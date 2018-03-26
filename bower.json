@@ -1,0 +1,10 @@
+{
+    "name": "gnibirpandvisaappointment",
+    "private": true,
+    "directory": "wwwroot/lib",
+    "dependencies": {
+        "jquery": "latest",
+        "bootstrap": "latest",
+        "angular": "latest"
+    }
+}
