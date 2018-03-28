@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/GNIBIRPAndVisaAppointment.Web.csproj"
+                "${workspaceFolder}/GNIBIRPAndVisaAppointment.Web/GNIBIRPAndVisaAppointment.Web.csproj"
             ],
             "problemMatcher": "$msCompile"
         }
