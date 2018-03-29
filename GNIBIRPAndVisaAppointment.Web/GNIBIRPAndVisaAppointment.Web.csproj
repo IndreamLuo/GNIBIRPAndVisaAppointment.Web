@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\GNIBIRPAndVisaAppointment.Web.DataAccess\GNIBIRPAndVisaAppointment.Web.DataAccess.csproj" />
+    <ProjectReference Include="..\GNIBIRPAndVisaAppointment.Web.Business\GNIBIRPAndVisaAppointment.Web.Business.csproj" />
   </ItemGroup>
 
 </Project>
