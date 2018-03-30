@@ -21,10 +21,6 @@
             <img src="/favicon.ico" style="height:25px" />
             GNIB/IRP And Visa Appointment
         </a>
-        
-        <button type="button" class="navbar-toggler" data-toggle="collapse" data-target=".navbar-collapse" aria-expanded="false">
-            <span class="navbar-toggler-icon"></span>
-        </button>
 
         <div class="navbar-collapse collapse">
             <ul class="navbar-nav">
@@ -32,6 +28,14 @@
                 <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="App" asp-action="Index">App</a></li>
                 <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Info" asp-action="About" asp-route-id="GNIB/IRP">GNIB/IRP</a></li>
             </ul>
+        </div>
+
+        <div class="my-lg-0">
+            <fb:login-button scope="public_profile,email" onlogin="checkLoginState();"></fb:login-button>
+        
+            <button type="button" class="navbar-toggler my-lg-0" data-toggle="collapse" data-target=".navbar-collapse" aria-expanded="false">
+                <span class="navbar-toggler-icon"></span>
+            </button>
         </div>
     </nav>
     <div class="container body-content">

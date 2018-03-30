@@ -9,11 +9,5 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
         {
             throw new NotImplementedException();
         }
-
-        [HttpPost]
-        public IActionResult Login(string id, string password)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
