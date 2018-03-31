@@ -1,0 +1,25 @@
+{
+  "name": "gnibirpandvisaappointment",
+  "private": true,
+  "directory": "wwwroot/lib",
+  "dependencies": {
+    "jquery": "latest",
+    "bootstrap": "latest",
+    "angular": "latest",
+    "popper.js": "^1.14.1"
+  },
+  "homepage": "https://gnibirpandvisaappointment.azurewebsites.net",
+  "authors": [
+    "Indream Luo <indreamluo@qq.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
