@@ -302,5 +302,4 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-GNIBIRPAndVisaAppointment.Web/wwwroot/lib/facebook.sdk.js
-GNIBIRPAndVisaAppointment.Web/appsettings.Development.json
+appsettings.Development.json
