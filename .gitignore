@@ -303,4 +303,4 @@ $RECYCLE.BIN/
 *.lnk
 
 # Environment
-*/appsettings.Development.json
+appsettings.Development.json
