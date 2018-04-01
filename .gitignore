@@ -302,6 +302,4 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-# Environment
-*.Development.json
-
+GNIBIRPAndVisaAppointment.Web/appsettings.Development.json
