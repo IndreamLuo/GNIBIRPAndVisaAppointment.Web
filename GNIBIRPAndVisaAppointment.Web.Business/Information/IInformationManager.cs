@@ -6,10 +6,13 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Information
 {
     public interface IInformationManager : IDomain
     {
-        DataAccess.Model.Storage.Information this[string key] { get; }
+        DataAccess.Model.Storage.Information this[string key, string language = Languages.English] { get; }
 
         [AdminRequired]
         IDictionary<string, IEnumerable<string>> GetAllKeys();
+
+        [AdminRequired]
+        IEnumerable<DataAccess.Model.Storage.Information> GetList();
 
         [AdminRequired]
         void Add(string key, string title, string auther, string content);

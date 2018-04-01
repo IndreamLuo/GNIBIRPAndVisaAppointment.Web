@@ -30,6 +30,8 @@ namespace GNIBIRPAndVisaAppointment.Web
             {
                 config.AddRegistry(new DataAccess.StructureMapRegistry());
                 config.AddRegistry(new Business.StructureMapRegistry());
+                config.For<IConfiguration>().Use(Configuration);
+                config.For<IApplicationSettings>().Use<ASPNETCoreApplicationSettings>();
             });
             
             container.Inject<IDIContainer>(new StructureMapDIContainer(container));

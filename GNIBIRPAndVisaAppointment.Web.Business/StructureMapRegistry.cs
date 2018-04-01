@@ -1,4 +1,5 @@
 using GNIBIRPAndVisaAppointment.Web.Business.Configuration;
+using GNIBIRPAndVisaAppointment.Web.Business.Information;
 using StructureMap;
 
 namespace GNIBIRPAndVisaAppointment.Web.Business
@@ -9,6 +10,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Business
         {
             For<IDomainHub>().Singleton().Use<DomainHub>();
             For<IConfigurationManager>().Singleton().Use<ConfigurationManager>();
+            For<IInformationManager>().Singleton().Use<InformationManager>();
         }
     }
 }

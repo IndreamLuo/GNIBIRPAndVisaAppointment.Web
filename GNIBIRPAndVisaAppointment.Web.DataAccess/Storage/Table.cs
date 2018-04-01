@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using GNIBIRPAndVisaAppointment.Web.Utility;
 using Microsoft.WindowsAzure.Storage.Table;
 
@@ -16,7 +17,7 @@ namespace GNIBIRPAndVisaAppointment.Web.DataAccess.Storage
             CloudTable = cloudTable;
         }
 
-        public static IList<string> Keys = new List<string> { "PartitionKey", "RowKey" };
+        public static string[] Keys = { "PartitionKey", "RowKey" };
 
         public List<TTableEntity> this[string partitionKey]
         {
@@ -42,12 +43,19 @@ namespace GNIBIRPAndVisaAppointment.Web.DataAccess.Storage
             }
         }
 
-        public TTableEntity this[string partitionKey, string rowKey] => (TTableEntity)CloudTable.ExecuteAsync(TableOperation.Retrieve(partitionKey, rowKey)).Result.Result;
+        public TTableEntity this[string partitionKey, string rowKey] => (TTableEntity)CloudTable.ExecuteAsync(TableOperation.Retrieve<TTableEntity>(partitionKey, rowKey)).Result.Result;
 
         public IDictionary<string, IEnumerable<string>> GetAllKeys()
         {
-            var query = new TableQuery<TTableEntity>().Select(Keys);
-            var result = new Dictionary<string, IEnumerable<string>>();
+            return this.GetAll(Keys)
+                .GroupBy(entity => entity.PartitionKey)
+                .ToDictionary(group => group.Key, group => group.Select(entity => entity.RowKey));
+        }
+
+        public IEnumerable<TTableEntity> GetAll(params string[] columns)
+        {
+            var query = new TableQuery<TTableEntity>().Select(columns);
+            var result = new List<TTableEntity>();
             TableContinuationToken token = null;
 
             do
@@ -56,13 +64,7 @@ namespace GNIBIRPAndVisaAppointment.Web.DataAccess.Storage
 
                 foreach (var entity in response.Results)
                 {
-                    IEnumerable<string> rowKeys;
-                    if (!result.TryGetValue(entity.PartitionKey, out rowKeys))
-                    {
-                        rowKeys = new List<string>();
-                        result.Add(entity.PartitionKey, rowKeys);
-                    }
-                    (rowKeys as List<string>).Add(entity.RowKey);
+                    result.Add(entity);
                 }
 
                 token = response.ContinuationToken;

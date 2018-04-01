@@ -1,0 +1,33 @@
+@model IEnumerable<InformationModel>
+
+@{
+    Layout = "_AdminLayout";
+}
+
+@foreach (var info in Model)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <td scope="col"></td>
+                <td scope="col">@nameof(InformationModel.Key)</td>
+                <td scope="col">@nameof(InformationModel.Language)</td>
+                <td scope="col">@nameof(InformationModel.Title)</td>
+                <td scope="col">@nameof(InformationModel.Author)</td>
+                <td scope="col">@nameof(InformationModel.CreatedTime)</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><a href="/Admin/Info/@info.Key/@info.Language/">Edit</a></td>
+                <td>@info.Key</td>
+                <td>@info.Language</td>
+                <td>@info.Title</td>
+                <td>@info.Author</td>
+                <td>@info.CreatedTime</td>
+            </tr>
+        </tbody>
+    </table>
+}
+
+<a class="btn btn-success" href="/Admin/Info/Add">Add</a>
