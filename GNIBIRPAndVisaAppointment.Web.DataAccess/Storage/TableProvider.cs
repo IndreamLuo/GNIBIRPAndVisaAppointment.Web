@@ -10,24 +10,17 @@ namespace GNIBIRPAndVisaAppointment.Web.DataAccess.Storage
     {
         readonly CloudTableClient CloudTableClient;
 
-        readonly LazyLoader LazyLoader;
+        readonly LazyLoader LazyLoader = new LazyLoader();
 
         public TableProvider(IApplicationSettings applicationSettings)
         {
             var cloudStorageAccount = CloudStorageAccount.Parse(applicationSettings[DataSourceKeys.AzureStorageConnectionString]);
             CloudTableClient = cloudStorageAccount.CreateCloudTableClient();
-
-            LazyLoader = new LazyLoader();
         }
 
-        public Table<Configuration> Configuration => LazyLoadTable<Configuration>();
-
-        public Table<TTableEntity> LazyLoadTable<TTableEntity>([CallerMemberName]string tableName = null)
-            where TTableEntity : TableEntity
+        public Table<TTableEntity> GetTable<TTableEntity>(string tableName = null) where TTableEntity : TableEntity, new()
         {
-            RuntimeAssert.IsNotNull(tableName, nameof(tableName));
-
-            return LazyLoader.LazyLoad(() => new Table<TTableEntity>(CloudTableClient.GetTableReference(tableName)));
+            return LazyLoader.LazyLoad(() => new Table<TTableEntity>(CloudTableClient.GetTableReference(tableName ?? typeof(TTableEntity).Name)));
         }
     }
 }

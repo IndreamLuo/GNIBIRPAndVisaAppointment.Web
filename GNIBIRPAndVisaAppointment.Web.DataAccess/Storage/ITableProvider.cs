@@ -1,9 +1,9 @@
-using GNIBIRPAndVisaAppointment.Web.DataAccess.Model.Storage;
+using Microsoft.WindowsAzure.Storage.Table;
 
 namespace GNIBIRPAndVisaAppointment.Web.DataAccess.Storage
 {
     public interface ITableProvider
     {
-        Table<Configuration> Configuration { get; }
+        Table<TTableEntity> GetTable<TTableEntity>(string tableName = null) where TTableEntity : TableEntity, new();
     }
 }
