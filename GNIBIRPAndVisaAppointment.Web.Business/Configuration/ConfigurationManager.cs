@@ -3,13 +3,11 @@ using GNIBIRPAndVisaAppointment.Web.Utility;
 
 namespace GNIBIRPAndVisaAppointment.Web.Business.Configuration
 {
-    internal class ConfigurationManager : IConfigurationManager
-    {
-        readonly Table<DataAccess.Model.Storage.Configuration> Table;
-        
-        public ConfigurationManager(ITableProvider tableProvider)
+    internal class ConfigurationManager : SingleTableDomainBase<DataAccess.Model.Storage.Configuration>, IConfigurationManager
+    {        
+        public ConfigurationManager(ITableProvider tableProvider) : base(tableProvider)
         {
-            Table = tableProvider.Configuration;
+            
         }
         
         public string this[string area, string key]
@@ -19,7 +17,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Configuration
             {
                 var configuration = Table[area, key];
                 configuration.Value = value;
-                Table.Update(configuration);
+                Table.Replace(configuration);
             }
         }
     }

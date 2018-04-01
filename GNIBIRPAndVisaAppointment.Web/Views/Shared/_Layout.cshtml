@@ -38,6 +38,11 @@
             </button>
         </div>
     </nav>
+
+    <div class="float-left">
+        @RenderSection("Left", required: false)
+    </div>
+
     <div class="container body-content">
         @RenderBody()
         <hr />
