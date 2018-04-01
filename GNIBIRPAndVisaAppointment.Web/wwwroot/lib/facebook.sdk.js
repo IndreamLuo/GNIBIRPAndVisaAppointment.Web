@@ -9,7 +9,7 @@ window.fbAsyncInit = function() {
     FB.AppEvents.logPageView();
 
     FB.getLoginStatus(function(response) {
-        alert(response);
+        
     });
 };
 
