@@ -5,6 +5,7 @@ using GNIBIRPAndVisaAppointment.Web.Business.Information;
 using GNIBIRPAndVisaAppointment.Web.DataAccess.Model.Storage;
 using GNIBIRPAndVisaAppointment.Web.Models;
 using GNIBIRPAndVisaAppointment.Web.Models.Admin;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GNIBIRPAndVisaAppointment.Web.Controllers
@@ -22,6 +23,17 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
         public IActionResult Index()
         {
             return View();
+        }
+
+        public IActionResult BrowseImages()
+        {
+            throw new NotImplementedException();
+        }
+
+        [Route("Upload")]
+        public IActionResult Upload(IFormFile upload)
+        {
+            throw new NotImplementedException();
         }
 
         [Route("Info")]
@@ -61,7 +73,6 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
         }
 
         [Route("Info/Add/")]
-        [HttpPost]
         public IActionResult AddInfo(InformationModel model)
         {
             if (model.Key != null && model.Language != null)
@@ -71,7 +82,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
                 return Redirect("/Admin/Info");
             }
 
-            return BadRequest();
+            return View(model);
         }
 
         [Route("Info/Update/")]

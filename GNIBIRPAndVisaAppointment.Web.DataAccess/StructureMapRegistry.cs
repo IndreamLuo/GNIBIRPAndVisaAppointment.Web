@@ -7,7 +7,7 @@ namespace GNIBIRPAndVisaAppointment.Web.DataAccess
     {
         public StructureMapRegistry()
         {
-            For<ITableProvider>().Singleton().Use<TableProvider>();
+            For<IStorageProvider>().Singleton().Use<StorageProvider>();
         }
     }
 }

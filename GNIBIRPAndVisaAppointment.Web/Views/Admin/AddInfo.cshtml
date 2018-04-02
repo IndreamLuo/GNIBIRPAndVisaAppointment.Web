@@ -32,5 +32,8 @@
 
 <script type="text/javascript" src="/lib/ckeditor/ckeditor.js"></script>
 <script type="text/javascript">
-    CKEDITOR.replace('contentInput');
+    CKEDITOR.replace('contentInput', {
+        filebrowserBrowseUrl: '/Admin/Browes',
+        filebrowserUploadUrl: '/Admin/Upload'
+    });
 </script>
