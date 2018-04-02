@@ -1,0 +1,36 @@
+@model InformationModel
+
+@{
+    Layout = "_AdminLayout";
+}
+
+<form method="POST">
+    <div class="form-row">
+        <div class="col">
+            <label for="keyInput">Key</label>
+            <input id="keyInput" asp-for="Key" class="form-control" placeholder="Enter Key" />
+        </div>
+        <div class="col">
+            <label for="languageSelect">Language</label>
+            <select id="languageSelect" asp-For="Language" asp-items="GNIBIRPAndVisaAppointment.Web.Utility.Languages.All.Select(language => new SelectListItem{ Value = language, Text = language })" class="form-control"></select>
+        </div>
+        <div class="col">
+            <label for="authorInput">Author</label>
+            <input id="authorInput" class="form-control" asp-for="Author" placeholder="Author" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="titleInput">Title</label>
+        <input id="titleInput" asp-for="Title" class="form-control" placeholder="Enter Title" />
+    </div>
+    <div class="form-group">
+        <label for="contentInput" contenteditable="true">Content</label>
+        <textarea id="contentInput" asp-for="Content" class="form-control"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+<script type="text/javascript" src="/lib/ckeditor/ckeditor.js"></script>
+<script type="text/javascript">
+    CKEDITOR.replace('contentInput');
+</script>

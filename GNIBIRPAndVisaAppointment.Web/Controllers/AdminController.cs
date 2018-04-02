@@ -41,11 +41,55 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
             return View(models);
         }
 
-        [Route("Info/{key}/{language?}")]
-        public IActionResult Info(Information model)
+        [Route("Info/{operation}/{key}/{language}/")]
+        public IActionResult Info(InformationModel model, string operation)
         {
             var informationManager = DomainHub.GetDomain<IInformationManager>();
-            return View();
+            var information = informationManager[model.Key, model.Language];
+            model = new InformationModel
+            {
+                Key = information.PartitionKey,
+                Language = information.RowKey,
+                Title = information.Title,
+                Author = information.Author,
+                CreatedTime = information.CreatedTime,
+                Content = information.Content
+            };
+            ViewBag.operation = operation;
+
+            return View(model);
+        }
+
+        [Route("Info/Add/")]
+        [HttpPost]
+        public IActionResult AddInfo(InformationModel model)
+        {
+            if (model.Key != null && model.Language != null)
+            {
+                var informationManager = DomainHub.GetDomain<IInformationManager>();
+                informationManager.Add(model.Key, model.Title, model.Author, model.Content);
+                return Redirect("/Admin/Info");
+            }
+
+            return BadRequest();
+        }
+
+        [Route("Info/Update/")]
+        [HttpPost]
+        public IActionResult UpdateInfo(InformationModel model)
+        {
+            var informationManager = DomainHub.GetDomain<IInformationManager>();
+            informationManager.Update(model.Key, model.Language, model.Title, model.Author, model.Content);
+            return Redirect("/Admin/Info");
+        }
+
+        [Route("Info/Delete/")]
+        [HttpPost]
+        public IActionResult DeleteInfo(InformationModel model)
+        {
+            var informationManager = DomainHub.GetDomain<IInformationManager>();
+            informationManager.Delete(model.Key, model.Language);
+            return Redirect("/Admin/Info");
         }
     }
 }

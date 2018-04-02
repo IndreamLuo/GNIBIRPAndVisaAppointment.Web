@@ -14,7 +14,7 @@ namespace GNIBIRPAndVisaAppointment.Web.DataAccess.Storage
 
         public TableProvider(IApplicationSettings applicationSettings)
         {
-            var cloudStorageAccount = CloudStorageAccount.Parse(applicationSettings[DataSourceKeys.AzureStorageConnectionString]);
+            var cloudStorageAccount = CloudStorageAccount.Parse(applicationSettings.GetConnectionString(ConnectionStringKeys.AzureStorage));
             CloudTableClient = cloudStorageAccount.CreateCloudTableClient();
         }
 

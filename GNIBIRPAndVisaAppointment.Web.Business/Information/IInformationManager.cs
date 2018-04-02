@@ -25,5 +25,8 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Information
 
         [AdminRequired]
         void Update(string key, string language, string title, string auther, string content);
+
+        [AdminRequired]
+        void Delete(string key, string language);
     }
 }

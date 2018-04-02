@@ -73,7 +73,11 @@ namespace GNIBIRPAndVisaAppointment.Web.DataAccess.Storage
             return result;
         }
 
-        public async void Replace(TTableEntity update) => await CloudTable.ExecuteAsync(TableOperation.Replace(update));
+        public async void Replace(TTableEntity update)
+        {
+            update.ETag = "*";
+            await CloudTable.ExecuteAsync(TableOperation.Replace(update));
+        }
 
         public async void Insert(TTableEntity entity) => await CloudTable.ExecuteAsync(TableOperation.Insert(entity));
 
