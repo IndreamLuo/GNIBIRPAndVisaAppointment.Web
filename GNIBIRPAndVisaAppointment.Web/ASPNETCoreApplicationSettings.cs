@@ -12,5 +12,7 @@ namespace GNIBIRPAndVisaAppointment.Web
         }
 
         public string this[string key] => Configuration[key];
+
+        public string GetConnectionString(string key) => Configuration.GetConnectionString(key);
     }
 }

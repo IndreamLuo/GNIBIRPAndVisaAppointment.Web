@@ -16,14 +16,19 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
             DomainHub = domainHub;
         }
 
-        [Route("About/{name}")]
-        public IActionResult About(string name)
+        [Route("Get/{key}/{language?}")]
+        public JsonResult Get(string key, string language)
         {
-            throw new NotImplementedException();
+            return Json(GetInformationModel(key, language));
         }
 
-        [Route("Get/{key}/{language}")]
-        public JsonResult Get(string key, string language = null)
+        [Route("{key}/{language?}")]
+        public IActionResult Read(string key, string language)
+        {
+            return View(GetInformationModel(key, language));
+        }
+
+        InformationModel GetInformationModel(string key, string language)
         {
             var informationManager = DomainHub.GetDomain<IInformationManager>();
             var information = informationManager[key, language];
@@ -33,7 +38,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
                 return null;
             }
 
-            var informationModel = new InformationModel
+            return new InformationModel
             {
                 Key = information.PartitionKey,
                 Language = information.RowKey,
@@ -42,8 +47,6 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
                 CreatedTime = information.CreatedTime,
                 Content = information.Content
             };
-
-            return Json(informationModel);
         }
     }
 }

@@ -4,30 +4,33 @@
     Layout = "_AdminLayout";
 }
 
-@foreach (var info in Model)
-{
-    <table class="table">
-        <thead>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <td scope="col"></td>
+            <td scope="col">@nameof(InformationModel.Key)</td>
+            <td scope="col">@nameof(InformationModel.Language)</td>
+            <td scope="col">@nameof(InformationModel.Title)</td>
+            <td scope="col">@nameof(InformationModel.Author)</td>
+            <td scope="col">@nameof(InformationModel.CreatedTime)</td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var info in Model)
+        {
             <tr>
-                <td scope="col"></td>
-                <td scope="col">@nameof(InformationModel.Key)</td>
-                <td scope="col">@nameof(InformationModel.Language)</td>
-                <td scope="col">@nameof(InformationModel.Title)</td>
-                <td scope="col">@nameof(InformationModel.Author)</td>
-                <td scope="col">@nameof(InformationModel.CreatedTime)</td>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><a href="/Admin/Info/@info.Key/@info.Language/">Edit</a></td>
+                <td>
+                    <a class="btn" href="/Admin/Info/Edit/@info.Key/@info.Language/">Edit</a>
+                    <a class="btn" href="/Admin/Info/Delete/@info.Key/@info.Language/">Delete</a>
+                </td>
                 <td>@info.Key</td>
                 <td>@info.Language</td>
                 <td>@info.Title</td>
                 <td>@info.Author</td>
                 <td>@info.CreatedTime</td>
             </tr>
-        </tbody>
-    </table>
-}
+        }
+    </tbody>
+</table>
 
 <a class="btn btn-success" href="/Admin/Info/Add">Add</a>

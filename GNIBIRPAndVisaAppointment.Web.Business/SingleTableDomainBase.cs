@@ -6,15 +6,15 @@ namespace GNIBIRPAndVisaAppointment.Web.Business
     public abstract class SingleTableDomainBase<TTableEntity> : IDomain
         where TTableEntity : TableEntity, new()
     {
-        protected readonly ITableProvider TableProvider;
+        protected readonly IStorageProvider StorageProvider;
 
         protected readonly string TableName;
 
-        protected Table<TTableEntity> Table => TableProvider.GetTable<TTableEntity>(TableName);
+        protected Table<TTableEntity> Table => StorageProvider.GetTable<TTableEntity>(TableName);
 
-        public SingleTableDomainBase(ITableProvider tableProvider, string tableName = null)
+        public SingleTableDomainBase(IStorageProvider tableProvider, string tableName = null)
         {
-            TableProvider = tableProvider;
+            StorageProvider = tableProvider;
             TableName = tableName;
         }
     }

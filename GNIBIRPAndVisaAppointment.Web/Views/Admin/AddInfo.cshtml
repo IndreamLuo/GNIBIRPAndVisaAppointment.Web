@@ -2,22 +2,17 @@
 
 @{
     Layout = "_AdminLayout";
-    var postSubmit = ViewBag.Operation.ToLower() == "edit" ? "Save" : "Delete";
-    var postAction = $"/Admin/Info/{(ViewBag.Operation.ToLower() == "edit" ? "Update" : "Delete")}";
-    var submitClass = ViewBag.Operation.ToLower() == "edit" ? "btn btn-primary" : "btn btn-danger";
 }
 
-<form class="form" method="POST" action="@postAction">
+<form method="POST">
     <div class="form-row">
         <div class="col">
             <label for="keyInput">Key</label>
-            <input id="keyInput" disabled asp-for="Key" class="form-control" />
-            <input type="hidden" asp-for="Key" />
+            <input id="keyInput" asp-for="Key" class="form-control" placeholder="Enter Key" />
         </div>
         <div class="col">
             <label for="languageSelect">Language</label>
-            <select id="languageSelect" disabled asp-For="Language" asp-items="GNIBIRPAndVisaAppointment.Web.Utility.Languages.All.Select(language => new SelectListItem{ Value = language, Text = language })" class="form-control"></select>
-            <input type="hidden" asp-for="Language" />
+            <select id="languageSelect" asp-For="Language" asp-items="GNIBIRPAndVisaAppointment.Web.Utility.Languages.All.Select(language => new SelectListItem{ Value = language, Text = language })" class="form-control"></select>
         </div>
         <div class="col">
             <label for="authorInput">Author</label>
@@ -29,15 +24,10 @@
         <input id="titleInput" asp-for="Title" class="form-control" placeholder="Enter Title" />
     </div>
     <div class="form-group">
-        <label for="createdTimeInput">Created Time</label>
-        <input id="createdTimeInput" disabled asp-for="CreatedTime" class="form-control" />
-        <input type="hidden" asp-for="Key" />
-    </div>
-    <div class="form-group">
         <label for="contentInput" contenteditable="true">Content</label>
         <textarea id="contentInput" asp-for="Content" class="form-control"></textarea>
     </div>
-    <button type="submit" class="@submitClass">@postSubmit</button>
+    <button type="submit" class="btn btn-primary">Submit</button>
 </form>
 
 <script type="text/javascript" src="/lib/ckeditor/ckeditor.js"></script>
