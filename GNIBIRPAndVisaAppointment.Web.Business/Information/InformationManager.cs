@@ -1,17 +1,30 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using GNIBIRPAndVisaAppointment.Web.DataAccess.Model.Storage;
 using GNIBIRPAndVisaAppointment.Web.DataAccess.Storage;
 using GNIBIRPAndVisaAppointment.Web.Utility;
+using Microsoft.WindowsAzure.Storage.File;
 
 namespace GNIBIRPAndVisaAppointment.Web.Business.Information
 {
     public class InformationManager : SingleTableDomainBase<DataAccess.Model.Storage.Information>, IInformationManager
     {
-        public InformationManager(IStorageProvider storageProvider) : base(storageProvider) { }
+        readonly CloudFileDirectory InformationDirectory;
+        readonly IApplicationSettings ApplicationSettings;
 
-        public DataAccess.Model.Storage.Information this[string key, string language = Languages.English] => Table[key, language ?? Languages.English];
+        public InformationManager(IStorageProvider storageProvider, IApplicationSettings applicationSettings) : base(storageProvider)
+        {
+            ApplicationSettings = applicationSettings;
+
+            var webRootDirectory = StorageProvider.WebFileShare.GetRootDirectoryReference();
+            InformationDirectory = webRootDirectory.GetDirectoryReference("info");
+            
+            InformationDirectory.CreateIfNotExistsAsync().Wait();
+        }
+
+        public DataAccess.Model.Storage.Information this[string key, string language = Languages.English] => Table[key.ToLower(), language ?? Languages.English];
 
         public IDictionary<string, IEnumerable<string>> GetAllKeys()
         {
@@ -32,14 +45,14 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Information
 
         public void Add(string key, string title, string auther, string content)
         {
-            Add(key.ToLower(), Languages.English, title, auther, content);
+            Add(key, Languages.English, title, auther, content);
         }
 
         public void Add(string key, string language, string title, string auther, string content)
         {
             Table.Insert(new DataAccess.Model.Storage.Information
             {
-                PartitionKey = key,
+                PartitionKey = key.ToLower(),
                 RowKey = language,
                 Title = title,
                 Author = auther,
@@ -76,6 +89,34 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Information
         public void Delete(string key, string language)
         {
             Table.Delete(key, language);
+        }
+
+        public string UploadFile(string fileName, string contentType, Stream fileStream)
+        {
+            var storeFileName = $"{fileStream.ToMD5()}{Path.GetExtension(fileName)}";
+            var fileReference = InformationDirectory.GetFileReference(storeFileName);
+            if (!fileReference.ExistsAsync().Result)
+            {
+                fileReference.CreateAsync(fileStream.Length).Wait();
+                using (var writeStream = fileReference.OpenWriteAsync(fileStream.Length).Result)
+                {
+                    fileStream.Position = 0;
+                    fileStream.CopyTo(writeStream);
+                }
+            }
+
+            return $"{ApplicationSettings["AppSettings:UploadedFileRewritingURL"]}{storeFileName}";
+        }
+
+        public Stream LoadFile(string fileName)
+        {
+            var fileReference = InformationDirectory.GetFileReference(fileName);
+            if (!fileReference.ExistsAsync().Result)
+            {
+                throw new ArgumentOutOfRangeException(fileName);
+            }
+
+            return fileReference.OpenReadAsync().Result;
         }
     }
 }

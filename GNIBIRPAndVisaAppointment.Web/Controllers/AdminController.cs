@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Linq;
 using GNIBIRPAndVisaAppointment.Web.Business;
 using GNIBIRPAndVisaAppointment.Web.Business.Information;
@@ -33,7 +34,15 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
         [Route("Upload")]
         public IActionResult Upload(IFormFile upload)
         {
-            throw new NotImplementedException();
+            var informationManager = DomainHub.GetDomain<IInformationManager>();
+            var url = informationManager.UploadFile(upload.FileName, upload.ContentType, upload.OpenReadStream());
+
+            return Ok(new
+            {
+                fileName = Path.GetFileNameWithoutExtension(url),
+                uploaded = true,
+                url = url
+            });
         }
 
         [Route("Info")]
@@ -79,7 +88,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
             {
                 var informationManager = DomainHub.GetDomain<IInformationManager>();
                 informationManager.Add(model.Key, model.Title, model.Author, model.Content);
-                return Redirect("/Admin/Info");
+                return Redirect($"/Admin/Info/{DateTime.Now.Ticks}");
             }
 
             return View(model);
@@ -91,7 +100,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
         {
             var informationManager = DomainHub.GetDomain<IInformationManager>();
             informationManager.Update(model.Key, model.Language, model.Title, model.Author, model.Content);
-            return Redirect("/Admin/Info");
+            return Redirect($"/Admin/Info/{DateTime.Now.Ticks}");
         }
 
         [Route("Info/Delete/")]
@@ -100,7 +109,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
         {
             var informationManager = DomainHub.GetDomain<IInformationManager>();
             informationManager.Delete(model.Key, model.Language);
-            return Redirect("/Admin/Info");
+            return Redirect($"/Admin/Info/{DateTime.Now.Ticks}");
         }
     }
 }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 using GNIBIRPAndVisaAppointment.Web.Business.Authentication;
 using GNIBIRPAndVisaAppointment.Web.Utility;
 
@@ -28,5 +29,10 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Information
 
         [AdminRequired]
         void Delete(string key, string language);
+
+        [AdminRequired]
+        string UploadFile(string fileName, string contentType, Stream fileStream);
+
+        Stream LoadFile(string fileName);
     }
 }
