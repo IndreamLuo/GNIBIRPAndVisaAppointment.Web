@@ -21,7 +21,7 @@ namespace GNIBIRPAndVisaAppointment.Web
         public void ApplyRule(RewriteContext context)
         {
             var path = context.HttpContext.Request.Path;
-            if (path.Value.StartsWith(ApplicationSettings["AppSettings:UploadedFileRewritingURL"]))
+            if (path.Value.StartsWith(ApplicationSettings["UploadedFileRewritingURL"]))
             {
                 var fileName = Path.GetFileName(path.Value);
                 var fileStream = DomainHub.GetDomain<IInformationManager>().LoadFile(fileName);

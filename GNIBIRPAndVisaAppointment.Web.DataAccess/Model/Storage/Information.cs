@@ -9,5 +9,6 @@ namespace GNIBIRPAndVisaAppointment.Web.DataAccess.Model.Storage
         public string Author { get; set; }
         public DateTime CreatedTime { get; set; }
         public string Content { get; set; }
+        public bool FacebookComment { get; set; }
     }
 }

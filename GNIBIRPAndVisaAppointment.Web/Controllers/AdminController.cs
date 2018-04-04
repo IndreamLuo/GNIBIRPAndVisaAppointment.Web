@@ -26,6 +26,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
             return View();
         }
 
+        [Route("BrowseImages")]
         public IActionResult BrowseImages()
         {
             throw new NotImplementedException();
@@ -50,14 +51,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
         {
             var informationManager = DomainHub.GetDomain<IInformationManager>();
             var informationList = informationManager.GetList();
-            var models = informationList.Select(entity => new InformationModel
-            {
-                Key = entity.PartitionKey,
-                Language = entity.RowKey,
-                Title = entity.Title,
-                Author = entity.Author,
-                CreatedTime = entity.CreatedTime
-            });
+            var models = informationList.Select(entity => new InformationModel(entity));
 
             return View(models);
         }
@@ -67,15 +61,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
         {
             var informationManager = DomainHub.GetDomain<IInformationManager>();
             var information = informationManager[model.Key, model.Language];
-            model = new InformationModel
-            {
-                Key = information.PartitionKey,
-                Language = information.RowKey,
-                Title = information.Title,
-                Author = information.Author,
-                CreatedTime = information.CreatedTime,
-                Content = information.Content
-            };
+            model = new InformationModel(information);
             ViewBag.operation = operation;
 
             return View(model);
@@ -88,7 +74,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
             {
                 var informationManager = DomainHub.GetDomain<IInformationManager>();
                 informationManager.Add(model.Key, model.Title, model.Author, model.Content);
-                return Redirect($"/Admin/Info/{DateTime.Now.Ticks}");
+                return Redirect($"/Admin/Info?_={DateTime.Now.Ticks}");
             }
 
             return View(model);
@@ -99,8 +85,8 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
         public IActionResult UpdateInfo(InformationModel model)
         {
             var informationManager = DomainHub.GetDomain<IInformationManager>();
-            informationManager.Update(model.Key, model.Language, model.Title, model.Author, model.Content);
-            return Redirect($"/Admin/Info/{DateTime.Now.Ticks}");
+            informationManager.Update(model.Key, model.Language, model.Title, model.Author, model.Content, model.FacebookComment);
+            return Redirect($"/Admin/Info?_={DateTime.Now.Ticks}");
         }
 
         [Route("Info/Delete/")]
@@ -109,7 +95,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
         {
             var informationManager = DomainHub.GetDomain<IInformationManager>();
             informationManager.Delete(model.Key, model.Language);
-            return Redirect($"/Admin/Info/{DateTime.Now.Ticks}");
+            return Redirect($"/Admin/Info?_={DateTime.Now.Ticks}");
         }
     }
 }

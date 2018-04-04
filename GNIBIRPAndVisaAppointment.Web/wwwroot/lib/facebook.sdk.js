@@ -9,7 +9,11 @@ window.fbAsyncInit = function() {
     FB.AppEvents.logPageView();
 
     FB.getLoginStatus(function(response) {
-        
+        var loginButtons = document.getElementsByClassName("facebook-login");
+        for (var index in loginButtons) {
+            var loginButton = loginButtons[index];
+            loginButton.parentElement.remove(loginButton);
+        }
     });
 };
 

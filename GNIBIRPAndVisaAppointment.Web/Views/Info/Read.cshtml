@@ -10,3 +10,6 @@
 <div class="mt-5 mb-5">
     @Html.Raw(Model.Content)
 </div>
+@if (Model.FacebookComment) {
+    <div class="fb-comments" data-href="https://gnibirpandvisaappointment.azurewebsites.net/Admin/@Model.Key" width="100%" data-numposts="20"></div>
+}
