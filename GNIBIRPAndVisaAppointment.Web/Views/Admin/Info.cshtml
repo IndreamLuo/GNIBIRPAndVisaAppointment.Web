@@ -29,6 +29,13 @@
         <input id="titleInput" asp-for="Title" class="form-control" placeholder="Enter Title" />
     </div>
     <div class="form-group">
+        <div class="form-check">
+            <label for="facebookCommentCheck"></label>
+            <input class="form-check-input" id="facebookCommentCheck" asp-for="FacebookComment" type="checkbox" />
+            <label class="form-check-label" for="facebookCommentCheck">Facebook Comment</label>
+        </div>
+    </div>
+    <div class="form-group">
         <label for="createdTimeInput">Created Time</label>
         <input id="createdTimeInput" disabled asp-for="CreatedTime" class="form-control" />
         <input type="hidden" asp-for="Key" />

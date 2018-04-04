@@ -38,15 +38,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
                 return null;
             }
 
-            return new InformationModel
-            {
-                Key = information.PartitionKey,
-                Language = information.RowKey,
-                Title = information.Title,
-                Author = information.Author,
-                CreatedTime = information.CreatedTime,
-                Content = information.Content
-            };
+            return new InformationModel(information);
         }
     }
 }

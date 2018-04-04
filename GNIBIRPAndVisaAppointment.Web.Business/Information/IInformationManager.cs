@@ -16,16 +16,16 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Information
         IEnumerable<DataAccess.Model.Storage.Information> GetList();
 
         [AdminRequired]
-        void Add(string key, string title, string auther, string content);
+        void Add(string key, string title, string auther, string content, bool facebookComment = false);
 
         [AdminRequired]
-        void Add(string key, string language, string title, string auther, string content);
+        void Add(string key, string language, string title, string auther, string content, bool facebookComment = false);
 
         [AdminRequired]
-        void Update(string key, string title, string auther, string content);
+        void Update(string key, string title, string auther, string content, bool facebookComment);
 
         [AdminRequired]
-        void Update(string key, string language, string title, string auther, string content);
+        void Update(string key, string language, string title, string auther, string content, bool facebookComment);
 
         [AdminRequired]
         void Delete(string key, string language);

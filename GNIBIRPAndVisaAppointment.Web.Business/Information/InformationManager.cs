@@ -38,17 +38,18 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Information
                     nameof(DataAccess.Model.Storage.Information.RowKey),
                     nameof(DataAccess.Model.Storage.Information.Title),
                     nameof(DataAccess.Model.Storage.Information.Author),
-                    nameof(DataAccess.Model.Storage.Information.CreatedTime))
+                    nameof(DataAccess.Model.Storage.Information.CreatedTime),
+                    nameof(DataAccess.Model.Storage.Information.FacebookComment))
                 .OrderBy(information => information.PartitionKey)
                 .ThenBy(information => information.RowKey);
         }
 
-        public void Add(string key, string title, string auther, string content)
+        public void Add(string key, string title, string auther, string content, bool facebookComment = false)
         {
-            Add(key, Languages.English, title, auther, content);
+            Add(key, Languages.English, title, auther, content, facebookComment);
         }
 
-        public void Add(string key, string language, string title, string auther, string content)
+        public void Add(string key, string language, string title, string auther, string content, bool facebookComment = false)
         {
             Table.Insert(new DataAccess.Model.Storage.Information
             {
@@ -57,16 +58,17 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Information
                 Title = title,
                 Author = auther,
                 CreatedTime = DateTime.Now,
-                Content = content
+                Content = content,
+                FacebookComment = facebookComment
             });
         }
 
-        public void Update(string key, string title, string auther, string content)
+        public void Update(string key, string title, string auther, string content, bool facebookComment)
         {
-            Update(key, Languages.English, title, auther, content);
+            Update(key, Languages.English, title, auther, content, facebookComment);
         }
 
-        public void Update(string key, string language, string title, string auther, string content)
+        public void Update(string key, string language, string title, string auther, string content, bool facebookComment)
         {
             var oldInformation = this[key, language];
 
@@ -82,7 +84,8 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Information
                 Title = title,
                 Author = auther,
                 CreatedTime = oldInformation.CreatedTime,
-                Content = content
+                Content = content,
+                FacebookComment = facebookComment
             });
         }
 
@@ -105,7 +108,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Information
                 }
             }
 
-            return $"{ApplicationSettings["AppSettings:UploadedFileRewritingURL"]}{storeFileName}";
+            return $"{ApplicationSettings["UploadedFileRewritingURL"]}{storeFileName}";
         }
 
         public Stream LoadFile(string fileName)
