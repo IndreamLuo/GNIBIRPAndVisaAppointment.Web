@@ -24,7 +24,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Information
             InformationDirectory.CreateIfNotExistsAsync().Wait();
         }
 
-        public DataAccess.Model.Storage.Information this[string key, string language = Languages.English] => Table[key, language ?? Languages.English];
+        public DataAccess.Model.Storage.Information this[string key, string language = Languages.English] => Table[key.ToLower(), language ?? Languages.English];
 
         public IDictionary<string, IEnumerable<string>> GetAllKeys()
         {
@@ -45,14 +45,14 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Information
 
         public void Add(string key, string title, string auther, string content)
         {
-            Add(key.ToLower(), Languages.English, title, auther, content);
+            Add(key, Languages.English, title, auther, content);
         }
 
         public void Add(string key, string language, string title, string auther, string content)
         {
             Table.Insert(new DataAccess.Model.Storage.Information
             {
-                PartitionKey = key,
+                PartitionKey = key.ToLower(),
                 RowKey = language,
                 Title = title,
                 Author = auther,

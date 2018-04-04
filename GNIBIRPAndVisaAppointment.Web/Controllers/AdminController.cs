@@ -88,7 +88,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
             {
                 var informationManager = DomainHub.GetDomain<IInformationManager>();
                 informationManager.Add(model.Key, model.Title, model.Author, model.Content);
-                return Redirect("/Admin/Info");
+                return Redirect($"/Admin/Info/{DateTime.Now.Ticks}");
             }
 
             return View(model);
@@ -100,7 +100,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
         {
             var informationManager = DomainHub.GetDomain<IInformationManager>();
             informationManager.Update(model.Key, model.Language, model.Title, model.Author, model.Content);
-            return Redirect("/Admin/Info");
+            return Redirect($"/Admin/Info/{DateTime.Now.Ticks}");
         }
 
         [Route("Info/Delete/")]
@@ -109,7 +109,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
         {
             var informationManager = DomainHub.GetDomain<IInformationManager>();
             informationManager.Delete(model.Key, model.Language);
-            return Redirect("/Admin/Info");
+            return Redirect($"/Admin/Info/{DateTime.Now.Ticks}");
         }
     }
 }
