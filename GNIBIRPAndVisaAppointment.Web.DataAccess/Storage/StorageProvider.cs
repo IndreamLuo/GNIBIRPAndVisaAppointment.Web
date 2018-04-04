@@ -25,5 +25,7 @@ namespace GNIBIRPAndVisaAppointment.Web.DataAccess.Storage
         {
             return LazyLoader.LazyLoad(() => new Table<TTableEntity>(CloudTableClient.GetTableReference(tableName ?? typeof(TTableEntity).Name)));
         }
+
+        public CloudFileShare WebFileShare => LazyLoader.LazyLoad(() => CloudFileClient.GetShareReference("web"));
     }
 }

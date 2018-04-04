@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Linq;
 using GNIBIRPAndVisaAppointment.Web.Business;
 using GNIBIRPAndVisaAppointment.Web.Business.Information;
@@ -33,7 +34,15 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
         [Route("Upload")]
         public IActionResult Upload(IFormFile upload)
         {
-            throw new NotImplementedException();
+            var informationManager = DomainHub.GetDomain<IInformationManager>();
+            var url = informationManager.UploadFile(upload.FileName, upload.ContentType, upload.OpenReadStream());
+
+            return Ok(new
+            {
+                fileName = Path.GetFileNameWithoutExtension(url),
+                uploaded = true,
+                url = url
+            });
         }
 
         [Route("Info")]

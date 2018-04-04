@@ -6,6 +6,7 @@ using GNIBIRPAndVisaAppointment.Web.Business;
 using GNIBIRPAndVisaAppointment.Web.Utility;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using StructureMap;
@@ -21,22 +22,25 @@ namespace GNIBIRPAndVisaAppointment.Web
 
         public IConfiguration Configuration { get; }
 
+        Container DIContainer;
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
 
-            var container = new Container(config =>
+            DIContainer = new Container(config =>
             {
                 config.AddRegistry(new DataAccess.StructureMapRegistry());
                 config.AddRegistry(new Business.StructureMapRegistry());
                 config.For<IConfiguration>().Use(Configuration);
                 config.For<IApplicationSettings>().Use<ASPNETCoreApplicationSettings>();
+                config.For<ResourceFileUrlRewriteRule>().Use<ResourceFileUrlRewriteRule>();
             });
             
-            container.Inject<IDIContainer>(new StructureMapDIContainer(container));
+            DIContainer.Inject<IDIContainer>(new StructureMapDIContainer(DIContainer));
 
-            services.AddTransient<IDomainHub>(provider => container.GetInstance<IDomainHub>());
+            services.AddTransient<IDomainHub>(provider => DIContainer.GetInstance<IDomainHub>());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -59,6 +63,12 @@ namespace GNIBIRPAndVisaAppointment.Web
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            //Rewrite File URLs with Azure Storage SAS
+            var rewriteOptions = new RewriteOptions();
+            rewriteOptions.Add(DIContainer.GetInstance<ResourceFileUrlRewriteRule>());
+
+            app.UseRewriter(rewriteOptions);
         }
     }
 }
