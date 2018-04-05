@@ -54,7 +54,11 @@ namespace GNIBIRPAndVisaAppointment.Web.DataAccess.Storage
 
         public IEnumerable<TTableEntity> GetAll(params string[] columns)
         {
-            var query = new TableQuery<TTableEntity>().Select(columns);
+            var query = new TableQuery<TTableEntity>();
+            if (columns?.Any() ?? false)
+            {
+                query = query.Select(columns);
+            }
             var result = new List<TTableEntity>();
             TableContinuationToken token = null;
 

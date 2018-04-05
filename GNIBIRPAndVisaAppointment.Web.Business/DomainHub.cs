@@ -11,9 +11,9 @@ namespace GNIBIRPAndVisaAppointment.Web.Business
             DIContainer = dIContainer;
         }
 
-        public ITDomain GetDomain<ITDomain>() where ITDomain : IDomain
+        public TIDomain GetDomain<TIDomain>() where TIDomain : IDomain
         {
-            return DIContainer.GetInstance<ITDomain>();
+            return DIContainer.GetInstance<TIDomain>();
         }
     }
 }
