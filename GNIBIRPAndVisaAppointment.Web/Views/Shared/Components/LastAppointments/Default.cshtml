@@ -1,0 +1,86 @@
+@model IEnumerable<AppointmentModel>
+@using Microsoft.AspNetCore.Mvc;
+@using System.Text;
+
+@{
+    var groups = Model
+        .GroupBy(appointment => appointment.Category + appointment.SubCategory)
+        .ToDictionary(group => group.Key, group => group.ToArray());
+}
+
+@functions
+{
+    public object showAppointments(IDictionary<string, AppointmentModel[]> groups, string category)
+    {
+        if (groups.ContainsKey(category))
+        {
+            var stringBuilder = new StringBuilder();
+            foreach (var appointment in groups[category])
+            {
+                stringBuilder.Append(appointment.Time.ToString("dd/MM/yyyy HH:mm"));
+                stringBuilder.Append(appointment.Expiration?.ToString(" - HH:mm"));
+                stringBuilder.Append("<br />");
+            }
+            return stringBuilder.ToString();
+        }
+        else
+        {
+            return "<span class=\"text-danger\">No valid appointment</span>";
+        }
+    }
+}
+
+<h1>GNIB / IRP</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col"></th>
+            <th scope="col">Work</th>
+            <th scope="col">Study</th>
+            <th scope="col">Other</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var set in new [] { "New", "Renewal" })
+        {
+            <tr>
+                <th scope="row">@set</th>
+                <td>
+                    @Html.Raw(showAppointments(groups, $"Work{set}"))
+                </td>
+                <td>
+                    @Html.Raw(showAppointments(groups, $"Study{set}"))
+                </td>
+                <td>
+                    @Html.Raw(showAppointments(groups, $"Other{set}"))
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<a class="btn btn-success mb-5" href="https://burghquayregistrationoffice.inis.gov.ie/Website/AMSREG/AMSRegWeb.nsf/AppSelect?OpenForm">Appoint for GNIB/IRP</a>
+
+<h1>Visa</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Individual</th>
+            <th scope="col">Family</th>
+            <th scope="col">Emergency</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                @Html.Raw(showAppointments(groups, "Individual"))
+            </td>
+            <td>
+                @Html.Raw(showAppointments(groups, "Family"))
+            </td>
+            <td>
+                @Html.Raw(showAppointments(groups, "Emergency"))
+            </td>
+        </tr>
+    </tbody>
+</table>
+<a class="btn btn-success mb-5" href="https://reentryvisa.inis.gov.ie/website/INISOA/IOA.nsf/AppointmentSelection?OpenForm">Appoint for Visa</a>

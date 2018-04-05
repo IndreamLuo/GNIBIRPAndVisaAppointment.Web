@@ -14,10 +14,13 @@ namespace GNIBIRPAndVisaAppointment.Web.Utility
 
         public T LazyLoad<T>(Func<T> getter)
         {
-            object result;
+            return LazyLoad(null, getter);
+        }
 
-            var hashCode = typeof(Func<T>).GetHashCode();
-            if (!LoadedObjects.TryGetValue(hashCode, out result))
+        public T LazyLoad<T>(string cacheKey, Func<T> getter)
+        {
+            var hashCode = (cacheKey as object ?? typeof(Func<T>)).GetHashCode();
+            if (!LoadedObjects.TryGetValue(hashCode, out var result))
             {
                 result = getter();
                 LoadedObjects[hashCode] = result;

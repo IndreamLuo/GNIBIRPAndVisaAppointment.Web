@@ -9,6 +9,7 @@ namespace GNIBIRPAndVisaAppointment.Web.DataAccess.Model.Storage
         public string Category { get; set; }
         public string SubCategory { get; set; }
         public DateTime Time { get; set; }
+        public DateTime? Expiration { get; set; }
         public DateTime Published { get; set; }
         public DateTime? Appointed { get; set; }
 

@@ -23,7 +23,8 @@ namespace GNIBIRPAndVisaAppointment.Web.DataAccess.Storage
 
         public Table<TTableEntity> GetTable<TTableEntity>(string tableName = null) where TTableEntity : TableEntity, new()
         {
-            return LazyLoader.LazyLoad(() => new Table<TTableEntity>(CloudTableClient.GetTableReference(tableName ?? typeof(TTableEntity).Name)));
+            tableName = tableName ?? typeof(TTableEntity).Name;
+            return LazyLoader.LazyLoad($"table:{tableName}", () => new Table<TTableEntity>(CloudTableClient.GetTableReference(tableName)));
         }
 
         public CloudFileShare WebFileShare => LazyLoader.LazyLoad(() => CloudFileClient.GetShareReference("web"));

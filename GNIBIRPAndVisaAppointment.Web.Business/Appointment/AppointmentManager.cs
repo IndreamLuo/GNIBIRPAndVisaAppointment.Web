@@ -12,7 +12,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Appointment
         public AppointmentManager(IStorageProvider storageProvider)
         {
             AppointmentTable = storageProvider.GetTable<DataAccess.Model.Storage.Appointment>();
-            AppointmentTable = storageProvider.GetTable<DataAccess.Model.Storage.Appointment>("LastAppointment");
+            LastAppointmentTable = storageProvider.GetTable<DataAccess.Model.Storage.Appointment>("LastAppointment");
         }
 
         public DataAccess.Model.Storage.Appointment[] GetLastAppointments()
