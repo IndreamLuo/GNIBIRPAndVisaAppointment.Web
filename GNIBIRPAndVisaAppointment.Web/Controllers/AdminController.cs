@@ -6,6 +6,7 @@ using GNIBIRPAndVisaAppointment.Web.Business.Information;
 using GNIBIRPAndVisaAppointment.Web.DataAccess.Model.Storage;
 using GNIBIRPAndVisaAppointment.Web.Models;
 using GNIBIRPAndVisaAppointment.Web.Models.Admin;
+using GNIBIRPAndVisaAppointment.Web.Utility;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,11 +15,19 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
     [Route("Admin")]
     public class AdminController : Controller
     {
+        IApplicationSettings ApplicationSettings;
         IDomainHub DomainHub;
 
-        public AdminController(IDomainHub domainHub)
+        public AdminController(IApplicationSettings applicationSettings, IDomainHub domainHub)
         {
+            ApplicationSettings = applicationSettings;
             DomainHub = domainHub;
+
+            var adminAllowed = bool.Parse(applicationSettings["AppSettings:AdminAllowed"]);
+            if (adminAllowed)
+            {
+                throw new InvalidOperationException("AdminAllowed is set false is application settings.");
+            }
         }
         
         public IActionResult Index()
