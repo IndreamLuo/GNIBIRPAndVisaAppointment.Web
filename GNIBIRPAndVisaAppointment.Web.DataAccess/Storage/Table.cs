@@ -10,8 +10,6 @@ namespace GNIBIRPAndVisaAppointment.Web.DataAccess.Storage
     {
         readonly CloudTable CloudTable;
 
-        readonly LazyLoader lazyLoader = new LazyLoader();
-
         public Table(CloudTable cloudTable)
         {
             CloudTable = cloudTable;

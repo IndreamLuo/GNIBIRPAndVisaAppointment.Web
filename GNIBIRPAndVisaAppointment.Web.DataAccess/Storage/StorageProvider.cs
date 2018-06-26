@@ -11,22 +11,23 @@ namespace GNIBIRPAndVisaAppointment.Web.DataAccess.Storage
     {
         readonly CloudTableClient CloudTableClient;
         readonly CloudFileClient CloudFileClient;
+        readonly IGlobalCache GlobalCache;
 
-        readonly LazyLoader LazyLoader = new LazyLoader();
-
-        public StorageProvider(IApplicationSettings applicationSettings)
+        public StorageProvider(IApplicationSettings applicationSettings, IGlobalCache globalCache)
         {
             var cloudStorageAccount = CloudStorageAccount.Parse(applicationSettings.GetConnectionString(ConnectionStringKeys.AzureStorage));
             CloudTableClient = cloudStorageAccount.CreateCloudTableClient();
             CloudFileClient = cloudStorageAccount.CreateCloudFileClient();
+
+            GlobalCache = globalCache;
         }
 
         public Table<TTableEntity> GetTable<TTableEntity>(string tableName = null) where TTableEntity : TableEntity, new()
         {
             tableName = tableName ?? typeof(TTableEntity).Name;
-            return LazyLoader.LazyLoad($"table:{tableName}", () => new Table<TTableEntity>(CloudTableClient.GetTableReference(tableName)));
+            return GlobalCache.Cached($"table:{tableName}", () => new Table<TTableEntity>(CloudTableClient.GetTableReference(tableName)));
         }
 
-        public CloudFileShare WebFileShare => LazyLoader.LazyLoad(() => CloudFileClient.GetShareReference("web"));
+        public CloudFileShare WebFileShare => GlobalCache.Cached(() => CloudFileClient.GetShareReference("web"));
     }
 }

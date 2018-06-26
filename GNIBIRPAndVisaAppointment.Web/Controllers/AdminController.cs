@@ -23,8 +23,8 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
             ApplicationSettings = applicationSettings;
             DomainHub = domainHub;
 
-            var adminAllowed = bool.Parse(applicationSettings["AppSettings:AdminAllowed"]);
-            if (adminAllowed)
+            var adminAllowed = bool.Parse(applicationSettings["AdminAllowed"]);
+            if (!adminAllowed)
             {
                 throw new InvalidOperationException("AdminAllowed is set false is application settings.");
             }

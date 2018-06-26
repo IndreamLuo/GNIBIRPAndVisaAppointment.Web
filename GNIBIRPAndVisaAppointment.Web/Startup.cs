@@ -31,6 +31,7 @@ namespace GNIBIRPAndVisaAppointment.Web
 
             DIContainer = new Container(config =>
             {
+                config.AddRegistry(new Utility.StructureMapRegistry());
                 config.AddRegistry(new DataAccess.StructureMapRegistry());
                 config.AddRegistry(new Business.StructureMapRegistry());
                 config.For<IConfiguration>().Use(Configuration);
@@ -41,6 +42,18 @@ namespace GNIBIRPAndVisaAppointment.Web
             DIContainer.Inject<IDIContainer>(new StructureMapDIContainer(DIContainer));
 
             services.AddTransient<IDomainHub>(provider => DIContainer.GetInstance<IDomainHub>());
+
+            foreach (var dependentType in DIContainer.Model.PluginTypes)
+            {
+                if (dependentType.PluginType.IsGenericType)
+                {
+                    services.AddTransient(dependentType.PluginType, dependentType.PluginType);
+                }
+                else
+                {
+                    services.AddTransient(dependentType.PluginType, provider => DIContainer.GetInstance(dependentType.PluginType));
+                }
+            }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
