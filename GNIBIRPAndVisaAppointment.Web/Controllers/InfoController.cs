@@ -28,9 +28,20 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
             return View(GetInformationModel(key, language));
         }
 
+        [Route("Content/{key}/{language?}")]
+        public IActionResult Content(string key, string language)
+        {
+            return PartialView("/Views/Info/Content.cshtml", GetInformationModel(key, language));
+        }
+
         InformationModel GetInformationModel(string key, string language)
         {
-            var informationManager = DomainHub.GetDomain<IInformationManager>();
+            return GetInformationModel(DomainHub, key, language);
+        }
+
+        public static InformationModel GetInformationModel(IDomainHub domainHub, string key, string language)
+        {
+            var informationManager = domainHub.GetDomain<IInformationManager>();
             var information = informationManager[key, language];
 
             if (information == null)
