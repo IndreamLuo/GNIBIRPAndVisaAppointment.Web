@@ -1,0 +1,77 @@
+@model IEnumerable<AppointmentStatisticsModel>
+
+@{
+    var date = (DateTime)ViewBag.Date;
+}
+
+@functions
+{
+    public double appointmentVailability(int validAppointments, int publishAppointments, double totalContinuous)
+    {
+        return validAppointments == 0 ? 0 : (totalContinuous / validAppointments / 18);
+    }
+
+    public string vailabilityTd(int validAppointments, int publishAppointments, double totalContinuous)
+    {
+        var vailability = appointmentVailability(validAppointments, publishAppointments, totalContinuous);
+        return $"<td vailability=\"{vailability}\">{(vailability < 0.01 ? string.Empty : $"{vailability:F0}%")}</td>";
+    }
+}
+
+<h1>Heat Map for @date.ToString("yyyy-MM-dd")</h1>
+<div class="alert alert-primary" role="alert">
+    The number of percentage shows how possible to make an appoint of the type at the time.
+</div>
+<table class="table table-sm text-center">
+    <thead>
+        <tr>
+            <th rowspan="3"></th>
+            <th colspan="2" class="table-danger">Work</th>
+            <th colspan="2" class="table-danger">Study</th>
+            <th colspan="2" class="table-danger">Other</th>
+            <th rowspan="2" class="table-success align-middle">Individual</th>
+            <th rowspan="2" class="table-success align-middle">Family</th>
+            <th rowspan="2" class="table-success align-middle">Emergency</th>
+        </tr>
+        <tr>
+            <th class="table-danger">New</th>
+            <th class="table-danger">Renew</th>
+            <th class="table-danger">New</th>
+            <th class="table-danger">Renew</th>
+            <th class="table-danger">New</th>
+            <th class="table-danger">Renew</th>
+        </tr>
+        <tr>
+            
+        </tr>
+    </thead>
+    <tbody>
+    @{
+        var begin = Model.FirstOrDefault()?.StartTime.Date ?? new DateTime();
+        var end = begin.AddDays(1);
+        var statisticsQueue = new Queue<AppointmentStatisticsModel>(Model);
+        var emptyStatistic = new AppointmentStatisticsModel(); 
+        for (var time = begin; time < end; time = time.AddHours(0.5))
+        {
+            var statistics = (statisticsQueue.Any() && statisticsQueue.Peek().StartTime < time.AddHours(0.5) && statisticsQueue.Peek().EndTime > time)
+                ? statisticsQueue.Dequeue()
+                : emptyStatistic;
+
+            <tr>
+                <th>
+                    @time.ToString("HH : mm")
+                </th>
+                @Html.Raw(vailabilityTd(statistics.ValidIRPWorkNew, statistics.PublishIRPWorkNew, statistics.TotalContinuousIRPWorkNew))
+                @Html.Raw(vailabilityTd(statistics.ValidIRPWorkRenew, statistics.PublishIRPWorkRenew, statistics.TotalContinuousIRPWorkRenew))
+                @Html.Raw(vailabilityTd(statistics.ValidIRPStudyNew, statistics.PublishIRPStudyNew, statistics.TotalContinuousIRPStudyNew))
+                @Html.Raw(vailabilityTd(statistics.ValidIRPStudyRenew, statistics.PublishIRPStudyRenew, statistics.TotalContinuousIRPStudyRenew))
+                @Html.Raw(vailabilityTd(statistics.ValidIRPOtherNew, statistics.PublishIRPOtherNew, statistics.TotalContinuousIRPOtherNew))
+                @Html.Raw(vailabilityTd(statistics.ValidIRPOtherRenew, statistics.PublishIRPOtherRenew, statistics.TotalContinuousIRPOtherRenew))
+                @Html.Raw(vailabilityTd(statistics.ValidVisaIndividual, statistics.PublishVisaIndividual, statistics.TotalContinuousVisaIndividual))
+                @Html.Raw(vailabilityTd(statistics.ValidVisaFamily, statistics.PublishVisaFamily, statistics.TotalContinuousVisaFamily))
+                @Html.Raw(vailabilityTd(statistics.ValidVisaEmergency, statistics.PublishVisaEmergency, statistics.TotalContinuousVisaEmergency))
+            </tr>
+        }
+    }
+    </tbody>
+</table>

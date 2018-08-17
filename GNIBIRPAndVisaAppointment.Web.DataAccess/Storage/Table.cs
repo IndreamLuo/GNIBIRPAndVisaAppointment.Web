@@ -21,7 +21,8 @@ namespace GNIBIRPAndVisaAppointment.Web.DataAccess.Storage
         {
             get
             {
-                var query = new TableQuery<TTableEntity>().Select(Keys);
+                var query = new TableQuery<TTableEntity>()
+                    .Where(TableQuery.GenerateFilterCondition(Keys[0], QueryComparisons.Equal, partitionKey));
                 var result = new List<TTableEntity>();
                 TableContinuationToken token = null;
 

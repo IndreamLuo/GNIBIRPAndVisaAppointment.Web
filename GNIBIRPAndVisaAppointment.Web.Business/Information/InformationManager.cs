@@ -19,6 +19,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Information
             ApplicationSettings = applicationSettings;
 
             var webRootDirectory = StorageProvider.WebFileShare.GetRootDirectoryReference();
+            webRootDirectory.CreateIfNotExistsAsync().Wait();
             InformationDirectory = webRootDirectory.GetDirectoryReference("info");
             
             InformationDirectory.CreateIfNotExistsAsync().Wait();
