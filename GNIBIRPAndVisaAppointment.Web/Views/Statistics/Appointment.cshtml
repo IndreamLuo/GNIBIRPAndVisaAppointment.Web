@@ -8,7 +8,7 @@
 {
     public double appointmentVailability(int validAppointments, int publishAppointments, double totalContinuous)
     {
-        return validAppointments == 0 ? 0 : (totalContinuous / validAppointments / 18);
+        return validAppointments == 0 ? 0 : (totalContinuous / 18);
     }
 
     public string vailabilityTd(int validAppointments, int publishAppointments, double totalContinuous)
