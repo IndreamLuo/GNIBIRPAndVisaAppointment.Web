@@ -1,39 +1,39 @@
-// using System;
-// using Microsoft.AspNetCore.Mvc;
+using System;
+using GNIBIRPAndVisaAppointment.Web.Models;
+using Microsoft.AspNetCore.Mvc;
 
-// namespace GNIBIRPAndVisaAppointment.Web.Controllers
-// {
-//     [Route("Order")]
-//     public class OrderController : Controller
-//     {
-//         [Route("/")]
-//         public IActionResult Index()
-//         {
-//             return View();
-//         }
+namespace GNIBIRPAndVisaAppointment.Web.Controllers
+{
+    [Route("Order")]
+    public class OrderController : Controller
+    {
+        public IActionResult Index(OrderModel model)
+        {
+            return View(model);
+        }
 
-//         [Route("PlaceOrder")]
-//         public IActionResult PlaceOrder()
-//         {
-//             return View();
-//         }
+        // [Route("PlaceOrder")]
+        // public IActionResult PlaceOrder()
+        // {
+        //     return View();
+        // }
 
-//         [Route("Pay")]
-//         public IActionResult Pay()
-//         {
-//             return View();
-//         }
+        // [Route("Pay")]
+        // public IActionResult Pay()
+        // {
+        //     return View();
+        // }
 
-//         [Route("ConfirmPayment")]
-//         public IActionResult ConfirmPayment()
-//         {
-//             return View();
-//         }
+        // [Route("ConfirmPayment")]
+        // public IActionResult ConfirmPayment()
+        // {
+        //     return View();
+        // }
 
-//         [Route("Status")]
-//         public IActionResult Status()
-//         {
-//             return View();
-//         }
-//     }
-// }
+        // [Route("Status")]
+        // public IActionResult Status()
+        // {
+        //     return View();
+        // }
+    }
+}
