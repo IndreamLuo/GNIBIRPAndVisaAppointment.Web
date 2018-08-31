@@ -1,0 +1,351 @@
+@model OrderModel
+
+
+<div class="alert alert-success">
+    I offer services to help making appointment.
+    Fill in the application and I'll contact you.
+    I suggest using the free tools by yourself first.
+    As a single person, I cannot help everyone when too many people come in same time.
+    You'll be put on a queue in such case.
+    <hr />
+    <ul>
+        <dt>Data usage</dt>
+        <li>Your GNIB number, passport number will be removed and a copy will be sent to you by e-mail after the service ends.</li>
+        <li>Your e-mail and name will be remainen in a secured database in case any contact.</li>
+        <li>If you want new service you need to give me your details again.</li>
+    </ul>
+</div>
+
+<form method="post">
+    <h2 class="mt-5 mb-4">Appointment Info</h2>
+    <div class="container content">
+        <div class="form-group">
+            <label for="Category">Category:</label>
+            <select name="Category" id="Category" class="form-control" placeholder="Select..."><option value="...">Select...</option><option value="Other">Other</option><option value="Study">Study</option><option value="Work">Work</option></select>
+        </div>
+        <div class="form-group">
+            <label for="SubCategory">Sub Category</label>
+            <select name="SubCategory" id="SubCategory" class="form-control" placeholder="Select..."><option value="...">Select...</option><option value="Work Permit Holder">Work Permit Holder</option><option value="Hosting agreement">Hosting agreement</option><option value="Working Holiday">Working Holiday</option><option value="Atypical Working Schemes">Atypical Working Schemes</option><option value="Invest or Start a Business">Invest or Start a Business</option><option value="Visiting Academics">Visiting Academics</option><option value="Doctor">Doctor</option><option value="3rd Level Graduate Scheme ">3rd Level Graduate Scheme </option></select>
+        </div>
+
+        <div class="form-group">
+            <label for="ConfirmGNIB" class="control-label">I have a GNIB card or I have been registered before:</label>
+            <select name="ConfirmGNIB" id="ConfirmGNIB" class="form-control" placeholder="Select...">
+                <option value="...">Select...
+                </option><option value="Renewal">Yes
+                </option><option value="New">No</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="GNIBNo" class="control-label">GNIB Number:</label>
+            <input name="GNIBNo" value="" id="GNIBNo" class="form-control" placeholder="Enter GNIB number">
+        </div>
+
+        <div class="form-group">
+            <label for="GNIBExDT" class="control-label">Expiry date of current permission / GNIB card:</label>
+            <div class="input-group date gnibdate">
+
+                <input name="GNIBExDT" value="" id="GNIBExDT" class="form-control">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+            </div>
+        </div>
+
+        <div class="form-group alert alert-warning">
+            <div>
+                I confirm that I understand the conditions of my permission. Conditions available on <a href="http://www.inis.gov.ie/en/INIS/Pages/registration-stamps">Permission, stamps &amp; conditions.</a> 
+            </div>
+            <div>
+                <p>
+                    You must confirm that ALL of the following statements are true:
+                </p>
+                <ol>
+                    <li>I confirm I have selected the Category and Sub-Category that applies to me. </li>
+                    <li>I confirm that I understand the conditions of my permission.</li>
+                </ol>
+                <p>
+                    Conditions available on <a href="http://www.inis.gov.ie/en/INIS/Pages/registration-stamps">INIS website.</a> 
+                </p>
+            </div>
+            <div>
+                <input type="checkbox" name="UsrDeclaration" value="Y" id="UsrDeclaration" />
+                I confirm that all of the above statements are true.
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="GivenName" class="control-label">Given Name:</label>
+            <input name="GivenName" value="" id="GivenName" class="form-control" placeholder="Enter your given name">
+        </div>
+        <div class="form-group">
+            <label for="SurName" class="control-label">Surname:</label>
+            <input name="SurName" value="" id="SurName" class="form-control" placeholder="Enter your surname">
+        </div>
+        <div class="form-group">
+            <label for="DOB" class="control-label">Date of Birth:</label>
+            <div class="input-group date dobdate">
+            <input name="DOB" value="" id="DOB" class="form-control">
+            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+        </div>
+
+        <div class="form-group">
+            <label for="Nationality" class="control-label">Nationality:</label>
+            <select name="Nationality" id="Nationality" class="form-control" placeholder="Select...">
+                <option>Select...
+                </option><option>Afghanistan, Islamic Republic of
+                </option><option>Albania, Republic of
+                </option><option>Algeria, People's Democratic Republic of
+                </option><option>Angola, Republic of
+                </option><option>Anguilla
+                </option><option>Antigua and Barbuda
+                </option><option>Argentina
+                </option><option>Armenia, Republic of
+                </option><option>Aruba
+                </option><option>Australia
+                </option><option>Azerbaijan, Republic of
+                </option><option>Bahamas
+                </option><option>Bahrain, Kingdom of
+                </option><option>Bangladesh
+                </option><option>Bangladesh, People's Republic of
+                </option><option>Barbados
+                </option><option>Belarus, Republic of
+                </option><option>Belize
+                </option><option>Benin, Republic of
+                </option><option>Bermuda
+                </option><option>Bhutan, Kingdom of
+                </option><option>Bolivia
+                </option><option>Bosnia and Herzegovina
+                </option><option>Botswana
+                </option><option>Brazil
+                </option><option>British Virgin Islands
+                </option><option>Brunei
+                </option><option>Burkina Faso
+                </option><option>Burma/Myanmar
+                </option><option>Burma/Republic of the Union of Myanmar
+                </option><option>Burundi, Republic of
+                </option><option>Cambodia, Kingdom of
+                </option><option>Cameroon, Republic of
+                </option><option>Canada
+                </option><option>Cape Verde, Republic of
+                </option><option>Cayman Islands
+                </option><option>Central African Republic
+                </option><option>Chad, Republic of
+                </option><option>Chile
+                </option><option>China, People's Republic of
+                </option><option>Colombia, Republic of
+                </option><option>Comoros, Union of the
+                </option><option>Congo, Democratic Republic of
+                </option><option>Congo, Republic of (Brazzaville)
+                </option><option>Costa Rica
+                </option><option>Cote d'Ivoire, republic of ivory coast
+                </option><option>Cuba, Republic of
+                </option><option>Djibouti, Republic of
+                </option><option>Dominica
+                </option><option>Dominican Republic
+                </option><option>Ecuador, Republic of
+                </option><option>Egypt, arab republic of
+                </option><option>El Salvador
+                </option><option>Equatorial Guinea, Republic of
+                </option><option>Eritrea, State of
+                </option><option>Ethiopia, Federal democratic republic of
+                </option><option>Falkland Islands
+                </option><option>Fiji
+                </option><option>Gabon, Republic of
+                </option><option>Gambia, Republic of
+                </option><option>Georgia
+                </option><option>Ghana, Republic of
+                </option><option>Greenland
+                </option><option>Grenada
+                </option><option>Guatemala
+                </option><option>Guinea-Bissau, Republic of
+                </option><option>Guinea, Republic of
+                </option><option>Guyana
+                </option><option>Haiti, Republic of
+                </option><option>Honduras
+                </option><option>Hong Kong
+                </option><option>India, Republic of
+                </option><option>Indonesia, Republic of
+                </option><option>Iran, Islamic Republic of
+                </option><option>Iraq, Republic of
+                </option><option>Israel
+                </option><option>Jamaica
+                </option><option>Japan
+                </option><option>Jordan, Hashemite Kingdom of
+                </option><option>Kazakhstan, Republic of
+                </option><option>Kenya, Republic of
+                </option><option>Kiribati
+                </option><option>Korea (North), Democratic Republic of
+                </option><option>Kosovo, Republic of
+                </option><option>Kuwait, State of
+                </option><option>Kyrgyzstan
+                </option><option>Laos People's Republic of
+                </option><option>Lebanon, Republic of
+                </option><option>Lesotho
+                </option><option>Liberia, Republic of
+                </option><option>Libya, State of
+                </option><option>Macao
+                </option><option>Macedonia, The former Yuoslav Republic of
+                </option><option>Madagascar, Republic of
+                </option><option>Malawi
+                </option><option>Malaysia
+                </option><option>Maldives
+                </option><option>Mali, Republic of
+                </option><option>Marshall Islands, Republic of
+                </option><option>Mauritania, Islamic Republic of
+                </option><option>Mauritius, Republic of
+                </option><option>Mexico
+                </option><option>Micronesia, Federated States of
+                </option><option>Moldova, Republic of
+                </option><option>Mongolia
+                </option><option>Montenegro
+                </option><option>Montserrat
+                </option><option>Morocco, Kingdom of
+                </option><option>Mozambique, Republic of
+                </option><option>Namibia, Republic of
+                </option><option>Nauru
+                </option><option>Nepal, Federal Democratic Republic of
+                </option><option>New Zealand
+                </option><option>Nicaragua
+                </option><option>Nigeria, Federal Republic of
+                </option><option>Niger, Republic of
+                </option><option>Oman, Sultanate of
+                </option><option>Pakistan, Islamic Republic of
+                </option><option>Palau, Republic of
+                </option><option>Palestinian National Authority
+                </option><option>Panama
+                </option><option>Papua New Guinea
+                </option><option>Paraguay
+                </option><option>Peru, republic of
+                </option><option>Philippines, Republic of
+                </option><option>Pitcairn Island
+                </option><option>Qatar, State of
+                </option><option>Russian Federation
+                </option><option>Rwanda, Republic of
+                </option><option>Saint-Barthelemy
+                </option><option>Samoa
+                </option><option>Sao Tome and Principe, Democratic Republic of
+                </option><option>Saudi Arabia, Kingdom of
+                </option><option>Senegal, Republic of
+                </option><option>Serbia, Republic of
+                </option><option>Seychelles
+                </option><option>Sierra Leone, Republic of
+                </option><option>Singapore
+                </option><option>Solomon Islands
+                </option><option>Somalia, Federal Republic of
+                </option><option>South Africa
+                </option><option>South Korea
+                </option><option>Sri Lanka, Democratic Socialist Republic of
+                </option><option>St Helena, Ascension and Tristan da Cunha
+                </option><option>St Kitts and Nevis
+                </option><option>St Lucia
+                </option><option>St Martin
+                </option><option>St Vincent and The Grenadines
+                </option><option>Sudan, Republic of the
+                </option><option>Suriname, Republic of
+                </option><option>Swaziland
+                </option><option>Syrian Arab Republic
+                </option><option>Taiwan
+                </option><option>Tajikistan
+                </option><option>Tanzania
+                </option><option>Thailand, Kingdom of
+                </option><option>Timor-Leste, Democratic Republic of
+                </option><option>Togo, Republic of
+                </option><option>Tonga
+                </option><option>Trinidad and Tobago
+                </option><option>Tunisia, Republic of
+                </option><option>Turkey, Republic of
+                </option><option>Turkmenistan
+                </option><option>Turks and Caicos Islands
+                </option><option>Tuvalu
+                </option><option>Uganda, Republic of
+                </option><option>Ukraine
+                </option><option>United Arab Emirates
+                </option><option>United States
+                </option><option>Uruguay
+                </option><option>Uzbekistan, Republic of
+                </option><option>Vanuatu
+                </option><option>Venezuela (Bolivarian Republic of)
+                </option><option>Vietnam, Socialist Republic of
+                </option><option>Yemen, Republic of
+                </option><option>Zambia, Republic of
+                </option><option>Zimbabwe, Republic of</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="Email" class="control-label">Email:</label>
+            <input name="Email" value="" id="Email" class="form-control" placeholder="Enter your email address">
+        </div>
+
+        <div class="form-group">
+            <label for="EmailConfirm" class="control-label">Confirm email:</label><br>
+            <input name="EmailConfirm" value="" id="EmailConfirm" class="form-control" placeholder="Enter your email address again">
+        </div>
+
+        <div class="form-group">
+            <label for="FamAppYN" class="control-label">Is this a family application?</label>
+            <select name="FamAppYN" id="FamAppYN" class="form-control" placeholder="Select...">
+                <option>Select...
+                </option><option>Yes
+                </option><option>No</option>
+            </select>
+            <small class="text-muted">(Primary applicant plus spouse, child or parent only)</small>
+        </div>
+
+        <div class="form-group">
+            <label for="FamAppNo" class="control-label">Number of applicants in family application:</label>
+            <select name="FamAppNo" id="FamAppNo" class="form-control" placeholder="Select...">
+                <option value="...">Select...
+                </option><option value="1">1
+                </option><option value="2">2
+                </option><option value="3">3
+                </option><option value="4">4
+                </option><option value="5">5
+                </option><option value="6">6
+                </option><option value="7">7
+                </option><option value="8">8
+                </option><option value="9">9
+                </option><option value="10">10 or more</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="PPNoYN" class="control-label">Do you have a Passport or Travel Document?</label>
+            <select name="PPNoYN" id="PPNoYN" class="form-control" placeholder="Select...">
+                <option>Select...
+                </option><option>Yes
+                </option><option>No</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="PPNo" class="control-label">Passport Number or Travel Document Number (max 30 characters):</label>
+            <input name="PPNo" value="" id="PPNo" class="form-control" placeholder="Enter your passport or travel document number" ;="" maxlength="30">
+        </div>
+
+        <div class="form-group">
+            <label for="PPReason" class="control-label">Reasons for absence of passport or travel document:</label>
+            <select name="PPReason" id="PPReason" class="form-control" placeholder="Enter your passport number">
+                <option>Select...
+                </option><option>I am a recognised refugee in Ireland
+                </option><option>My passport has expired
+                </option><option>Other
+                </option><option>My embassy cannot/will not help me get my passport renewed</option>
+            </select>
+            <div>
+                Applications without a current passport will only be processed in exceptional circumstances.
+                You must bring photographic identification to your appointment. If you have an expired passport, please bring this document.
+            </div>
+        </div>
+    </div>
+
+    <h2 class="mt-5 mb-4">You Expectation and Contact</h2>
+    <div class="container content">
+        <div class="form-group">
+            <textarea name="Message" class="form-control" placeholder="I want to make a close appointment. You may contact me by number 089 1234567 or my e-mail."></textarea>
+        </div>
+    </div>
+</form>
+
+<h1 class="mt-5"></h1>
+<div class="fb-comments" data-href="http://gnibirpvisa.ie/Application" width="100%" data-numposts="20"></div>
