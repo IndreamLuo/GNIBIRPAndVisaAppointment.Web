@@ -1,1 +1,23 @@
-@await Component.InvokeAsync("InfoContent", new { key = "donate" })
+<div class="jumbotron">
+    <h2>This is an open source project</h2>
+    <hr class="my-3" />
+    <p>
+        The
+        <a href="https://github.com/IndreamLuo/GNIBIRPAndVisaAppointment.Chrome">source code</a>
+        is free to access. Donation helps me to maintain and develop the services and afford the cloud servers costs for hosting and testing.
+        <br />
+        I tried my best to keep this in low cost with best practice from the beginning.
+    </p>
+    <a class="btn btn-primary" target="_blank" href="https://github.com/IndreamLuo/GNIBIRPAndVisaAppointment.Chrome">View in GitHub</a>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm">
+            @await Component.InvokeAsync("InfoContent", new { key = "donate-paypal" })
+        </div>
+        <div class="col-sm">
+            @await Component.InvokeAsync("InfoContent", new { key = "donate-wechat" })
+        </div>
+    </div>
+</div>
