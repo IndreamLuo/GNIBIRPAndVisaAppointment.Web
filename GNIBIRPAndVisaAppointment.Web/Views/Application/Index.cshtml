@@ -357,7 +357,11 @@
             <input type="checkbox" value="true" name="AuthorizeContact" />
             I authorize the use of contact for the service of making GNIB/IRP appointment.
         </div>
-        <button type="submit" class="btn btn-success">Submit</button>
+        <button type="submit" class="btn btn-success"
+            class="g-recaptcha"
+            data-sitekey=""
+            data-callback="submit">Submit
+        </button>
     </div>
 </form>
 
@@ -366,6 +370,10 @@
 
 @section scripts {
     <script type="text/javascript">
+        var submit = function () {
+            $('form').submit();
+        }
+
         $(document).ready(function () {
             $('select').each(function () {
                 if ($(this).attr('value')) {

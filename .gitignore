@@ -305,3 +305,4 @@ $RECYCLE.BIN/
 appsettings.Development.json
 .vscode/tasks.json
 .vscode/launch.json
+GNIBIRPAndVisaAppointment.Web/wwwroot/.well-known/apple-developer-merchantid-domain-association
