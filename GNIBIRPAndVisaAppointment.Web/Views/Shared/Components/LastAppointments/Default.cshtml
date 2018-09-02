@@ -31,7 +31,7 @@
 }
 
 <h1>GNIB / IRP</h1>
-<table class="table">
+<table class="table irp">
     <thead>
         <tr>
             <th scope="col"></th>
@@ -46,12 +46,21 @@
             <tr>
                 <th scope="row">@set</th>
                 <td>
+                    <h6>
+                        <span class="badge badge-info">@set</span>
+                    </h6>
                     @Html.Raw(showAppointments(groups, $"Work{set}"))
                 </td>
                 <td>
+                    <h6>
+                        <span class="badge badge-info">@set</span>
+                    </h6>
                     @Html.Raw(showAppointments(groups, $"Study{set}"))
                 </td>
                 <td>
+                    <h6>
+                        <span class="badge badge-info">@set</span>
+                    </h6>
                     @Html.Raw(showAppointments(groups, $"Other{set}"))
                 </td>
             </tr>
@@ -60,8 +69,28 @@
 </table>
 <a class="btn btn-success mb-5" href="https://burghquayregistrationoffice.inis.gov.ie/Website/AMSREG/AMSRegWeb.nsf/AppSelect?OpenForm">Appoint for GNIB/IRP</a>
 
+<style>
+    table[class~=irp] .badge {
+        display: none;
+    }
+
+    @@media only screen and (max-width: 420px) {
+        table[class~=irp] tr th:first-child  {
+            display: none;
+        }
+
+        table[class~=irp] .badge {
+            display: block;
+        }
+    }
+</style>
+
 <h1>Visa</h1>
-<table class="table">
+<div class="alert alert-warning">
+    <a href="http://www.inis.gov.ie/en/INIS/Pages/Re-entry+visas" target="_blank">Only emergency will be accepted from 3 Sep 2018.</a>
+    I'll be following the actual situation. Feel free to contact if you need help.
+</div>
+<table class="table visa">
     <thead>
         <tr>
             <th scope="col">Individual</th>
