@@ -4,7 +4,7 @@ using GNIBIRPAndVisaAppointment.Web.Utility;
 namespace GNIBIRPAndVisaAppointment.Web.Business.Configuration
 {
     internal class ConfigurationManager : SingleTableDomainBase<DataAccess.Model.Storage.Configuration>, IConfigurationManager
-    {        
+    {
         public ConfigurationManager(IStorageProvider storageProvider) : base(storageProvider) { }
         
         public string this[string area, string key]

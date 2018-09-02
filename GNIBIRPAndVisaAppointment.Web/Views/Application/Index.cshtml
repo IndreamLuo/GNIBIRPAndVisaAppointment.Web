@@ -1,36 +1,39 @@
-@model OrderModel
+@model ApplicationModel
 
 
 <div class="alert alert-success">
     I offer services to help making appointment.
     Fill in the application and I'll contact you.
-    I suggest using the free tools by yourself first.
+    I suggest using the
+    <a href="/App">free tools</a>
+    by yourself first.
     As a single person, I cannot help everyone when too many people come in same time.
     You'll be put on a queue in such case.
     <hr />
     <ul>
         <dt>Data usage</dt>
-        <li>Your GNIB number, passport number will be removed and a copy will be sent to you by e-mail after the service ends.</li>
-        <li>Your e-mail and name will be remainen in a secured database in case any contact.</li>
-        <li>If you want new service you need to give me your details again.</li>
+        <li>Your GNIB number, passport number will be removed after the service ends.</li>
+        <li>Your e-mail and name will be remained in case any contact about the service.</li>
+        <li>If you want new service you need to offer me your details again.</li>
     </ul>
 </div>
 
 <form method="post">
     <h2 class="mt-5 mb-4">Appointment Info</h2>
     <div class="container content">
+        <div class="alert alert-info">You don't need to provide all information if you want this to be an inquiry first.</div>
         <div class="form-group">
             <label for="Category">Category:</label>
-            <select name="Category" id="Category" class="form-control" placeholder="Select..."><option value="...">Select...</option><option value="Other">Other</option><option value="Study">Study</option><option value="Work">Work</option></select>
+            <select name="Category" id="Category" value="@Model.Category" class="form-control" placeholder="Select..."><option value="...">Select...</option><option value="Other">Other</option><option value="Study">Study</option><option value="Work">Work</option></select>
         </div>
         <div class="form-group">
             <label for="SubCategory">Sub Category</label>
-            <select name="SubCategory" id="SubCategory" class="form-control" placeholder="Select..."><option value="...">Select...</option><option value="Work Permit Holder">Work Permit Holder</option><option value="Hosting agreement">Hosting agreement</option><option value="Working Holiday">Working Holiday</option><option value="Atypical Working Schemes">Atypical Working Schemes</option><option value="Invest or Start a Business">Invest or Start a Business</option><option value="Visiting Academics">Visiting Academics</option><option value="Doctor">Doctor</option><option value="3rd Level Graduate Scheme ">3rd Level Graduate Scheme </option></select>
+            <select name="SubCategory" id="SubCategory" value="@Model.SubCategory" class="form-control" placeholder="Select..."><option value="...">Select...</option><option value="Work Permit Holder">Work Permit Holder</option><option value="Hosting agreement">Hosting agreement</option><option value="Working Holiday">Working Holiday</option><option value="Atypical Working Schemes">Atypical Working Schemes</option><option value="Invest or Start a Business">Invest or Start a Business</option><option value="Visiting Academics">Visiting Academics</option><option value="Doctor">Doctor</option><option value="3rd Level Graduate Scheme ">3rd Level Graduate Scheme </option></select>
         </div>
 
         <div class="form-group">
             <label for="ConfirmGNIB" class="control-label">I have a GNIB card or I have been registered before:</label>
-            <select name="ConfirmGNIB" id="ConfirmGNIB" class="form-control" placeholder="Select...">
+            <select name="ConfirmGNIB" id="ConfirmGNIB" value="@Model.ConfirmGNIB" class="form-control" placeholder="Select...">
                 <option value="...">Select...
                 </option><option value="Renewal">Yes
                 </option><option value="New">No</option>
@@ -39,14 +42,14 @@
 
         <div class="form-group">
             <label for="GNIBNo" class="control-label">GNIB Number:</label>
-            <input name="GNIBNo" value="" id="GNIBNo" class="form-control" placeholder="Enter GNIB number">
+            <input name="GNIBNo" id="GNIBNo" value="@Model.GNIBNo" class="form-control" placeholder="Enter GNIB number">
         </div>
 
         <div class="form-group">
             <label for="GNIBExDT" class="control-label">Expiry date of current permission / GNIB card:</label>
             <div class="input-group date gnibdate">
 
-                <input name="GNIBExDT" value="" id="GNIBExDT" class="form-control">
+                <input name="GNIBExDT" value="@Model.GNIBExDT" id="GNIBExDT" class="form-control">
                 <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
             </div>
         </div>
@@ -68,29 +71,28 @@
                 </p>
             </div>
             <div>
-                <input type="checkbox" name="UsrDeclaration" value="Y" id="UsrDeclaration" />
+                <input type="checkbox" name="UsrDeclaration" value="Y" id="UsrDeclaration" @Html.Raw(Model.UsrDeclaration == 'Y' ? "checked" : string.Empty) />
                 I confirm that all of the above statements are true.
             </div>
         </div>
 
         <div class="form-group">
             <label for="GivenName" class="control-label">Given Name:</label>
-            <input name="GivenName" value="" id="GivenName" class="form-control" placeholder="Enter your given name">
+            <input name="GivenName" value="@Model.GivenName" id="GivenName" class="form-control" placeholder="Enter your given name">
         </div>
         <div class="form-group">
             <label for="SurName" class="control-label">Surname:</label>
-            <input name="SurName" value="" id="SurName" class="form-control" placeholder="Enter your surname">
+            <input name="SurName" value="@Model.SurName" id="SurName" class="form-control" placeholder="Enter your surname">
         </div>
         <div class="form-group">
             <label for="DOB" class="control-label">Date of Birth:</label>
-            <div class="input-group date dobdate">
-            <input name="DOB" value="" id="DOB" class="form-control">
+            <input name="DOB" value="@Model.DOB" id="DOB" class="form-control">
             <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
         </div>
 
         <div class="form-group">
             <label for="Nationality" class="control-label">Nationality:</label>
-            <select name="Nationality" id="Nationality" class="form-control" placeholder="Select...">
+            <select name="Nationality" value="@Model.Nationality" id="Nationality" class="form-control" placeholder="Select...">
                 <option>Select...
                 </option><option>Afghanistan, Islamic Republic of
                 </option><option>Albania, Republic of
@@ -274,17 +276,19 @@
 
         <div class="form-group">
             <label for="Email" class="control-label">Email:</label>
-            <input name="Email" value="" id="Email" class="form-control" placeholder="Enter your email address">
+            <input name="Email" value="@Model.Email" id="Email" class="form-control" placeholder="Enter your email address">
+            <span asp-validation-for="Email" class="form-text text-danger"></span>
         </div>
 
         <div class="form-group">
             <label for="EmailConfirm" class="control-label">Confirm email:</label><br>
-            <input name="EmailConfirm" value="" id="EmailConfirm" class="form-control" placeholder="Enter your email address again">
+            <input name="EmailConfirm" value="@Model.EmailConfirm" id="EmailConfirm" class="form-control" placeholder="Enter your email address again">
+            <span asp-validation-for="EmailConfirm" class="form-text text-danger"></span>
         </div>
 
         <div class="form-group">
             <label for="FamAppYN" class="control-label">Is this a family application?</label>
-            <select name="FamAppYN" id="FamAppYN" class="form-control" placeholder="Select...">
+            <select name="FamAppYN" id="FamAppYN" value="@Model.FamAppYN" class="form-control" placeholder="Select...">
                 <option>Select...
                 </option><option>Yes
                 </option><option>No</option>
@@ -294,7 +298,7 @@
 
         <div class="form-group">
             <label for="FamAppNo" class="control-label">Number of applicants in family application:</label>
-            <select name="FamAppNo" id="FamAppNo" class="form-control" placeholder="Select...">
+            <select name="FamAppNo" value="@Model.FamAppNo" id="FamAppNo" class="form-control" placeholder="Select...">
                 <option value="...">Select...
                 </option><option value="1">1
                 </option><option value="2">2
@@ -311,7 +315,7 @@
 
         <div class="form-group">
             <label for="PPNoYN" class="control-label">Do you have a Passport or Travel Document?</label>
-            <select name="PPNoYN" id="PPNoYN" class="form-control" placeholder="Select...">
+            <select name="PPNoYN" value="@Model.PPNoYN" id="PPNoYN" class="form-control" placeholder="Select...">
                 <option>Select...
                 </option><option>Yes
                 </option><option>No</option>
@@ -320,12 +324,12 @@
 
         <div class="form-group">
             <label for="PPNo" class="control-label">Passport Number or Travel Document Number (max 30 characters):</label>
-            <input name="PPNo" value="" id="PPNo" class="form-control" placeholder="Enter your passport or travel document number" ;="" maxlength="30">
+            <input name="PPNo" value="@Model.PPNo" id="PPNo" class="form-control" placeholder="Enter your passport or travel document number" ;="" maxlength="30">
         </div>
 
         <div class="form-group">
             <label for="PPReason" class="control-label">Reasons for absence of passport or travel document:</label>
-            <select name="PPReason" id="PPReason" class="form-control" placeholder="Enter your passport number">
+            <select name="PPReason" value="@Model.PPReason" id="PPReason" class="form-control" placeholder="Enter your passport number">
                 <option>Select...
                 </option><option>I am a recognised refugee in Ireland
                 </option><option>My passport has expired
@@ -342,10 +346,36 @@
     <h2 class="mt-5 mb-4">You Expectation and Contact</h2>
     <div class="container content">
         <div class="form-group">
-            <textarea name="Message" class="form-control" placeholder="I want to make a close appointment. You may contact me by number 089 1234567 or my e-mail."></textarea>
+            <textarea name="Message" style="height: 500px" class="form-control" placeholder="I want to make a close appointment. You may contact me by number 089 1234567 or my e-mail.">
+@Model.Message
+            </textarea>
         </div>
+    </div>
+
+    <div class="container content">
+        <div class="alert alert-danger">
+            <input type="checkbox" value="true" name="AuthorizeContact" />
+            I authorize the use of contact for the service of making GNIB/IRP appointment.
+        </div>
+        <button type="submit" class="btn btn-success">Submit</button>
     </div>
 </form>
 
 <h1 class="mt-5"></h1>
 <div class="fb-comments" data-href="http://gnibirpvisa.ie/Application" width="100%" data-numposts="20"></div>
+
+@section scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('select').each(function () {
+                if ($(this).attr('value')) {
+                    $(this).val($(this).attr('value'));
+                }
+            });
+            $('button[type="submit"]').prop('disabled', !$('input[name="AuthorizeContact"]').checked);
+            $('input[name="AuthorizeContact"]').change(function () {
+                $('button[type="submit"]').prop('disabled', !this.checked);
+            });
+        });
+    </script>
+}

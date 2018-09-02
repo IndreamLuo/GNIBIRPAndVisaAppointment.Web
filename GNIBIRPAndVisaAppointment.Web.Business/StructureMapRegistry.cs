@@ -13,6 +13,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Business
             For<IConfigurationManager>().Singleton().Use<ConfigurationManager>();
             For<IInformationManager>().Singleton().Use<InformationManager>();
             For<IAppointmentManager>().Use<AppointmentManager>();
+            For<IApplicationManager>().Use<ApplicationManager>();
         }
     }
 }
