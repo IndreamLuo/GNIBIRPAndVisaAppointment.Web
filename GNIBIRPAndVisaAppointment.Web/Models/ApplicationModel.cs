@@ -1,11 +1,19 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using GNIBIRPAndVisaAppointment.Web.DataAccess.Model.Storage;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace GNIBIRPAndVisaAppointment.Web.Models
 {
     public class ApplicationModel
     {
+        public ApplicationModel() { }
+        
+        public ApplicationModel(Application application)
+        {
+
+        }
+
         public string Category { get; set; }
         public string SubCategory { get; set; }
         public string ConfirmGNIB { get; set; }

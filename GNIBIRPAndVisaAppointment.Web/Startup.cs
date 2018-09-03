@@ -6,6 +6,7 @@ using GNIBIRPAndVisaAppointment.Web.Business;
 using GNIBIRPAndVisaAppointment.Web.Utility;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -37,6 +38,7 @@ namespace GNIBIRPAndVisaAppointment.Web
                 config.For<IConfiguration>().Use(Configuration);
                 config.For<IApplicationSettings>().Use<ASPNETCoreApplicationSettings>();
                 config.For<ResourceFileUrlRewriteRule>().Use<ResourceFileUrlRewriteRule>();
+                config.For<IHttpContextAccessor>().Use<HttpContextAccessor>();
             });
             
             DIContainer.Inject<IDIContainer>(new StructureMapDIContainer(DIContainer));

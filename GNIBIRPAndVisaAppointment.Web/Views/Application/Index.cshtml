@@ -48,8 +48,7 @@
         <div class="form-group">
             <label for="GNIBExDT" class="control-label">Expiry date of current permission / GNIB card:</label>
             <div class="input-group date gnibdate">
-
-                <input name="GNIBExDT" value="@Model.GNIBExDT" id="GNIBExDT" class="form-control">
+                <input name="GNIBExDT" value="@Model.GNIBExDT" id="GNIBExDT" class="form-control" placeholder="30/12/2018">
                 <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
             </div>
         </div>
@@ -86,7 +85,7 @@
         </div>
         <div class="form-group">
             <label for="DOB" class="control-label">Date of Birth:</label>
-            <input name="DOB" value="@Model.DOB" id="DOB" class="form-control">
+            <input name="DOB" value="@Model.DOB" id="DOB" class="form-control" placeholder="30/12/2018">
             <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
         </div>
 
@@ -357,6 +356,7 @@
             <input type="checkbox" value="true" name="AuthorizeContact" />
             I authorize the use of contact for the service of making GNIB/IRP appointment.
         </div>
+        <input type="hidden" name="reCaptchaResponse" id="reCaptchaResponse" />
         <button type="submit" class="btn btn-success"
             class="g-recaptcha"
             data-sitekey=""
@@ -370,7 +370,8 @@
 
 @section scripts {
     <script type="text/javascript">
-        var submit = function () {
+        var submit = function (responseToken) {
+            reCaptchaResponse.val = responseToken;
             $('form').submit();
         }
 

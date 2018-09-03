@@ -1,8 +1,11 @@
 using System;
+using System.Threading.Tasks;
 using GNIBIRPAndVisaAppointment.Web.Business;
-using GNIBIRPAndVisaAppointment.Web.Business.Information;
+using GNIBIRPAndVisaAppointment.Web.Business.Application;
 using GNIBIRPAndVisaAppointment.Web.DataAccess.Model.Storage;
 using GNIBIRPAndVisaAppointment.Web.Models;
+using GNIBIRPAndVisaAppointment.Web.Utility;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GNIBIRPAndVisaAppointment.Web.Controllers
@@ -11,15 +14,19 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
     public class ApplicationController : Controller
     {
         IDomainHub DomainHub;
+        IHttpContextAccessor HttpContextAccessor;
+        reCaptchaHelper reCaptchaHelper;
 
-        public ApplicationController(IDomainHub domainHub)
+        public ApplicationController(IDomainHub domainHub, IHttpContextAccessor httpContextAccessor, reCaptchaHelper reCaptchaHelper)
         {
             DomainHub = domainHub;
+            HttpContextAccessor = httpContextAccessor;
+            this.reCaptchaHelper = reCaptchaHelper;
         }
 
-        public IActionResult Index(ApplicationModel model)
+        public async Task<IActionResult> Index(ApplicationModel model, string reCaptchaResponse)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && await reCaptchaHelper.VerifyAsync(reCaptchaResponse, HttpContextAccessor.HttpContext.Connection.RemoteIpAddress.ToString()))
             {
                 var applicationManager = DomainHub.GetDomain<IApplicationManager>();
                 var application = new Application
@@ -43,10 +50,17 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
                     Message = model.Message
                 };
                 
-                applicationManager.CreateApplication(application);
+                var applicationId = applicationManager.CreateApplication(application);
+                return Redirect($"/Order/{applicationId}");
             }
 
             return View(model);
+        }
+
+        [Route("Order/{applicationId}")]
+        public IActionResult Order(string applicationId)
+        {
+            return View();
         }
 
         // [Route("PlaceOrder")]

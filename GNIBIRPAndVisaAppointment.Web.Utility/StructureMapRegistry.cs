@@ -8,6 +8,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Utility
         {
             For<IGlobalCache>().Singleton().Use<GlobalCache>();
             For<ICurrentObjectCache>().Transient().Use<CurrentObjectCache>();
+            For<reCaptchaHelper>().Use<reCaptchaHelper>();
         }
     }
 }

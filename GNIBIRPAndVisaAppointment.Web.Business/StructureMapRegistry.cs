@@ -1,6 +1,7 @@
 using GNIBIRPAndVisaAppointment.Web.Business.Appointment;
 using GNIBIRPAndVisaAppointment.Web.Business.Configuration;
 using GNIBIRPAndVisaAppointment.Web.Business.Information;
+using GNIBIRPAndVisaAppointment.Web.Business.Application;
 using StructureMap;
 
 namespace GNIBIRPAndVisaAppointment.Web.Business
