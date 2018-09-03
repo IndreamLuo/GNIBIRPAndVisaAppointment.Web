@@ -370,7 +370,7 @@
 @section scripts {
     <script type="text/javascript">
         var submit = function (responseToken) {
-            reCaptchaResponse.val = responseToken;
+            $(reCaptchaResponse).val(responseToken);
             $('form').submit();
         }
 
