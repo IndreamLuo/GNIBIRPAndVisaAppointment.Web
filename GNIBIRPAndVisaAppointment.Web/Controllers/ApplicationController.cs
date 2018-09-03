@@ -51,7 +51,11 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
                 };
                 
                 var applicationId = applicationManager.CreateApplication(application);
-                return Redirect($"/Order/{applicationId}");
+                return RedirectToAction("Order",
+                new
+                {
+                    applicationId = applicationId
+                });
             }
 
             ViewBag.reCaptchaUserCode = reCaptchaHelper.reCaptchaUserCode;
