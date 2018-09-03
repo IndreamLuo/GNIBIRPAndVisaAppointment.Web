@@ -54,6 +54,8 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
                 return Redirect($"/Order/{applicationId}");
             }
 
+            ViewBag.reCaptchaUserCode = reCaptchaHelper.reCaptchaUserCode;
+
             return View(model);
         }
 
