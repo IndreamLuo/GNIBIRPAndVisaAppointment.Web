@@ -66,6 +66,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
         [Route("Order/{applicationId}")]
         public IActionResult Order(string applicationId)
         {
+            ViewBag.ApplicationId = applicationId;
             return View();
         }
 

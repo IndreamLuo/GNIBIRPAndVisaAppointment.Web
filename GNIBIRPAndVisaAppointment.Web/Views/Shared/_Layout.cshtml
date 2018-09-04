@@ -45,7 +45,7 @@
 
         <div class="my-lg-0">
             <!-- <fb:login-button class="facebook-login" scope="public_profile,email" onlogin="checkLoginState();"></fb:login-button> -->
-            <a class="btn btn-outline-primary" href="/Donate">Donate</a>
+            <a class="btn btn-outline-primary" data-toggle="tooltip" data-placement="bottom" title="This is an open source project." href="/Donate">Donate</a>
             <button type="button" class="navbar-toggler my-lg-0" data-toggle="collapse" data-target=".navbar-collapse" aria-expanded="false">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -74,10 +74,16 @@
     <script src="~/lib/jquery/dist/jquery.slim.js"></script>
     <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.16.0/jquery.validate.min.js"></script>
     <script src="https://ajax.aspnetcdn.com/ajax/jquery.validation.unobtrusive/3.2.6/jquery.validate.unobtrusive.min.js"></script>
-    <script src="~/lib/popper.js/dist/popper.js"></script>
+    <script src="~/lib/popper.js/dist/umd/popper.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(function () {
+                $('[data-toggle="tooltip"]').tooltip()
+            });
+        })
+    </script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>
