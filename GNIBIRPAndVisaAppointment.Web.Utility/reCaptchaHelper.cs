@@ -19,8 +19,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Utility
         {
             using (var httpClient = new HttpClient())
             {
-                var postResponse = await httpClient.PostAsync("https://www.google.com/recaptcha/api/siteverify",
-                    new StringContent($"secret={reCaptchaSystemCode}&response={g_recaptcha_response}&remoteip{userIP}"));
+                var postResponse = await httpClient.PostAsync($"https://www.google.com/recaptcha/api/siteverify?secret={reCaptchaSystemCode}&response={g_recaptcha_response}&remoteip{userIP}", null);
 
                 var resultContent = await postResponse.Content.ReadAsStringAsync();
 
