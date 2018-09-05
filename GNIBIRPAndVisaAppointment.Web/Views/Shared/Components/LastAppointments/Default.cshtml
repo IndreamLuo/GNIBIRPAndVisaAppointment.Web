@@ -88,24 +88,17 @@
 <h1>Visa</h1>
 <div class="alert alert-warning">
     <a href="http://www.inis.gov.ie/en/INIS/Pages/Re-entry+visas" target="_blank">Only emergency will be accepted from 3 Sep 2018.</a>
+    You should use postal to apply for a regular single/multi entry visa.
     I'll be following the actual situation. Feel free to contact if you need help.
 </div>
 <table class="table visa">
     <thead>
         <tr>
-            <th scope="col">Individual</th>
-            <th scope="col">Family</th>
             <th scope="col">Emergency</th>
         </tr>
     </thead>
     <tbody>
         <tr>
-            <td>
-                @Html.Raw(showAppointments(groups, "Individual"))
-            </td>
-            <td>
-                @Html.Raw(showAppointments(groups, "Family"))
-            </td>
             <td>
                 @Html.Raw(showAppointments(groups, "Emergency"))
             </td>
