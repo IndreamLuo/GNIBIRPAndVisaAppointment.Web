@@ -15,7 +15,8 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Application
 
         public string CreateApplication(DataAccess.Model.Storage.Application application)
         {
-            application.PartitionKey = DateTime.UtcNow.AddHours(1).Ticks.ToString();
+            application.Id = DateTime.UtcNow.AddHours(1).Ticks.ToString();
+            application.PartitionKey = application.Id;
             application.RowKey = "New";
 
             ApplicationTable.Insert(application);

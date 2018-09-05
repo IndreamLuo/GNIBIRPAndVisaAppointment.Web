@@ -4,6 +4,7 @@ namespace GNIBIRPAndVisaAppointment.Web.DataAccess.Model.Storage
 {
     public class Application : TableEntity
     {
+        public string Id { get; set; }
         public string Category { get; set; }
         public string SubCategory { get; set; }
         public string ConfirmGNIB { get; set; }

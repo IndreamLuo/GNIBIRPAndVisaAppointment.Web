@@ -8,12 +8,13 @@ namespace GNIBIRPAndVisaAppointment.Web.Models
     public class ApplicationModel
     {
         public ApplicationModel() { }
-        
+
         public ApplicationModel(Application application)
         {
 
         }
 
+        public string Id { get; set; }
         public string Category { get; set; }
         public string SubCategory { get; set; }
         public string ConfirmGNIB { get; set; }
