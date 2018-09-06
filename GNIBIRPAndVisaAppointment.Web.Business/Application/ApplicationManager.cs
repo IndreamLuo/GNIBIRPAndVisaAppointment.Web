@@ -55,7 +55,14 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Application
             + order.NoCancelRebook
             + order.Emergency;
 
-            OrderTable.Replace(order);
+            if (GetOrder(order.Id) == null)
+            {
+                OrderTable.Insert(order);
+            }
+            else
+            {
+                OrderTable.Replace(order);
+            }
 
             return order.Id;
         }

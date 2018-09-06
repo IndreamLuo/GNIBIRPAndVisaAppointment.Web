@@ -1,5 +1,6 @@
 using System;
 using GNIBIRPAndVisaAppointment.Web.Business.Application;
+using GNIBIRPAndVisaAppointment.Web.DataAccess.Storage;
 using GNIBIRPAndVisaAppointment.Web.Utility;
 using Stripe;
 
@@ -8,11 +9,13 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Payment
     public class PaymentManager : IPaymentManager
     {
         readonly IDomainHub DomainHub;
+        Table<DataAccess.Model.Storage.Payment> PaymentTable;
         public string PublishableKey { get; private set; }
         public string SecretKey { get; private set; }
-        public PaymentManager(IDomainHub domainHub, IApplicationSettings applicationSettings)
+        public PaymentManager(IDomainHub domainHub, IStorageProvider storageProvider, IApplicationSettings applicationSettings)
         {
             this.DomainHub = domainHub;
+            PaymentTable = storageProvider.GetTable<DataAccess.Model.Storage.Payment>();
             PublishableKey = applicationSettings["StripeAPIKeyPublishable"];
             SecretKey = applicationSettings["StripeAPIKeySecret"];
         }
@@ -53,6 +56,8 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Payment
                     Amount = ((double)charge.Amount) / 100,
                     Payer = charge.Customer?.Email ?? email
                 };
+                
+                PaymentTable.Insert(payment);
             }
 
             return charge.Paid;
