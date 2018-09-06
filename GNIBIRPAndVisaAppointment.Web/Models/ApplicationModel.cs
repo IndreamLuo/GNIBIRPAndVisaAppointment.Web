@@ -20,6 +20,8 @@ namespace GNIBIRPAndVisaAppointment.Web.Models
         public string ConfirmGNIB { get; set; }
         public string GNIBNo { get; set; }
         public string GNIBExDT { get; set; }
+        
+        [Required]
         public char UsrDeclaration { get; set; }
         public string GivenName { get; set; }
         public string SurName { get; set; }
@@ -37,7 +39,9 @@ namespace GNIBIRPAndVisaAppointment.Web.Models
         public string PPNoYN { get; set; }
         public string PPNo { get; set; }
         public string PPReason { get; set; }
-        public string Message { get; set; }
+        public string Comment { get; set; }
+        
+        [Required]
         public bool AuthorizeContact { get; set; }
     }
 }

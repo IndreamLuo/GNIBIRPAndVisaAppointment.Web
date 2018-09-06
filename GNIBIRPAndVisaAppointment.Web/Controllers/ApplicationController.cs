@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using GNIBIRPAndVisaAppointment.Web.Business;
 using GNIBIRPAndVisaAppointment.Web.Business.Application;
+using GNIBIRPAndVisaAppointment.Web.Business.Payment;
 using GNIBIRPAndVisaAppointment.Web.DataAccess.Model.Storage;
 using GNIBIRPAndVisaAppointment.Web.Models;
 using GNIBIRPAndVisaAppointment.Web.Utility;
@@ -26,7 +27,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
 
         public async Task<IActionResult> Index(ApplicationModel model, string reCaptchaResponse)
         {
-            if (ModelState.IsValid && await reCaptchaHelper.VerifyAsync(reCaptchaResponse, HttpContextAccessor.HttpContext.Connection.RemoteIpAddress.ToString()))
+            if (ModelState.IsValid && model.AuthorizeContact && await reCaptchaHelper.VerifyAsync(reCaptchaResponse, HttpContextAccessor.HttpContext.Connection.RemoteIpAddress.ToString()))
             {
                 var applicationManager = DomainHub.GetDomain<IApplicationManager>();
                 var application = new Application
@@ -47,10 +48,11 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
                     PPNoYN = model.PPNoYN,
                     PPNo = model.PPNo,
                     PPReason = model.PPReason,
-                    Message = model.Message
+                    Comment = model.Comment
                 };
                 
                 var applicationId = applicationManager.CreateApplication(application);
+
                 return RedirectToAction("Order",
                 new
                 {
@@ -64,11 +66,76 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
         }
 
         [Route("Order/{applicationId}")]
-        public IActionResult Order(string applicationId)
+        public IActionResult Order(OrderModel model, bool isOld = false)
         {
-            ViewBag.ApplicationId = applicationId;
+            var applicationManager = DomainHub.GetDomain<IApplicationManager>();
+
+            if (isOld && ModelState.IsValid)
+            {
+                var order = new Order
+                {
+                    ApplicationId = model.ApplicationId,
+                    Base = 33,
+                    SelectFrom = model.SelectFrom ? 3 : 0,
+                    From = model.From,
+                    SelectTo = model.SelectTo ? 3 : 0,
+                    To = model.To,
+                    Rebook = model.Rebook ? 20 : 0,
+                    NoCancelRebook = model.NoCancelRebook ? 33 : 0,
+                    Emergency = model.Emergency ? 40 : 0
+                };
+
+                var orderId = applicationManager.CreateOrder(order);
+
+                return RedirectToAction("Checkout", new
+                {
+                    orderId = orderId
+                });
+            }
+
+            ViewBag.Application = applicationManager[model.ApplicationId];
+
             return View();
         }
+
+        [Route("Checkout/{orderId}/{isFaild?}")]
+        public IActionResult Checkout(string orderId, bool isFailed = false)
+        {
+            var applicationManager = DomainHub.GetDomain<IApplicationManager>();
+            var paymentManager = DomainHub.GetDomain<IPaymentManager>();
+
+            ViewBag.Order = applicationManager.GetOrder(orderId);
+            ViewBag.StripeKey = paymentManager.PublishableKey;
+
+            return View();
+        }
+
+        [Route("StripePay/{orderId}")]
+        public IActionResult StripePay(string orderId, string stripeToken, string stripeEmail)
+        {
+            var paymentManager = DomainHub.GetDomain<IPaymentManager>();
+            
+            if (paymentManager.StripePay(orderId, stripeToken, stripeEmail))
+            {
+                return RedirectToAction("Paid", new
+                {
+                    orderId = orderId
+                });
+            }
+
+            return RedirectToAction("Checkout", new
+            {
+                orderId = orderId,
+                failed = true
+            });
+        }
+
+        [Route("Paid/{orderId}")]
+        public IActionResult Paid(string orderId)
+        {
+            return View();
+        }
+
 
         // [Route("PlaceOrder")]
         // public IActionResult PlaceOrder()

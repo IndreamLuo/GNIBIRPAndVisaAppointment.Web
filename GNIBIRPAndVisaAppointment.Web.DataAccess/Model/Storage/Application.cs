@@ -1,3 +1,4 @@
+using System;
 using Microsoft.WindowsAzure.Storage.Table;
 
 namespace GNIBIRPAndVisaAppointment.Web.DataAccess.Model.Storage
@@ -5,6 +6,7 @@ namespace GNIBIRPAndVisaAppointment.Web.DataAccess.Model.Storage
     public class Application : TableEntity
     {
         public string Id { get; set; }
+        public DateTime Time { get; set; }
         public string Category { get; set; }
         public string SubCategory { get; set; }
         public string ConfirmGNIB { get; set; }
@@ -21,7 +23,6 @@ namespace GNIBIRPAndVisaAppointment.Web.DataAccess.Model.Storage
         public string PPNoYN { get; set; }
         public string PPNo { get; set; }
         public string PPReason { get; set; }
-        public string Message { get; set; }
-        public bool Paid { get; set; }
+        public string Comment { get; set; }
     }
 }

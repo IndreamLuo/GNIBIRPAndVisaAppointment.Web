@@ -49,6 +49,10 @@
 
 <script type="text/javascript" src="/lib/ckeditor/ckeditor.js"></script>
 <script type="text/javascript">
+    CKEDITOR.editConfig = function (config) {
+        config.protectedSource.push( /<.*class=.*><\/.*>/g );
+    }
+
     CKEDITOR.replace('contentInput', {
         filebrowserBrowseUrl: '/Admin/Browse',
         filebrowserUploadUrl: '/Admin/Upload'

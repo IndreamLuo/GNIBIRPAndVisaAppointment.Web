@@ -56,6 +56,9 @@ namespace GNIBIRPAndVisaAppointment.Web
                     services.AddTransient(dependentType.PluginType, provider => DIContainer.GetInstance(dependentType.PluginType));
                 }
             }
+
+            var paymentManager = DIContainer.GetInstance<Business.Payment.IPaymentManager>();
+            paymentManager.Startup();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

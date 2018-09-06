@@ -7,6 +7,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
     <PackageReference Include="Newtonsoft.JSON" Version="11.0.2" />
+    <PackageReference Include="stripe.net" Version="19.3.0" />
     <PackageReference Include="StructureMap" Version="4.6.1" />
   </ItemGroup>
 

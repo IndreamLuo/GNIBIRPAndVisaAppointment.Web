@@ -3,6 +3,7 @@ using GNIBIRPAndVisaAppointment.Web.Business.Configuration;
 using GNIBIRPAndVisaAppointment.Web.Business.Information;
 using GNIBIRPAndVisaAppointment.Web.Business.Application;
 using StructureMap;
+using GNIBIRPAndVisaAppointment.Web.Business.Payment;
 
 namespace GNIBIRPAndVisaAppointment.Web.Business
 {
@@ -15,6 +16,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Business
             For<IInformationManager>().Singleton().Use<InformationManager>();
             For<IAppointmentManager>().Use<AppointmentManager>();
             For<IApplicationManager>().Use<ApplicationManager>();
+            For<IPaymentManager>().Use<PaymentManager>();
         }
     }
 }

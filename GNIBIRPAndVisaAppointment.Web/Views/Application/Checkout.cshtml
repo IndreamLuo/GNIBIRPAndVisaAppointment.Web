@@ -1,0 +1,73 @@
+@{
+    var order = ViewBag.Order;
+}
+
+@section Head {
+    <style type="text/css">
+        .table {
+            max-width: 400px;
+        }
+    </style>
+}
+
+<h2>Order</h2>
+<table class="table table-sm">
+    <thead>
+        <tr>
+            <th>Item</th>
+            <th>Price</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Appointment</td>
+            <td>€ @order.Base</td>
+        </tr>
+        <tr>
+            <td>From @order.From</td>
+            <td>€ @order.SelectFrom</td>
+        </tr>
+        <tr>
+            <td>To @order.To</td>
+            <td>€ @order.SelectTo</td>
+        </tr>
+        <tr>
+            <td>Rebook</td>
+            <td>€ @order.Rebook</td>
+        </tr>
+        <tr>
+            <td>No Cancel Rebook</td>
+            <td>€ @order.NoCancelRebook</td>
+        </tr>
+        <tr>
+            <td>Emergency</td>
+            <td>€ @order.Emergency</td>
+        </tr>
+        <tr>
+            <td>Appointment</td>
+            <td>€ @order.Base</td>
+        </tr>
+    </tbody>
+    <tfoot>
+        <tr>
+            <th>
+                Total:
+            </th>
+            <td>
+                <span class="text-success">€ @order.Amount.ToString("F2")</span>
+            </td>
+        </tr>
+    </tfoot>
+</table>
+<form action="/Application/StripePay/@order.Id" method="POST">
+  <script
+    src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+    data-key="@ViewBag.StripeKey"
+    data-amount="@(order.Amount * 100)"
+    data-name="Indream's"
+    data-description="Widget"
+    data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+    data-locale="auto"
+    data-currency="eur">
+  </script>
+</form>
