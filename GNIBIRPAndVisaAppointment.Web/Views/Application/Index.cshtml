@@ -67,7 +67,7 @@
             <div class="input-group">
                 <div class="input-group-prepend">
                     <span class="input-group-text">
-                        <input name="HasGNIB" id="HasGNIB" value="true" type="checkbox">
+                        <input name="HasGNIB" id="HasGNIB" value="true" type="checkbox" @(Model.HasGNIB ? "checked" : string.Empty)>
                     </span>
                 </div>
                 <input name="GNIBNo" id="GNIBNo" value="@Model.GNIBNo" class="form-control" placeholder="GNIB number">

@@ -32,95 +32,88 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
 
         public async Task<IActionResult> Index(ApplicationModel model, string reCaptchaResponse)
         {
+            if (model.HasGNIB)
+            {
+                if (string.IsNullOrEmpty(model.GNIBNo))
+                {
+                    ModelState.AddModelError("GNIBNo", "GNIB number is required.");
+                }
+                else if (!new Regex(@"\d+").IsMatch(model.GNIBNo)) 
+                {
+                    ModelState.AddModelError("GNIBNo", "GNIB number should all be digits.");
+                }
+                
+                if (string.IsNullOrEmpty(model.GNIBExDT))
+                {
+                    ModelState.AddModelError("GNIBExDT", "GNIB expired date required.");
+                }
+                else if (!IsFormattedDate(model.GNIBExDT))
+                {
+                    ModelState.AddModelError("GNIBExDT", "GNIB expired date format wrong, should be DD/MM/YYYY.");
+                }
+            }
+
+            if (!string.IsNullOrEmpty(model.DOB) && !IsFormattedDate(model.DOB))
+            {
+                ModelState.AddModelError("DOB", "Date of Birth is formatting wrong, should be DD/MM/YYYY.");
+            }
+
+            if (!model.UsrDeclaration)
+            {
+                ModelState.AddModelError("UsrDeclaration", "You need to confirm to continue.");
+            }
+
+            if (model.IsFamily && string.IsNullOrEmpty(model.FamAppNo))
+            {
+                ModelState.AddModelError("FamAppNo", "Family number is not selected.");
+            }
+
+            if (model.HasPassport)
+            {
+                if (string.IsNullOrEmpty(model.PPNo))
+                {
+                    ModelState.AddModelError("PPNo", "Passport Number required.");
+                }
+            }
+            else if (string.IsNullOrEmpty(model.PPReason))
+            {
+                ModelState.AddModelError("PPReason", "No Passport Reason required.");
+            }
+
             if (ModelState.IsValid
                 && model.AuthorizeDataUsage
                 && (HostingEnvironment.IsDevelopment() ||
                     await reCaptchaHelper.VerifyAsync(reCaptchaResponse, HttpContextAccessor.HttpContext.Connection.RemoteIpAddress.ToString())))
             {
-                if (model.HasGNIB)
+                var applicationManager = DomainHub.GetDomain<IApplicationManager>();
+                var application = new Application
                 {
-                    if (model.GNIBNo == null
-                        || model.GNIBNo == string.Empty)
-                    {
-                        ModelState.AddModelError("GNIBNo", "GNIB number is required.");
-                    }
-                    else if (!new Regex(@"\d+").IsMatch(model.GNIBNo)) 
-                    {
-                        ModelState.AddModelError("GNIBNo", "GNIB number should all be digits.");
-                    }
-                    else if (model.GNIBExDT == null || model.GNIBExDT == string.Empty)
-                    {
-                        ModelState.AddModelError("GNIBExDT", "GNIB expired date required.");
-                    }
-                    else if (model.GNIBExDT == null || model.GNIBExDT == string.Empty)
-                    {
-                        ModelState.AddModelError("GNIBExDT", "GNIB expired date required.");
-                    }
-                    else if (!IsFormattedDate(model.GNIBExDT))
-                    {
-                        ModelState.AddModelError("GNIBExDT", "GNIB expired date format wrong.");
-                    }
-                }
-
-                if (!IsFormattedDate(model.DOB))
-                {
-                    ModelState.AddModelError("DOB", "Date of Birth is formatting wrong.");
-                }
-
-                if (!model.UsrDeclaration)
-                {
-                    ModelState.AddModelError("UsrDeclaration", "You need to confirm to continue.");
-                }
-
-                if (model.IsFamily && string.IsNullOrEmpty(model.FamAppNo))
-                {
-                    ModelState.AddModelError("FamAppNo", "Family number is not selected.");
-                }
-
-                if (model.HasPassport)
-                {
-                    if (string.IsNullOrEmpty(model.PPNo))
-                    {
-                        ModelState.AddModelError("PPNo", "Passport Number required.");
-                    }
-                }
-                else if (string.IsNullOrEmpty(model.PPReason))
-                {
-                    ModelState.AddModelError("PPReason", "No Passport Reason required.");
-                }
+                    Category = model.Category,
+                    SubCategory = model.SubCategory,
+                    ConfirmGNIB = model.HasGNIB ? "Yes" : "No",
+                    GNIBNo = model.GNIBNo,
+                    GNIBExDT = model.GNIBExDT,
+                    UsrDeclaration = model.UsrDeclaration ? 'Y' : 'N',
+                    GivenName = model.GivenName,
+                    SurName = model.SurName,
+                    DOB = model.DOB,
+                    Nationality = model.Nationality,
+                    Email = model.Email,
+                    FamAppYN = model.IsFamily ? "Yes" : "No",
+                    FamAppNo = model.FamAppNo,
+                    PPNoYN = model.HasPassport ? "Yes" : "No",
+                    PPNo = model.PPNo,
+                    PPReason = model.PPReason,
+                    Comment = model.Comment
+                };
                 
-                if (ModelState.IsValid)
-                {
-                    var applicationManager = DomainHub.GetDomain<IApplicationManager>();
-                    var application = new Application
-                    {
-                        Category = model.Category,
-                        SubCategory = model.SubCategory,
-                        ConfirmGNIB = model.HasGNIB ? "Yes" : "No",
-                        GNIBNo = model.GNIBNo,
-                        GNIBExDT = model.GNIBExDT,
-                        UsrDeclaration = model.UsrDeclaration ? 'Y' : 'N',
-                        GivenName = model.GivenName,
-                        SurName = model.SurName,
-                        DOB = model.DOB,
-                        Nationality = model.Nationality,
-                        Email = model.Email,
-                        FamAppYN = model.IsFamily ? "Yes" : "No",
-                        FamAppNo = model.FamAppNo,
-                        PPNoYN = model.HasPassport ? "Yes" : "No",
-                        PPNo = model.PPNo,
-                        PPReason = model.PPReason,
-                        Comment = model.Comment
-                    };
-                    
-                    var applicationId = applicationManager.CreateApplication(application);
+                var applicationId = applicationManager.CreateApplication(application);
 
-                    return RedirectToAction("Order",
-                    new
-                    {
-                        applicationId = applicationId
-                    });
-                }
+                return RedirectToAction("Order",
+                new
+                {
+                    applicationId = applicationId
+                });
             }
 
             ViewBag.reCaptchaUserCode = reCaptchaHelper.reCaptchaUserCode;
@@ -135,16 +128,11 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
             if (dateRegex.IsMatch(dateString))
             {
                 var numbers = dateString
-                    .Split("/")
-                    .Select(numberString => int.Parse(numberString))
-                    .ToArray();
-                var date = new DateTime(numbers[2], numbers[1], numbers[0]);
-                if (date.Year == numbers[2]
-                    & date.Month == numbers[1]
-                    & date.Day == numbers[0])
-                {
-                    return true;
-                }
+                    .Split("/");
+
+                DateTime value;
+
+                return DateTime.TryParse($"{numbers[2]}-{numbers[1]}-{numbers[0]} 00:00:00", out value);
             }
 
             return false;

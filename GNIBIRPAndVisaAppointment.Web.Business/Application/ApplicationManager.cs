@@ -28,15 +28,18 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Application
 
         public string CreateApplication(DataAccess.Model.Storage.Application application)
         {
-            application.Id = Guid.NewGuid().ToString();
-            application.Time = DateTime.UtcNow.AddHours(1);
-            
-            application.PartitionKey = application.Id;
-            application.RowKey = New;
+            lock(ApplicationTable)
+            {
+                application.Id = Guid.NewGuid().ToString();
+                application.Time = DateTime.UtcNow.AddHours(1);
+                
+                application.PartitionKey = application.Id;
+                application.RowKey = New;
 
-            ApplicationTable.Insert(application);
+                ApplicationTable.Insert(application);
 
-            return application.Id;
+                return application.Id;
+            }
         }
         
         public string CreateOrder(DataAccess.Model.Storage.Order order)
