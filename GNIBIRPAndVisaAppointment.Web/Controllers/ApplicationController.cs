@@ -8,6 +8,7 @@ using GNIBIRPAndVisaAppointment.Web.Business.Payment;
 using GNIBIRPAndVisaAppointment.Web.DataAccess.Model.Storage;
 using GNIBIRPAndVisaAppointment.Web.Models;
 using GNIBIRPAndVisaAppointment.Web.Utility;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,18 +19,23 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
     {
         IDomainHub DomainHub;
         IHttpContextAccessor HttpContextAccessor;
+        IHostingEnvironment HostingEnvironment;
         reCaptchaHelper reCaptchaHelper;
 
-        public ApplicationController(IDomainHub domainHub, IHttpContextAccessor httpContextAccessor, reCaptchaHelper reCaptchaHelper)
+        public ApplicationController(IDomainHub domainHub, IHttpContextAccessor httpContextAccessor, IHostingEnvironment hostingEnvironment, reCaptchaHelper reCaptchaHelper)
         {
             DomainHub = domainHub;
             HttpContextAccessor = httpContextAccessor;
+            HostingEnvironment = hostingEnvironment;
             this.reCaptchaHelper = reCaptchaHelper;
         }
 
         public async Task<IActionResult> Index(ApplicationModel model, string reCaptchaResponse)
         {
-            if (ModelState.IsValid && model.AuthorizeDataUsage && await reCaptchaHelper.VerifyAsync(reCaptchaResponse, HttpContextAccessor.HttpContext.Connection.RemoteIpAddress.ToString()))
+            if (ModelState.IsValid
+                && model.AuthorizeDataUsage
+                && (HostingEnvironment.IsDevelopment() ||
+                    await reCaptchaHelper.VerifyAsync(reCaptchaResponse, HttpContextAccessor.HttpContext.Connection.RemoteIpAddress.ToString())))
             {
                 if (model.HasGNIB)
                 {
@@ -56,9 +62,9 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
                     }
                 }
 
-                if (IsFormattedDate(model.DOB))
+                if (!IsFormattedDate(model.DOB))
                 {
-                    ModelState.AddModelError("DOB", "Date of Birth is required.");
+                    ModelState.AddModelError("DOB", "Date of Birth is formatting wrong.");
                 }
 
                 if (!model.UsrDeclaration)
@@ -118,6 +124,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
             }
 
             ViewBag.reCaptchaUserCode = reCaptchaHelper.reCaptchaUserCode;
+            ViewBag.HostingEnvironment = HostingEnvironment;
 
             return View(model);
         }

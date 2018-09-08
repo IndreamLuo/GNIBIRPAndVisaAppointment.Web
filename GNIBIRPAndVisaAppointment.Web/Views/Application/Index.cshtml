@@ -1,4 +1,7 @@
 @model ApplicationModel
+@{
+    var HostingEnvironment = ViewBag.HostingEnvironment;
+}
 
 <div class="alert alert-success">
     I offer services to help making appointment.
@@ -380,10 +383,17 @@
             I authorize the use of personal data for the services of making GNIB/IRP appointment.
         </div>
         <input type="hidden" name="reCaptchaResponse" id="reCaptchaResponse" />
-        <button class="btn btn-success g-recaptcha submit"
-            data-sitekey="@ViewBag.reCaptchaUserCode"
-            data-callback="submit">Submit
-        </button>
+        @if (Microsoft.AspNetCore.Hosting.HostingEnvironmentExtensions.IsDevelopment(HostingEnvironment))
+        {
+            <button class="btn btn-success g-recaptcha submit" type="Submit">Submit</button>
+        }
+        else
+        {
+            <button class="btn btn-success g-recaptcha submit"
+                data-sitekey="@ViewBag.reCaptchaUserCode"
+                data-callback="submit">Submit
+            </button>
+        }
     </div>
 </form>
 
