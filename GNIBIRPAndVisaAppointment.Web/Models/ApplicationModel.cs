@@ -15,17 +15,33 @@ namespace GNIBIRPAndVisaAppointment.Web.Models
         }
 
         public string Id { get; set; }
+        
+        [Required]
         public string Category { get; set; }
+        
+        [Required]
         public string SubCategory { get; set; }
-        public string ConfirmGNIB { get; set; }
+        public bool HasGNIB { get; set; }
+
+        [MaxLength(20)]
         public string GNIBNo { get; set; }
         public string GNIBExDT { get; set; }
         
         [Required]
         public char UsrDeclaration { get; set; }
+        
+        [Required]
+        [MaxLength(200)]
         public string GivenName { get; set; }
+        
+        [Required]
+        [MaxLength(200)]
         public string SurName { get; set; }
+        
+        [Required]
         public string DOB { get; set; }
+        
+        [Required]
         public string Nationality { get; set; }
 
         [Required]
@@ -34,9 +50,10 @@ namespace GNIBIRPAndVisaAppointment.Web.Models
 
         [Compare("Email")]
         public string EmailConfirm { get; set; }
-        public string FamAppYN { get; set; }
-        public int FamAppNo { get; set; }
-        public string PPNoYN { get; set; }
+        public bool IsFamily { get; set; }
+        public string FamAppNo { get; set; }
+        public bool HasPassport { get; set; }
+        [MaxLength(30)]
         public string PPNo { get; set; }
         public string PPReason { get; set; }
         public string Comment { get; set; }

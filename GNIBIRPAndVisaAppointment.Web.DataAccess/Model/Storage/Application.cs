@@ -19,7 +19,7 @@ namespace GNIBIRPAndVisaAppointment.Web.DataAccess.Model.Storage
         public string Nationality { get; set; }
         public string Email { get; set; }
         public string FamAppYN { get; set; }
-        public int FamAppNo { get; set; }
+        public string FamAppNo { get; set; }
         public string PPNoYN { get; set; }
         public string PPNo { get; set; }
         public string PPReason { get; set; }

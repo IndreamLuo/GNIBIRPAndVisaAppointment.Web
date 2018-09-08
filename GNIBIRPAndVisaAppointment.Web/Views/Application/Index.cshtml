@@ -1,6 +1,5 @@
 @model ApplicationModel
 
-
 <div class="alert alert-success">
     I offer services to help making appointment.
     Fill in the application and I'll contact you.
@@ -22,34 +21,57 @@
     <h2 class="mt-5 mb-4">Appointment Info</h2>
     <div class="container content">
         <div class="form-group">
-            <label for="Category">Category:</label>
-            <select name="Category" id="Category" value="@Model.Category" class="form-control" placeholder="Select..."><option value="...">Select...</option><option value="Other">Other</option><option value="Study">Study</option><option value="Work">Work</option></select>
-        </div>
-        <div class="form-group">
-            <label for="SubCategory">Sub Category</label>
-            <select name="SubCategory" id="SubCategory" value="@Model.SubCategory" class="form-control" placeholder="Select..."><option value="...">Select...</option><option value="Work Permit Holder">Work Permit Holder</option><option value="Hosting agreement">Hosting agreement</option><option value="Working Holiday">Working Holiday</option><option value="Atypical Working Schemes">Atypical Working Schemes</option><option value="Invest or Start a Business">Invest or Start a Business</option><option value="Visiting Academics">Visiting Academics</option><option value="Doctor">Doctor</option><option value="3rd Level Graduate Scheme ">3rd Level Graduate Scheme </option></select>
-        </div>
-
-        <div class="form-group">
-            <label for="ConfirmGNIB" class="control-label">I have a GNIB card or I have been registered before:</label>
-            <select name="ConfirmGNIB" id="ConfirmGNIB" value="@Model.ConfirmGNIB" class="form-control" placeholder="Select...">
-                <option value="...">Select...
-                </option><option value="Renewal">Yes
-                </option><option value="New">No</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="GNIBNo" class="control-label">GNIB Number:</label>
-            <input name="GNIBNo" id="GNIBNo" value="@Model.GNIBNo" class="form-control" placeholder="Enter GNIB number">
-        </div>
-
-        <div class="form-group">
-            <label for="GNIBExDT" class="control-label">Expiry date of current permission / GNIB card:</label>
-            <div class="input-group date gnibdate">
-                <input name="GNIBExDT" value="@Model.GNIBExDT" id="GNIBExDT" class="form-control" placeholder="30/12/2018">
-                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+            <label for="Category">Category - Sub Category:</label>
+            <div class="input-group">
+                <select name="Category" id="Category" value="@Model.Category" class="form-control" placeholder="Select...">
+                    <option value="Other">Other</option>
+                    <option value="Study">Study</option>
+                    <option value="Work">Work</option>
+                </select>
+                <select name="SubCategory" id="SubCategory" value="@Model.SubCategory" class="form-control" placeholder="Select...">
+                    <!-- Work -->
+                    <option category="Work" value="Work Permit Holder">Work Permit Holder</option>
+                    <option category="Work" value="Hosting agreement">Hosting agreement</option>
+                    <option category="Work" value="Working Holiday">Working Holiday</option>
+                    <option category="Work" value="Atypical Working Schemes">Atypical Working Schemes</option>
+                    <option category="Work" value="Invest or Start a Business">Invest or Start a Business</option>
+                    <option category="Work" value="Visiting Academics">Visiting Academics</option>
+                    <option category="Work" value="Doctor">Doctor</option>
+                    <option category="Work" value="3rd Level Graduate Scheme ">3rd Level Graduate Scheme </option>
+                    <!-- Study -->
+                    <option category="Study" value="PhD">PhD</option>
+                    <option category="Study" value="Masters">Masters</option>
+                    <option category="Study" value="Higher National Diploma">Higher National Diploma</option>
+                    <option category="Study" value="Degree">Degree</option>
+                    <option category="Study" value="English Language Course">English Language Course</option>
+                    <option category="Study" value="Second Level">Second Level</option>
+                    <option category="Study" value="Pre-Masters">Pre-Masters</option>
+                    <option category="Study" value="Visiting Students">Visiting Students</option>
+                    <option category="Study" value="3rd Level Graduate Scheme">3rd Level Graduate Scheme</option>
+                    <!-- Other -->
+                    <option category="Other" value="Lost Card">Lost Card</option>
+                    <option category="Other" value="Stolen Card">Stolen Card</option>
+                    <option category="Other" value="Join family member">Join family member</option>
+                    <option category="Other" value="Permission Letter">Permission Letter</option>
+                </select>
             </div>
+            <span asp-validation-for="Category" class="form-text text-danger"></span>
+            <span asp-validation-for="SubCategory" class="form-text text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label">GNIB:</label>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">
+                        <input name="HasGNIB" id="HasGNIB" value="true" type="checkbox">
+                    </span>
+                </div>
+                <input name="GNIBNo" id="GNIBNo" value="@Model.GNIBNo" class="form-control" placeholder="GNIB number">
+                <input name="GNIBExDT" value="@Model.GNIBExDT" id="GNIBExDT" class="form-control" placeholder="Expire: 30/03/2018">
+            </div>
+            <span asp-validation-for="GNIBNo" class="form-text text-danger"></span>
+            <span asp-validation-for="GNIBExDT" class="form-text text-danger"></span>
         </div>
 
         <div class="form-group alert alert-warning">
@@ -72,20 +94,23 @@
                 <input type="checkbox" name="UsrDeclaration" value="Y" id="UsrDeclaration" @Html.Raw(Model.UsrDeclaration == 'Y' ? "checked" : string.Empty) />
                 I confirm that all of the above statements are true.
             </div>
+            <span asp-validation-for="UsrDeclaration" class="form-text text-danger"></span>
         </div>
 
         <div class="form-group">
             <label for="GivenName" class="control-label">Given Name:</label>
             <input name="GivenName" value="@Model.GivenName" id="GivenName" class="form-control" placeholder="Enter your given name">
+            <span asp-validation-for="GivenName" class="form-text text-danger"></span>
         </div>
         <div class="form-group">
             <label for="SurName" class="control-label">Surname:</label>
             <input name="SurName" value="@Model.SurName" id="SurName" class="form-control" placeholder="Enter your surname">
+            <span asp-validation-for="SurName" class="form-text text-danger"></span>
         </div>
         <div class="form-group">
             <label for="DOB" class="control-label">Date of Birth:</label>
-            <input name="DOB" value="@Model.DOB" id="DOB" class="form-control" placeholder="30/12/2018">
-            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+            <input name="DOB" value="@Model.DOB" id="DOB" class="form-control" placeholder="30/03/2018">
+            <span asp-validation-for="DOB" class="form-text text-danger"></span>
         </div>
 
         <div class="form-group">
@@ -270,6 +295,7 @@
                 </option><option>Zambia, Republic of
                 </option><option>Zimbabwe, Republic of</option>
             </select>
+            <span asp-validation-for="Nationality" class="form-text text-danger"></span>
         </div>
 
         <div class="form-group">
@@ -285,56 +311,56 @@
         </div>
 
         <div class="form-group">
-            <label for="FamAppYN" class="control-label">Is this a family application?</label>
-            <select name="FamAppYN" id="FamAppYN" value="@Model.FamAppYN" class="form-control" placeholder="Select...">
-                <option>Select...
-                </option><option>Yes
-                </option><option>No</option>
-            </select>
-            <small class="text-muted">(Primary applicant plus spouse, child or parent only)</small>
+            <label class="control-label">Family Application:</label>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">
+                        <input name="IsFamily" id="IsFamily" value="true" type="checkbox">
+                    </span>
+                </div>
+                <select name="FamAppNo" value="@Model.FamAppNo" id="FamAppNo" class="form-control" placeholder="Select...">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10 or more</option>
+                </select>
+            </div>
+            <span asp-validation-for="IsFamily" class="form-text text-danger"></span>
+            <span asp-validation-for="FamAppNo" class="form-text text-danger"></span>
         </div>
 
         <div class="form-group">
-            <label for="FamAppNo" class="control-label">Number of applicants in family application:</label>
-            <select name="FamAppNo" value="@Model.FamAppNo" id="FamAppNo" class="form-control" placeholder="Select...">
-                <option value="...">Select...
-                </option><option value="1">1
-                </option><option value="2">2
-                </option><option value="3">3
-                </option><option value="4">4
-                </option><option value="5">5
-                </option><option value="6">6
-                </option><option value="7">7
-                </option><option value="8">8
-                </option><option value="9">9
-                </option><option value="10">10 or more</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="PPNoYN" class="control-label">Do you have a Passport or Travel Document?</label>
-            <select name="PPNoYN" value="@Model.PPNoYN" id="PPNoYN" class="form-control" placeholder="Select...">
-                <option>Select...
-                </option><option>Yes
-                </option><option>No</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="PPNo" class="control-label">Passport Number or Travel Document Number (max 30 characters):</label>
-            <input name="PPNo" value="@Model.PPNo" id="PPNo" class="form-control" placeholder="Enter your passport or travel document number" ;="" maxlength="30">
-        </div>
-
-        <div class="form-group">
-            <label for="PPReason" class="control-label">Reasons for absence of passport or travel document:</label>
-            <select name="PPReason" value="@Model.PPReason" id="PPReason" class="form-control" placeholder="Enter your passport number">
-                <option>Select...
-                </option><option>I am a recognised refugee in Ireland
-                </option><option>My passport has expired
-                </option><option>Other
-                </option><option>My embassy cannot/will not help me get my passport renewed</option>
-            </select>
-            <div>
+            <label class="control-label">Passport:</label>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">
+                        <input name="HasPassport" id="HasPassport" value="true" type="radio" @(!Model.HasPassport ? "checked" : string.Empty)>
+                    </span>
+                </div>
+                <input name="PPNo" value="@Model.PPNo" id="PPNo" class="form-control" placeholder="Enter your passport or travel document number" maxlength="30">
+            </div>
+            <span asp-validation-for="PPNo" class="form-text text-danger"></span>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">
+                        <input name="HasPassport" id="HasPassport" value="false" type="radio" @(Model.HasPassport ? "checked" : string.Empty)>
+                    </span>
+                </div>
+                <select name="PPReason" value="@Model.PPReason" id="PPReason" class="form-control" placeholder="Enter your passport number">
+                    <option>I am a recognised refugee in Ireland</option>
+                    <option>My passport has expired</option>
+                    <option>Other</option>
+                    <option>My embassy cannot/will not help me get my passport renewed</option>
+                </select>
+            </div>
+            <span asp-validation-for="PPReason" class="form-text text-danger"></span>
+            <div class="alert alert-warning">
                 Applications without a current passport will only be processed in exceptional circumstances.
                 You must bring photographic identification to your appointment. If you have an expired passport, please bring this document.
             </div>
@@ -351,10 +377,10 @@
     <div class="container content">
         <div class="alert alert-danger">
             <input type="checkbox" value="true" name="AuthorizeContact" />
-            I authorize the use of contact for the service of making GNIB/IRP appointment.
+            I authorize the use of personal data for the services of making GNIB/IRP appointment.
         </div>
         <input type="hidden" name="reCaptchaResponse" id="reCaptchaResponse" />
-        <button class="btn btn-success g-recaptcha"
+        <button class="btn btn-success g-recaptcha submit"
             data-sitekey="@ViewBag.reCaptchaUserCode"
             data-callback="submit">Submit
         </button>
@@ -372,14 +398,48 @@
         }
 
         $(document).ready(function () {
+            var $subCategoryWork = $(SubCategory).find('option[category="Work"]').clone();
+            var $subCategoryStudy = $(SubCategory).find('option[category="Study"]').clone();
+            var $subCategoryOther = $(SubCategory).find('option[category="Other"]').clone();
+            var $subCategories = [$subCategoryWork, $subCategoryStudy, $subCategoryOther];
+            var refreshSubCategory = function () {
+                $(SubCategory).empty();
+                var value = $(Category).val();
+                for (var i in $subCategories) {
+                    $subCategories[i].attr('category') == value
+                    && $(SubCategory).append($subCategories[i].clone());
+                }
+            }
+            $(Category).change(refreshSubCategory);
+            refreshSubCategory();
+
+            var setGNIB = function () {
+                $([GNIBNo, GNIBExDT]).prop('disabled', !HasGNIB.checked);
+            }
+            $(HasGNIB).change(setGNIB);
+            setGNIB();
+
+            var setFamilyApplication = function () {
+                $(FamAppNo).prop('disabled', !IsFamily.checked);
+            }
+            $(IsFamily).change(setFamilyApplication);
+            setFamilyApplication();
+
+            var setPassport = function () {
+                $(PPNo).prop('disabled', !$(HasPassport).val());
+                $(PPReason).prop('disabled', $(HasPassport).val());
+            }
+            $(HasPassport).change(setPassport);
+            setPassport();
+
             $('select').each(function () {
                 if ($(this).attr('value')) {
                     $(this).val($(this).attr('value'));
                 }
             });
-            $('button[type="submit"]').prop('disabled', !$('input[name="AuthorizeContact"]').checked);
+            $('.submit').prop('disabled', !$('input[name="AuthorizeContact"]').checked);
             $('input[name="AuthorizeContact"]').change(function () {
-                $('button[type="submit"]').prop('disabled', !this.checked);
+                $('.submit').prop('disabled', !this.checked);
             });
         });
     </script>
