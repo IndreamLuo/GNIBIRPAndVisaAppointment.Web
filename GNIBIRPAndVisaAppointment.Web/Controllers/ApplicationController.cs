@@ -29,7 +29,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
 
         public async Task<IActionResult> Index(ApplicationModel model, string reCaptchaResponse)
         {
-            if (ModelState.IsValid && model.AuthorizeContact && await reCaptchaHelper.VerifyAsync(reCaptchaResponse, HttpContextAccessor.HttpContext.Connection.RemoteIpAddress.ToString()))
+            if (ModelState.IsValid && model.AuthorizeDataUsage && await reCaptchaHelper.VerifyAsync(reCaptchaResponse, HttpContextAccessor.HttpContext.Connection.RemoteIpAddress.ToString()))
             {
                 if (model.HasGNIB)
                 {
@@ -54,6 +54,16 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
                     {
                         ModelState.AddModelError("GNIBExDT", "GNIB expired date format wrong.");
                     }
+                }
+
+                if (IsFormattedDate(model.DOB))
+                {
+                    ModelState.AddModelError("DOB", "Date of Birth is required.");
+                }
+
+                if (!model.UsrDeclaration)
+                {
+                    ModelState.AddModelError("UsrDeclaration", "You need to confirm to continue.");
                 }
 
                 if (model.IsFamily && string.IsNullOrEmpty(model.FamAppNo))
@@ -83,7 +93,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
                         ConfirmGNIB = model.HasGNIB ? "Yes" : "No",
                         GNIBNo = model.GNIBNo,
                         GNIBExDT = model.GNIBExDT,
-                        UsrDeclaration = model.UsrDeclaration,
+                        UsrDeclaration = model.UsrDeclaration ? 'Y' : 'N',
                         GivenName = model.GivenName,
                         SurName = model.SurName,
                         DOB = model.DOB,

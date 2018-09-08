@@ -28,7 +28,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Models
         public string GNIBExDT { get; set; }
         
         [Required]
-        public char UsrDeclaration { get; set; }
+        public bool UsrDeclaration { get; set; }
         
         [Required]
         [MaxLength(200)]
@@ -59,6 +59,6 @@ namespace GNIBIRPAndVisaAppointment.Web.Models
         public string Comment { get; set; }
         
         [Required]
-        public bool AuthorizeContact { get; set; }
+        public bool AuthorizeDataUsage { get; set; }
     }
 }

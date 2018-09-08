@@ -91,7 +91,7 @@
                 </p>
             </div>
             <div>
-                <input type="checkbox" name="UsrDeclaration" value="Y" id="UsrDeclaration" @Html.Raw(Model.UsrDeclaration == 'Y' ? "checked" : string.Empty) />
+                <input type="checkbox" name="UsrDeclaration" value="true" id="UsrDeclaration" @Html.Raw(Model.UsrDeclaration ? "checked" : string.Empty) />
                 I confirm that all of the above statements are true.
             </div>
             <span asp-validation-for="UsrDeclaration" class="form-text text-danger"></span>
@@ -376,7 +376,7 @@
 
     <div class="container content">
         <div class="alert alert-danger">
-            <input type="checkbox" value="true" name="AuthorizeContact" />
+            <input type="checkbox" value="true" name="AuthorizeDataUsage" id="AuthorizeDataUsage" />
             I authorize the use of personal data for the services of making GNIB/IRP appointment.
         </div>
         <input type="hidden" name="reCaptchaResponse" id="reCaptchaResponse" />
@@ -437,8 +437,8 @@
                     $(this).val($(this).attr('value'));
                 }
             });
-            $('.submit').prop('disabled', !$('input[name="AuthorizeContact"]').checked);
-            $('input[name="AuthorizeContact"]').change(function () {
+            $('.submit').prop('disabled', !AuthorizeDataUsage.checked);
+            $('input[name="AuthorizeDataUsage"]').change(function () {
                 $('.submit').prop('disabled', !this.checked);
             });
         });
