@@ -413,15 +413,19 @@
             var $subCategoryOther = $(SubCategory).find('option[category="Other"]').clone();
             var $subCategories = [$subCategoryWork, $subCategoryStudy, $subCategoryOther];
             var refreshSubCategory = function () {
+                var value = $(Category).attr('value') || $(Category).val();
+                $(Category).attr('value', null).val(value);
+                var subValue = $(SubCategory).attr('value');
                 $(SubCategory).empty();
-                var value = $(Category).val();
                 for (var i in $subCategories) {
                     $subCategories[i].attr('category') == value
                     && $(SubCategory).append($subCategories[i].clone());
                 }
+
+                subValue && $(SubCategory).val(subValue);
             }
-            $(Category).change(refreshSubCategory);
             refreshSubCategory();
+            $(Category).change(refreshSubCategory);
 
             var setGNIB = function () {
                 $([GNIBNo, GNIBExDT]).prop('disabled', !HasGNIB.checked);
