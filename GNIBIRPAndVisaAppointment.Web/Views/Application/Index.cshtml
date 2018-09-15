@@ -389,6 +389,13 @@
         }
         else
         {
+            @if (ViewBag.reCaptchaVerified)
+            {
+                <div class="alert alert-danger">
+                    Google reCaptcha Verification Failed.
+                </div>
+            }
+
             <button class="btn btn-success g-recaptcha submit"
                 data-sitekey="@ViewBag.reCaptchaUserCode"
                 data-callback="submit">Submit

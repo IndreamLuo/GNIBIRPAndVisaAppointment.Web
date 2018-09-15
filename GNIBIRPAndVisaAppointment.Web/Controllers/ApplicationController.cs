@@ -80,40 +80,50 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
                 ModelState.AddModelError("PPReason", "No Passport Reason required.");
             }
 
+            ViewBag.reCaptchaVerified = null;
+            
             if (ModelState.IsValid
-                && model.AuthorizeDataUsage
-                && (HostingEnvironment.IsDevelopment() ||
-                    await reCaptchaHelper.VerifyAsync(reCaptchaResponse, HttpContextAccessor.HttpContext.Connection.RemoteIpAddress.ToString())))
+                && model.AuthorizeDataUsage)
             {
-                var applicationManager = DomainHub.GetDomain<IApplicationManager>();
-                var application = new Application
-                {
-                    Category = model.Category,
-                    SubCategory = model.SubCategory,
-                    ConfirmGNIB = model.HasGNIB ? "Yes" : "No",
-                    GNIBNo = model.GNIBNo,
-                    GNIBExDT = model.GNIBExDT,
-                    UsrDeclaration = model.UsrDeclaration ? 'Y' : 'N',
-                    GivenName = model.GivenName,
-                    SurName = model.SurName,
-                    DOB = model.DOB,
-                    Nationality = model.Nationality,
-                    Email = model.Email,
-                    FamAppYN = model.IsFamily ? "Yes" : "No",
-                    FamAppNo = model.FamAppNo,
-                    PPNoYN = model.HasPassport ? "Yes" : "No",
-                    PPNo = model.PPNo,
-                    PPReason = model.PPReason,
-                    Comment = model.Comment
-                };
-                
-                var applicationId = applicationManager.CreateApplication(application);
+                var reCaptchaVerified = (HostingEnvironment.IsDevelopment() ||
+                        await reCaptchaHelper.VerifyAsync(reCaptchaResponse, HttpContextAccessor.HttpContext.Connection.RemoteIpAddress.ToString()));
 
-                return RedirectToAction("Order",
-                new
+                if (reCaptchaVerified)
                 {
-                    applicationId = applicationId
-                });
+                    var applicationManager = DomainHub.GetDomain<IApplicationManager>();
+                    var application = new Application
+                    {
+                        Category = model.Category,
+                        SubCategory = model.SubCategory,
+                        ConfirmGNIB = model.HasGNIB ? "Yes" : "No",
+                        GNIBNo = model.GNIBNo,
+                        GNIBExDT = model.GNIBExDT,
+                        UsrDeclaration = model.UsrDeclaration ? 'Y' : 'N',
+                        GivenName = model.GivenName,
+                        SurName = model.SurName,
+                        DOB = model.DOB,
+                        Nationality = model.Nationality,
+                        Email = model.Email,
+                        FamAppYN = model.IsFamily ? "Yes" : "No",
+                        FamAppNo = model.FamAppNo,
+                        PPNoYN = model.HasPassport ? "Yes" : "No",
+                        PPNo = model.PPNo,
+                        PPReason = model.PPReason,
+                        Comment = model.Comment
+                    };
+                    
+                    var applicationId = applicationManager.CreateApplication(application);
+
+                    return RedirectToAction("Order",
+                    new
+                    {
+                        applicationId = applicationId
+                    });
+                }
+                else
+                {
+                    ViewBag.reCaptchaVerified = reCaptchaVerified;
+                }
             }
 
             ViewBag.reCaptchaUserCode = reCaptchaHelper.reCaptchaUserCode;
