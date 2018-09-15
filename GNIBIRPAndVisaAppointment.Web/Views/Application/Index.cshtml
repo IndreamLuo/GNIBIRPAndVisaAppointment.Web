@@ -389,7 +389,7 @@
         }
         else
         {
-            @if (ViewBag.reCaptchaVerified)
+            @if (ViewBag.reCaptchaVerified == false)
             {
                 <div class="alert alert-danger">
                     Google reCaptcha Verification Failed.
