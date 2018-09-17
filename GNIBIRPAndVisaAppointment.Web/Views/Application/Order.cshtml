@@ -44,29 +44,24 @@
         </table>
         <h4 class="mb-3">Service</h4>
         <div class="form-group pl-5">
-            <input class="form-check-input" id="appointment" type="checkbox" disabled checked amount="33">
-            <label class="form-check-label" for="rebook">€33, a regular appointment</label>
+            <input class="form-check-input" id="appointment" type="checkbox" disabled checked amount="30">
+            <label class="form-check-label" for="rebook">€30, a regular appointment</label>
         </div>
-        <div class="form-row pl-5">
-            <input class="form-check-input mt-2" id="selectFrom" name="selectFrom" type="checkbox" amount="3">
-            <label class="form-check-label" for="selectFrom">From (€3):</label>
-            <div class="col-auto">
-                <input class="form-control form-control-sm" name="from" placeholder="2018-11-30" />
-            </div>
-        </div>
-        <div class="form-row pl-5 mb-3">
-            <input class="form-check-input mt-2" id="selectTo" name="selectTo" type="checkbox" amount="3">
-            <label class="form-check-label" for="selectTo">To (€3):</label>
-            <div class="col-auto">
-                <input class="form-control form-control-sm" name="to" placeholder="YYYY-MM-DD" />
-            </div>
-        </div>
-        <div class="alert alert-warning">
-            The wider range of dates you pick the more you are possible to get an appointment
+        <div class="form-group pl-5">
+            <input class="form-check-input" id="pickDate" name="pickDate" type="checkbox" amount="10">
+            <label class="form-check-label" for="pickDate">€10, Pick date:</label>
+            <br />
+            from
+            <input class="form-control form-control-sm from" name="from" placeholder="2018-11-30" />
+            to
+            <input class="form-control form-control-sm to" name="to" placeholder="YYYY-MM-DD" />
         </div>
         <div class="form-group pl-5">
             <input class="form-check-input" id="cancellation" type="checkbox" checked amount="0">
-            <label class="form-check-label" for="cancellation">€0, free cancellation when I booked the wrong date for you</label>
+            <label class="form-check-label" for="cancellation">€0, free cancellation when I booked the date out of your selection</label>
+        </div>
+        <div class="alert alert-warning">
+            The wider range of dates you pick the more you are possible to get an appointment
         </div>
         <div class="form-group pl-5">
             <input class="form-check-input" id="rebook" name="rebook" type="checkbox" value="true" amount="20">
@@ -75,15 +70,15 @@
         <div class="alert alert-warning mb-4">
             If I picked the date you selected but you still want to cancel it and get another one, I can rebook one more time for you after cancellation.
         </div>
-        <div class="form-group pl-5">
+        <!-- <div class="form-group pl-5">
             <input class="form-check-input" id="noCancelRebook" name="noCancelRebook" type="checkbox" value="true" amount="33">
             <label class="form-check-label" for="noCancelRebook">€33, rebook without cancellation</label>
-        </div>
-        <div class="alert alert-warning mb-4">
+        </div> -->
+        <!-- <div class="alert alert-warning mb-4">
             Use this when you already have an appointment which you don't like and you still want to make another one without cancelling the current one.
             <br />
             <strong>Please do cancel others which you don't need at last if you have more than 1 appointment. There're other people needing them so much!</strong>
-        </div>
+        </div> -->
         <div class="form-group pl-5">
             <input class="form-check-input" id="emergency" name="emergency" type="checkbox" value="true" amount="40">
             <label class="form-check-label" for="emergency">€40, emergency</label>
@@ -111,6 +106,11 @@
         }
 
         $('input').change(recalculateAmount);
+        $(pickDate).change(function () {
+            $('.from, .to').prop('disabled', !$(this).prop('checked'));
+        });
+         $('.from, .to').prop('disabled', !$(this).prop('checked'));
+
         recalculateAmount();
     </script>
 }

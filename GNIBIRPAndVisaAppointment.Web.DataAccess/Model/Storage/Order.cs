@@ -10,9 +10,8 @@ namespace GNIBIRPAndVisaAppointment.Web.DataAccess.Model.Storage
         public string ApplicationId { get; set; }
         public string Type { get; set; }
         public double Base { get; set; }
-        public double SelectFrom { get; set; }
+        public double PickDate { get; set; }
         public string From { get; set; }
-        public double SelectTo { get; set; }
         public string To { get; set; }
         public double Rebook { get; set; }
         public double NoCancelRebook { get; set; }

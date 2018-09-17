@@ -1,4 +1,5 @@
 using System;
+using GNIBIRPAndVisaAppointment.Web.Business.Payment;
 using GNIBIRPAndVisaAppointment.Web.DataAccess.Model.Storage;
 using GNIBIRPAndVisaAppointment.Web.DataAccess.Storage;
 
@@ -8,11 +9,13 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Application
     {
         Table<DataAccess.Model.Storage.Application> ApplicationTable;
         Table<DataAccess.Model.Storage.Order> OrderTable;
+        IDomainHub DomainHub;
 
-        public ApplicationManager(IStorageProvider storageProvider)
+        public ApplicationManager(IStorageProvider storageProvider, IDomainHub domainHub)
         {
             ApplicationTable = storageProvider.GetTable<DataAccess.Model.Storage.Application>();
             OrderTable = storageProvider.GetTable<DataAccess.Model.Storage.Order>();
+            DomainHub = domainHub;
         }
 
         const string New = "New";
@@ -52,8 +55,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Application
             order.RowKey = Application;
 
             order.Amount = order.Base
-            + order.SelectFrom
-            + order.SelectTo
+            + order.PickDate
             + order.Rebook
             + order.NoCancelRebook
             + order.Emergency;
@@ -73,6 +75,32 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Application
         public DataAccess.Model.Storage.Order GetOrder(string orderId)
         {
             return OrderTable[orderId, Application];
+        }
+
+        public void Pending(string orderId)
+        {
+            var paymentManager = DomainHub.GetDomain<IPaymentManager>();
+            if (paymentManager.IsPaid(orderId))
+            {
+                
+            }
+
+            throw new NotImplementedException();
+        }
+
+        public void Accept(string orderId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Complete(string orderId, string appointmentNo)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Close(string orderId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -158,10 +158,9 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
                 var order = new Order
                 {
                     ApplicationId = model.ApplicationId,
-                    Base = 33,
-                    SelectFrom = model.SelectFrom ? 3 : 0,
+                    Base = 30,
+                    PickDate = model.PickDate ? 10 : 0,
                     From = model.From,
-                    SelectTo = model.SelectTo ? 3 : 0,
                     To = model.To,
                     Rebook = model.Rebook ? 20 : 0,
                     NoCancelRebook = model.NoCancelRebook ? 33 : 0,
@@ -213,11 +212,36 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
             });
         }
 
+        [Route("PayAfter/{orderId}")]
+        public IActionResult PayAfter(string orderId)
+        {
+            var applicationManager = DomainHub.GetDomain<IApplicationManager>();
+            applicationManager.Pending(orderId);
+
+            return RedirectToAction("Status", new
+            {
+                orderId = orderId
+            });
+        }
+
         [Route("Paid/{orderId}")]
         public IActionResult Paid(string orderId)
         {
+            var applicationManager = DomainHub.GetDomain<IApplicationManager>();
+            applicationManager.Pending(orderId);
+
+            return RedirectToAction("Status", new
+            {
+                orderId = orderId
+            });
+        }
+
+        [Route("Status")]
+        public IActionResult Status(string orderId)
+        {
             return View();
         }
+        
 
 
         // [Route("PlaceOrder")]

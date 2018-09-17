@@ -24,12 +24,8 @@
             <td>€ @order.Base</td>
         </tr>
         <tr>
-            <td>From @order.From</td>
-            <td>€ @order.SelectFrom</td>
-        </tr>
-        <tr>
-            <td>To @order.To</td>
-            <td>€ @order.SelectTo</td>
+            <td>From @order.From to @order.To</td>
+            <td>€ @order.PickDate</td>
         </tr>
         <tr>
             <td>Rebook</td>
@@ -59,15 +55,31 @@
         </tr>
     </tfoot>
 </table>
-<form action="/Application/StripePay/@order.Id" method="POST">
-  <script
-    src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-    data-key="@ViewBag.StripeKey"
-    data-amount="@(order.Amount * 100)"
-    data-name="Indream"
-    data-description="Widget"
-    data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
-    data-locale="auto"
-    data-currency="eur">
-  </script>
-</form>
+
+<table>
+    <tr>
+        <td>
+            <form action="/Application/StripePay/@order.Id" method="POST">
+            <script
+                src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                data-key="@ViewBag.StripeKey"
+                data-amount="@(order.Amount * 100)"
+                data-name="Indream"
+                data-description="Widget"
+                data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+                data-locale="auto"
+                data-currency="eur">
+            </script>
+            </form>
+        </td>
+        <td class="pl-2" rowspan="3">
+            <a class="btn btn-info" href="/PayAfter/@order.Id">Pay After Appointed</a>
+        </td>
+    </tr>
+    <tr>
+        <td></td>
+    </tr>
+    <tr>
+        <td></td>
+    </tr>
+</table>

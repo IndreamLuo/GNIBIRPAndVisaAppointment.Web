@@ -17,9 +17,8 @@ namespace GNIBIRPAndVisaAppointment.Web.Models
         [Required]
         public string ApplicationId { get; set; }
         public string Type { get { return "Application"; } }
-        public bool SelectFrom { get; set; }
+        public bool PickDate { get; set; }
         public string From { get; set; }
-        public bool SelectTo { get; set; }
         public string To { get; set; }
         public bool Rebook { get; set; }
         public bool NoCancelRebook { get; set; }

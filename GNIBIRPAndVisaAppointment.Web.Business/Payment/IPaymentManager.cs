@@ -6,5 +6,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Payment
         string SecretKey { get; }
         void Startup();
         bool StripePay(string orderId, string stripeToken, string email);
+        DataAccess.Model.Storage.Payment GetPayment(string orderId);
+        bool IsPaid(string orderId);
     }
 }

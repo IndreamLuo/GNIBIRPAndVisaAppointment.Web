@@ -1,5 +1,6 @@
 using System;
 using GNIBIRPAndVisaAppointment.Web.Business.Application;
+using GNIBIRPAndVisaAppointment.Web.DataAccess.Model.Storage;
 using GNIBIRPAndVisaAppointment.Web.DataAccess.Storage;
 using GNIBIRPAndVisaAppointment.Web.Utility;
 using Stripe;
@@ -61,6 +62,16 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Payment
             }
 
             return charge.Paid;
+        }
+
+        public DataAccess.Model.Storage.Payment GetPayment(string orderId)
+        {
+            return PaymentTable[orderId][0];
+        }
+
+        public bool IsPaid(string orderId)
+        {
+            return PaymentTable[orderId].Count > 0;
         }
     }
 }
