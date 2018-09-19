@@ -19,8 +19,13 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
         }
 
         [Route("Appointment/{date?}")]
-        public ActionResult Appointment(string date)
+        public ActionResult Appointment(string date = "yesterday")
         {
+            if (date.ToLower() == "yesterday")
+            {
+                date = DateTime.Now.AddDays(-1).ToString("yyyyMMdd");
+            }
+
             var assignmentManager = DomainHub.GetDomain<IAppointmentManager>();
             var statisticsDate = date == null
                 ? DateTime.Now.Date
