@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using GNIBIRPAndVisaAppointment.Web.DataAccess.Model.Storage;
+
 namespace GNIBIRPAndVisaAppointment.Web.Business.Application
 {
     public interface IApplicationManager : IDomain
@@ -8,7 +11,10 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Application
         DataAccess.Model.Storage.Order GetOrder(string orderId);
         void Pending(string orderId);
         void Accept(string orderId);
+        void Reject(string orderId);
         void Complete(string orderId, string appointmentNo);
         void Close(string orderId);
+        Assignment GetAssignment(string orderId);
+        List<Assignment> GetAssignments(string status);
     }
 }

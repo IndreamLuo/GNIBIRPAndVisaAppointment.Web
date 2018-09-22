@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using GNIBIRPAndVisaAppointment.Web.Business.Payment;
 using GNIBIRPAndVisaAppointment.Web.DataAccess.Model.Storage;
 using GNIBIRPAndVisaAppointment.Web.DataAccess.Storage;
@@ -9,12 +10,14 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Application
     {
         Table<DataAccess.Model.Storage.Application> ApplicationTable;
         Table<DataAccess.Model.Storage.Order> OrderTable;
+        Table<DataAccess.Model.Storage.Assignment> AssignmentTable;
         IDomainHub DomainHub;
 
         public ApplicationManager(IStorageProvider storageProvider, IDomainHub domainHub)
         {
             ApplicationTable = storageProvider.GetTable<DataAccess.Model.Storage.Application>();
             OrderTable = storageProvider.GetTable<DataAccess.Model.Storage.Order>();
+            AssignmentTable = storageProvider.GetTable<DataAccess.Model.Storage.Assignment>();
             DomainHub = domainHub;
         }
 
@@ -56,8 +59,6 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Application
 
             order.Amount = order.Base
             + order.PickDate
-            + order.Rebook
-            + order.NoCancelRebook
             + order.Emergency;
 
             if (GetOrder(order.Id) == null)
@@ -80,27 +81,67 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Application
         public void Pending(string orderId)
         {
             var paymentManager = DomainHub.GetDomain<IPaymentManager>();
-            if (paymentManager.IsPaid(orderId))
+            
+            var assignment = new Assignment
             {
-                
-            }
+                Id = orderId,
+                Time = DateTime.Now,
+                Status = AssignmentStatus.Pending
+            };
 
-            throw new NotImplementedException();
+            assignment.PartitionKey = assignment.Status;
+            assignment.RowKey = assignment.Id;
+
+            AssignmentTable.Insert(assignment);
+
+            assignment.PartitionKey = assignment.RowKey;
+            assignment.RowKey = AssignmentStatus.Tracked;
+            AssignmentTable.Insert(assignment);
         }
 
         public void Accept(string orderId)
         {
-            throw new NotImplementedException();
+            UpdataAssignmentStatus(orderId, AssignmentStatus.Pending, AssignmentStatus.Accepted);
+        }
+
+        public void Reject(string orderId)
+        {
+            UpdataAssignmentStatus(orderId, AssignmentStatus.Pending, AssignmentStatus.Rejected);
         }
 
         public void Complete(string orderId, string appointmentNo)
         {
-            throw new NotImplementedException();
+            UpdataAssignmentStatus(orderId, AssignmentStatus.Accepted, AssignmentStatus.Complete);
         }
 
         public void Close(string orderId)
         {
-            throw new NotImplementedException();
+            UpdataAssignmentStatus(orderId, AssignmentStatus.Complete, AssignmentStatus.Closed);
+        }
+
+        protected void UpdataAssignmentStatus(string orderId, string fromStatus, string toStatus)
+        {
+            var assignment = AssignmentTable[fromStatus, orderId];
+            AssignmentTable.Delete(assignment);
+
+            assignment.ETag = "*";
+            assignment.Status = toStatus;
+            assignment.PartitionKey = assignment.Status;
+            AssignmentTable.Insert(assignment);
+
+            var trackedAssignment = GetAssignment(orderId);
+            trackedAssignment.Status = toStatus;
+            AssignmentTable.Replace(trackedAssignment);
+        }
+
+        public Assignment GetAssignment(string orderId)
+        {
+            return AssignmentTable[orderId, AssignmentStatus.Tracked];
+        }
+
+        public List<Assignment> GetAssignments(string status)
+        {
+            return AssignmentTable[status];
         }
     }
 }

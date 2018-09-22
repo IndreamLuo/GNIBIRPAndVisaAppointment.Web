@@ -7,8 +7,13 @@
         <li class="nav-item">
             <a class="nav-link active" href="/Admin/">Admin</a>
             <a class="nav-link" href="/Admin/Info">Information</a>
+            <a class="nav-link" href="/Admin/Assignment">Assignment</a>
         </li>
     </ul>
 }
 
 @RenderBody()
+
+@section scripts {
+    @RenderSection("Scripts", required: false)
+}

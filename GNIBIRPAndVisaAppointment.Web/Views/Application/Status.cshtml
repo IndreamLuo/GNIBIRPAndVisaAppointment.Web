@@ -1,0 +1,118 @@
+@using GNIBIRPAndVisaAppointment.Web.Business.Application
+@{
+    var assignment = ViewBag.Assignment;
+    var order = ViewBag.Order;
+    var application = ViewBag.Application;
+}
+
+<table class="table table-sm">
+    <tr class="table-active">
+        <th colspan="2">
+            Application
+        </th>
+    </tr>
+    <tr>
+        <th>Person</th>
+        <td>
+            @application.GivenName @application.SurName
+            <br />
+            @application.DOB
+            <br />
+            @application.Nationality - @(application.PPNoYN == "Yes" ? application.PPNo : application.NoPPReason)
+            <br />
+            @(application.FamAppYN == "Y" ? $"{application.FamNo} family applicants" : string.Empty)
+        </td>
+    </tr>
+    <tr>
+        <th>Category</th>
+        <td>@application.Category - @application.SubCategory</td>
+    </tr>
+    <tr>
+        <th>GNIB</th>
+        <td>@(application.ConfirmGNIB == "Yes" ? $"{application.GNIBNo} ~ {application.GNIBExDT}" : "New Registration")</td>
+    </tr>
+    <tr>
+        <th>Contact</th>
+        <td>@application.Email</td>
+    </tr>
+    <tr>
+        <th>Comment</th>
+        <td>@application.Comment</td>
+    </tr>
+    <tr class="table-active">
+        <th colspan="2">
+            Order
+        </th>
+    </tr>
+    <tr>
+        <th>Basic</th>
+        <td>
+            € @order.Base
+            -
+            Appointment Service
+        </td>
+    </tr>
+    <tr>
+        <th>Date Picked</th>
+        <td>
+            @if (order.PickDate > 0)
+            {
+                <span>
+                    € @order.PickDate
+                    -
+                    For specific dates
+                    , from
+                    @order.FromDate
+                    to
+                    @order.ToDate
+                </span>
+            }
+            else
+            {
+                <span>No date picked</span>
+            }
+        </td>
+    </tr>
+    <tr class="table-active">
+        <th colspan="2">
+            Assignment
+        </th>
+    </tr>
+    <tr>
+        <th>Assigned Time</th>
+        <td>
+            @assignment.Time
+        </td>
+    </tr>
+    <tr>
+        <th>Status</th>
+        <td>
+            @{
+                var showingStatus = "secondary";
+                switch(assignment.Status)
+                {
+                    case AssignmentStatus.Pending:
+                        showingStatus = "primary";
+                        break;
+                    case AssignmentStatus.Accepted:
+                        showingStatus = "info";
+                        break;
+                    case AssignmentStatus.Rejected:
+                        showingStatus = "danger";
+                        break;
+                    case AssignmentStatus.Complete:
+                        showingStatus = "success";
+                        break;
+                    case AssignmentStatus.Closed:
+                        showingStatus = "dark";
+                        break;
+                    default:
+                        break;
+                }
+                <span class="badge badge-@showingStatus">
+                    @assignment.Status
+                </span>
+            }
+        </td>
+    </tr>
+</table>

@@ -1,0 +1,83 @@
+@using GNIBIRPAndVisaAppointment.Web.Business.Application
+@{
+    Layout = "_AdminLayout";
+    var status = ViewBag.Status;
+    var assignments = ViewBag.Assignments;
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <nav>
+                <div class="nav nav-tabs assignment-nav">
+                    <a class="nav-item nav-link pending" href="/Admin/Assignment/Pending">Pending</a>
+                    <a class="nav-item nav-link accepted" href="/Admin/Assignment/Accepted">Accepted</a>
+                    <a class="nav-item nav-link rejected" href="/Admin/Assignment/Rejected">Rejected</a>
+                    <a class="nav-item nav-link complete" href="/Admin/Assignment/Complete">Complete</a>
+                    <a class="nav-item nav-link closed" href="/Admin/Assignment/Closed">Closed</a>
+                </li>
+            </nav>
+        </tr>
+        <tr class="table-secondary">
+            <th>ID</th>
+            <th>Time</th>
+            <th>Status</th>
+            <th>Appointment No.</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var assignment in assignments)
+        {
+            <tr>
+                <td>@assignment.Id</td>
+                <td>@assignment.Time</td>
+                <td>
+                    @{
+                        var showingStatus = "secondary";
+                        switch(assignment.Status)
+                        {
+                            case AssignmentStatus.Pending:
+                                showingStatus = "primary";
+                                break;
+                            case AssignmentStatus.Accepted:
+                                showingStatus = "info";
+                                break;
+                            case AssignmentStatus.Rejected:
+                                showingStatus = "danger";
+                                break;
+                            case AssignmentStatus.Complete:
+                                showingStatus = "success";
+                                break;
+                            case AssignmentStatus.Closed:
+                                showingStatus = "dark";
+                                break;
+                            default:
+                                break;
+                        }
+                        <span class="badge badge-@showingStatus">
+                            @assignment.Status
+                        </span>
+                    }
+                </td>
+                <td>@assignment.AppointmentNo</td>
+                <td>
+                    @switch(assignment.Status)
+                    {
+                        case AssignmentStatus.Pending:
+                            <a class="btn btn-success" href="/Admin/Assignment/Accept/@assignment.Id">Accept</a>
+                            <a class="btn btn-danger" href="/Admin/Assignment/Accept/@assignment.Id">Reject</a>
+                            break;
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section scripts
+{
+    <script type="text/javascript">
+        $('.assignment-nav .@status.ToLower()').addClass('active');
+    </script>
+}

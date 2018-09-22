@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Linq;
 using GNIBIRPAndVisaAppointment.Web.Business;
+using GNIBIRPAndVisaAppointment.Web.Business.Application;
 using GNIBIRPAndVisaAppointment.Web.Business.Information;
 using GNIBIRPAndVisaAppointment.Web.DataAccess.Model.Storage;
 using GNIBIRPAndVisaAppointment.Web.Models;
@@ -105,6 +106,31 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
             var informationManager = DomainHub.GetDomain<IInformationManager>();
             informationManager.Delete(model.Key, model.Language);
             return Redirect($"/Admin/Info?_={DateTime.Now.Ticks}");
+        }
+
+        [Route("Assignment/{status?}")]
+        public IActionResult Assignment(string status = AssignmentStatus.Pending)
+        {
+            var applicationManager = DomainHub.GetDomain<IApplicationManager>();
+            ViewBag.Assignments = applicationManager.GetAssignments(status);
+            ViewBag.Status = status;
+            return View();
+        }
+
+        [Route("Assignment/Accept/{id}")]
+        public IActionResult AssignmentAccept(string id)
+        {
+            var applicationManager = DomainHub.GetDomain<IApplicationManager>();
+            applicationManager.Accept(id);
+            return RedirectToAction("Assignment");
+        }
+
+        [Route("Assignment/Reject/{id}")]
+        public IActionResult AssignmentReject(string id)
+        {
+            var applicationManager = DomainHub.GetDomain<IApplicationManager>();
+            applicationManager.Reject(id);
+            return RedirectToAction("Assignment");
         }
     }
 }

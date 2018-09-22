@@ -162,8 +162,6 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
                     PickDate = model.PickDate ? 10 : 0,
                     From = model.From,
                     To = model.To,
-                    Rebook = model.Rebook ? 20 : 0,
-                    NoCancelRebook = model.NoCancelRebook ? 33 : 0,
                     Emergency = model.Emergency ? 40 : 0
                 };
 
@@ -239,6 +237,12 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
         [Route("Status")]
         public IActionResult Status(string orderId)
         {
+            var applicationManager = DomainHub.GetDomain<IApplicationManager>();
+
+            ViewBag.Assignment = applicationManager.GetAssignment(orderId);
+            ViewBag.Order = applicationManager.GetOrder(orderId);
+            ViewBag.Application = applicationManager[orderId];
+
             return View();
         }
         
