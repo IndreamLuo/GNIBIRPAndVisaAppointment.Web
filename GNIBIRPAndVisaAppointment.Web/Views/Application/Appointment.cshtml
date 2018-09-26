@@ -1,0 +1,44 @@
+@{
+    var appointment = ViewBag.Appointment;
+    var appointmentLetterTemplate = ViewBag.AppointmentLetterTemplate;
+
+    var appointmentLetter = appointmentLetterTemplate
+        .Replace("{AppointmentNo}", appointment.AppointmentNo)
+        .Replace("{Time}", appointment.Time.ToString("DD/MM/YYYY HH:mm"))
+        .Replace("{Name}", appointment.Name)
+        .Replace("{Category}", appointment.Category)
+        .Replace("{SubCategory}", appointment.SubCategory);
+}
+
+@section Head
+{
+    <style type="text/css">
+        
+    </style>
+}
+
+<div class="email">
+    @Html.Raw(appointmentLetter)
+</div>
+<div class="text-center">
+    <button class="btn btn-success print">Print</button>
+</div>
+
+@section Scripts
+{
+    <script type="text/javascript">
+        $('.print').click(function () {
+            var printWindow = window.open('', 'PRINT');
+            printWindow.document.write('<html><head><title>INIS IRP Appointment Letter</title>');
+            printWindow.document.write('</head><body>');
+            printWindow.document.write($('.email').html());
+            printWindow.document.write('</body></html>');
+            
+            printWindow.document.close(); // for IE >= 10
+            printWindow.focus(); // for IE >= 10*/
+
+            printWindow.print();
+            printWindow.close();
+        });
+    </script>
+}

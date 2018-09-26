@@ -1,0 +1,31 @@
+@using GNIBIRPAndVisaAppointment.Web.Business.Application
+@model string
+@{
+    var showingStatus = "secondary";
+    switch(Model)
+    {
+        case AssignmentStatus.Pending:
+            showingStatus = "primary";
+            break;
+        case AssignmentStatus.Accepted:
+            showingStatus = "info";
+            break;
+        case AssignmentStatus.Rejected:
+            showingStatus = "danger";
+            break;
+        case AssignmentStatus.Appointed:
+            showingStatus = "warning";
+            break;
+        case AssignmentStatus.Complete:
+            showingStatus = "success";
+            break;
+        case AssignmentStatus.Closed:
+            showingStatus = "dark";
+            break;
+        default:
+            break;
+    }
+    <span class="badge badge-@showingStatus">
+        @Model
+    </span>
+}

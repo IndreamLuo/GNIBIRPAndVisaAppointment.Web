@@ -3,17 +3,19 @@
     Layout = "_AdminLayout";
     var status = ViewBag.Status;
     var assignments = ViewBag.Assignments;
+    var payments = ViewBag.Payments;
 }
 
-<table class="table">
+<table class="table table-sm">
     <thead>
         <tr>
             <nav>
                 <div class="nav nav-tabs assignment-nav">
                     <a class="nav-item nav-link pending" href="/Admin/Assignment/Pending">Pending</a>
                     <a class="nav-item nav-link accepted" href="/Admin/Assignment/Accepted">Accepted</a>
-                    <a class="nav-item nav-link rejected" href="/Admin/Assignment/Rejected">Rejected</a>
+                    <a class="nav-item nav-link appointed" href="/Admin/Assignment/Appointed">Appointed</a>
                     <a class="nav-item nav-link complete" href="/Admin/Assignment/Complete">Complete</a>
+                    <a class="nav-item nav-link rejected" href="/Admin/Assignment/Rejected">Rejected</a>
                     <a class="nav-item nav-link closed" href="/Admin/Assignment/Closed">Closed</a>
                 </li>
             </nav>
@@ -23,6 +25,7 @@
             <th>Time</th>
             <th>Status</th>
             <th>Appointment No.</th>
+            <th>Payment</th>
             <th></th>
         </tr>
     </thead>
@@ -33,40 +36,45 @@
                 <td>@assignment.Id</td>
                 <td>@assignment.Time</td>
                 <td>
-                    @{
-                        var showingStatus = "secondary";
-                        switch(assignment.Status)
-                        {
-                            case AssignmentStatus.Pending:
-                                showingStatus = "primary";
-                                break;
-                            case AssignmentStatus.Accepted:
-                                showingStatus = "info";
-                                break;
-                            case AssignmentStatus.Rejected:
-                                showingStatus = "danger";
-                                break;
-                            case AssignmentStatus.Complete:
-                                showingStatus = "success";
-                                break;
-                            case AssignmentStatus.Closed:
-                                showingStatus = "dark";
-                                break;
-                            default:
-                                break;
-                        }
-                        <span class="badge badge-@showingStatus">
-                            @assignment.Status
-                        </span>
-                    }
+                    @Html.Partial("../Application/StatusPartial", assignment.Status as string)
                 </td>
                 <td>@assignment.AppointmentNo</td>
+                <td>
+                    @{
+                        var payment = payments[assignment.Id];
+                        if (payment == null)
+                        {
+                            <span class="badge badge-danger">Unpaid</span>
+                        }
+                        else
+                        {
+                            <span class="badge badge-success">Paid</span>
+                            <span>@payment.Type - @payment.Currency @payment.Amount</span>
+                        }
+                    }
+                </td>
                 <td>
                     @switch(assignment.Status)
                     {
                         case AssignmentStatus.Pending:
-                            <a class="btn btn-success" href="/Admin/Assignment/Accept/@assignment.Id">Accept</a>
-                            <a class="btn btn-danger" href="/Admin/Assignment/Accept/@assignment.Id">Reject</a>
+                            <a class="btn btn-info btn-sm" href="/Admin/Assignment/Accept/@assignment.Id" target="_self">Accept</a>
+                            <a class="btn btn-danger btn-sm" href="/Admin/Assignment/Accept/@assignment.Id" target="_self">Reject</a>
+                            break;
+                        case AssignmentStatus.Accepted:
+                            <a class="btn btn-warning btn-sm" href="/Admin/Assignment/Appoint/@assignment.Id" target="_self">Appoint</a>
+                            break;
+                        case AssignmentStatus.Appointed:
+                            <a class="btn btn-success btn-sm" href="/Admin/Assignment/Complete/@assignment.Id" target="_self">Complete</a>
+                            break;
+                        case AssignmentStatus.Complete:
+                            if (payments[assignment.Id] == null)
+                            {
+                                <a class="btn btn-info btn-sm" href="/Admin/Assignment/Pay/@assignment.Id">Confirm Payment</a>
+                            }
+                            else
+                            {
+                                <a class="btn btn-dark btn-sm" href="/Admin/Assignment/Close/@assignment.Id">Close</a>
+                            }
                             break;
                     }
                 </td>

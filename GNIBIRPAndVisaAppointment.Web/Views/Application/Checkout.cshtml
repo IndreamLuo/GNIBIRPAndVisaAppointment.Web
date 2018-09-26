@@ -1,5 +1,8 @@
+@using GNIBIRPAndVisaAppointment.Web.Business.Application
+@model string
 @{
     var order = ViewBag.Order;
+    var assignment = ViewBag.Assignment;
 }
 
 @section Head {
@@ -60,9 +63,12 @@
             </script>
             </form>
         </td>
-        <td class="pl-2" rowspan="3">
-            <a class="btn btn-info" href="/Application/PayAfter/@order.Id">Pay After Appointed</a>
-        </td>
+        @if (assignment == null || assignment.Status != AssignmentStatus.Complete || assignment.Status != AssignmentStatus.Closed)
+        {
+            <td class="pl-2" rowspan="3">
+                <a class="btn btn-info" href="/Application/PayAfter/@order.Id">Pay Later</a>
+            </td>
+        }
     </tr>
     <tr>
         <td></td>

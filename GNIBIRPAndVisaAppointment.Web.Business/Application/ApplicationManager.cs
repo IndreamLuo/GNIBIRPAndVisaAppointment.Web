@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using GNIBIRPAndVisaAppointment.Web.Business.Payment;
 using GNIBIRPAndVisaAppointment.Web.DataAccess.Model.Storage;
 using GNIBIRPAndVisaAppointment.Web.DataAccess.Storage;
@@ -11,6 +12,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Application
         Table<DataAccess.Model.Storage.Application> ApplicationTable;
         Table<DataAccess.Model.Storage.Order> OrderTable;
         Table<DataAccess.Model.Storage.Assignment> AssignmentTable;
+        Table<DataAccess.Model.Storage.AppointmentLetter> AppointmentLetterTable;
         IDomainHub DomainHub;
 
         public ApplicationManager(IStorageProvider storageProvider, IDomainHub domainHub)
@@ -18,6 +20,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Application
             ApplicationTable = storageProvider.GetTable<DataAccess.Model.Storage.Application>();
             OrderTable = storageProvider.GetTable<DataAccess.Model.Storage.Order>();
             AssignmentTable = storageProvider.GetTable<DataAccess.Model.Storage.Assignment>();
+            AppointmentLetterTable = storageProvider.GetTable<DataAccess.Model.Storage.AppointmentLetter>();
             DomainHub = domainHub;
         }
 
@@ -37,7 +40,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Application
             lock(ApplicationTable)
             {
                 application.Id = Guid.NewGuid().ToString();
-                application.Time = DateTime.UtcNow.AddHours(1);
+                application.Time = DateTime.Now;
                 
                 application.PartitionKey = application.Id;
                 application.RowKey = New;
@@ -51,7 +54,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Application
         public string CreateOrder(DataAccess.Model.Storage.Order order)
         {
             order.Id = order.ApplicationId;
-            order.Time = DateTime.UtcNow.AddHours(1);
+            order.Time = DateTime.Now;
             order.Type = Application;
             
             order.PartitionKey = order.Id;
@@ -109,9 +112,25 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Application
             UpdataAssignmentStatus(orderId, AssignmentStatus.Pending, AssignmentStatus.Rejected);
         }
 
-        public void Complete(string orderId, string appointmentNo)
+        public void Appoint(string orderId)
         {
-            UpdataAssignmentStatus(orderId, AssignmentStatus.Accepted, AssignmentStatus.Complete);
+            UpdataAssignmentStatus(orderId, AssignmentStatus.Accepted, AssignmentStatus.Appointed);
+        }
+
+        public void Complete(string orderId, string appointmentNo, DateTime time, string name, string category, string subCategory)
+        {
+            AppointmentLetterTable.Insert(new AppointmentLetter
+            {
+                PartitionKey = orderId,
+                RowKey = appointmentNo,
+                AppointmentNo = appointmentNo,
+                Time = time,
+                Name = name,
+                Category = category,
+                SubCategory = subCategory
+            });
+
+            UpdataAssignmentStatus(orderId, AssignmentStatus.Appointed, AssignmentStatus.Complete);
         }
 
         public void Close(string orderId)
@@ -119,7 +138,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Application
             UpdataAssignmentStatus(orderId, AssignmentStatus.Complete, AssignmentStatus.Closed);
         }
 
-        protected void UpdataAssignmentStatus(string orderId, string fromStatus, string toStatus)
+        protected void UpdataAssignmentStatus(string orderId, string fromStatus, string toStatus, string assignmentNo = null)
         {
             var assignment = AssignmentTable[fromStatus, orderId];
             AssignmentTable.Delete(assignment);
@@ -127,10 +146,21 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Application
             assignment.ETag = "*";
             assignment.Status = toStatus;
             assignment.PartitionKey = assignment.Status;
+
+            if (!string.IsNullOrEmpty(assignmentNo))
+            {
+                assignment.AppointmentNo = assignmentNo;
+            }
+
             AssignmentTable.Insert(assignment);
 
             var trackedAssignment = GetAssignment(orderId);
             trackedAssignment.Status = toStatus;
+
+            if (!string.IsNullOrEmpty(assignmentNo))
+            {
+                trackedAssignment.AppointmentNo = assignmentNo;
+            }
             AssignmentTable.Replace(trackedAssignment);
         }
 
@@ -142,6 +172,17 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Application
         public List<Assignment> GetAssignments(string status)
         {
             return AssignmentTable[status];
+        }
+
+        public AppointmentLetter GetAppointmentLetter(string orderId)
+        {
+            var paymentManager = DomainHub.GetDomain<IPaymentManager>();
+            if (!paymentManager.IsPaid(orderId))
+            {
+                throw new AccessViolationException("Not paid.");
+            }
+
+            return AppointmentLetterTable[orderId].FirstOrDefault();
         }
     }
 }

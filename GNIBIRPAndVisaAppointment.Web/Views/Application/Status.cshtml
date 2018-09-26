@@ -3,6 +3,8 @@
     var assignment = ViewBag.Assignment;
     var order = ViewBag.Order;
     var application = ViewBag.Application;
+    var payment = ViewBag.Payment;
+    var AppointmentLetter = ViewBag.AppointmentLetter;
 }
 
 <table class="table table-sm">
@@ -28,7 +30,7 @@
         <td>@application.Category - @application.SubCategory</td>
     </tr>
     <tr>
-        <th>GNIB</th>
+        <th>GNIB / IRP Status</th>
         <td>@(application.ConfirmGNIB == "Yes" ? $"{application.GNIBNo} ~ {application.GNIBExDT}" : "New Registration")</td>
     </tr>
     <tr>
@@ -62,9 +64,9 @@
                     -
                     For specific dates
                     , from
-                    @order.FromDate
+                    @order.From
                     to
-                    @order.ToDate
+                    @order.To
                 </span>
             }
             else
@@ -87,31 +89,50 @@
     <tr>
         <th>Status</th>
         <td>
-            @{
-                var showingStatus = "secondary";
-                switch(assignment.Status)
+            @Html.Partial("StatusPartial", assignment.Status as string)
+        </td>
+    </tr>
+    <tr>
+        <th></th>
+        <td>
+            @switch (assignment.Status)
+            {
+                case AssignmentStatus.Appointed:
+                    <div class="alert alert-warning">
+                        Waiting for the application e-mail.
+                    </div>
+                    break;
+                case AssignmentStatus.Complete:
+                    break;
+            }
+        </td>
+    </tr>
+    <tr>
+        <th>Payment</th>
+        <td>
+            @if (payment == null)
+            {
+                if (assignment.Status == AssignmentStatus.Complete || assignment.Status == AssignmentStatus.Closed)
                 {
-                    case AssignmentStatus.Pending:
-                        showingStatus = "primary";
-                        break;
-                    case AssignmentStatus.Accepted:
-                        showingStatus = "info";
-                        break;
-                    case AssignmentStatus.Rejected:
-                        showingStatus = "danger";
-                        break;
-                    case AssignmentStatus.Complete:
-                        showingStatus = "success";
-                        break;
-                    case AssignmentStatus.Closed:
-                        showingStatus = "dark";
-                        break;
-                    default:
-                        break;
+                    <a class="btn btn-primary" target="_self" href="/Application/Checkout/@order.Id">Pay to Download Appointment Letter</a>
                 }
-                <span class="badge badge-@showingStatus">
-                    @assignment.Status
-                </span>
+                else
+                {
+                    <a class="btn btn-primary" target="_self" href="/Application/Checkout/@order.Id">Prepay</a>
+                }
+            }
+            else
+            {
+                <span>@payment.Type: @payment.Amount @payment.Currency.ToUpper()</span>
+            }
+        </td>
+    </tr>
+    <tr>
+        <th></th>
+        <td>
+            @if (payment != null)
+            {
+                <a class="btn btn-success" target="_blank" href="/Application/Appointment/@order.Id">View Appointment Letter</a>
             }
         </td>
     </tr>

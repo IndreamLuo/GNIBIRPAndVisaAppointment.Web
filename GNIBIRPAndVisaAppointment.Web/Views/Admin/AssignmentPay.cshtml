@@ -1,0 +1,41 @@
+@model GNIBIRPAndVisaAppointment.Web.Models.Admin.AssignmentPayModel
+
+<form method="POST">
+    <div class="form-group">
+        <label for="Type">Type</label>
+        <select class="form-control" asp-for="Type">
+            <option value="WeChat">WeChat</option>
+            <option value="Alipay">Alipay</option>
+            <option value="BankTransfer">Bank Transfer</option>
+            <option value="Cash">Cash</option>
+            <option value="PayPal">PayPal</option>
+            <option value="Stripe">Stripe</option>
+        </select>
+        <span asp-validation-for="Type" class="form-text text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="ChargeId">Charge Id</label>
+        <input class="form-control" id="ChargeId" name="ChargeId" type="text" value="@Model.ChargeId" />
+        <span asp-validation-for="ChargeId" class="form-text text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="Currency">Currency</label>
+        <select class="form-control" asp-for="Currency">
+            <option value="eur">EUR</option>
+            <option value="cny">CNY</option>
+            <option value="usd">USD</option>
+        </select>
+        <span asp-validation-for="Currency" class="form-text text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="Amount">Amount</label>
+        <input class="form-control" id="Amount" name="Amount" type="text" value="@Model.Amount" />
+        <span asp-validation-for="Amount" class="form-text text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="Payer">Payer</label>
+        <input class="form-control" id="Payer" name="Payer" type="text" value="@Model.Payer" />
+        <span asp-validation-for="Payer" class="form-text text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-success">Submit Payment</button>
+</form>

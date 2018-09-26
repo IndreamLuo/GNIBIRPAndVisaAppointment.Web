@@ -1,0 +1,84 @@
+@model GNIBIRPAndVisaAppointment.Web.Models.Admin.AppointmentLetterModel
+
+<form method="POST">
+    <div class="form-group">
+        <label for="AppointmentNo">Appointment No</label>
+        <input class="form-control" id="AppointmentNo" name="AppointmentNo" type="text" value="@Model.AppointmentNo" placeholder="EXTW-XXXXXXXXX" />
+        <span asp-validation-for="AppointmentNo" class="form-text text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="Time">Time</label>
+        <input class="form-control" id="Time" name="Time" type="text" value="@Model.Time" placeholder="DD/MM/YYYY HH:mm" />
+        <span asp-validation-for="Time" class="form-text text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="Name">Name</label>
+        <input class="form-control" id="Name" name="Name" type="text" value="@Model.Name" placeholder="Donald Trump" />
+        <span asp-validation-for="Name" class="form-text text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="Category">Category - Sub Category:</label>
+        <div class="input-group">
+            <select name="Category" id="Category" value="@Model.Category" class="form-control" placeholder="Select...">
+                <option value="Other">Other</option>
+                <option value="Study">Study</option>
+                <option value="Work">Work</option>
+            </select>
+            <select name="SubCategory" id="SubCategory" value="@Model.SubCategory" class="form-control" placeholder="Select...">
+                <!-- Work -->
+                <option category="Work" value="Work Permit Holder">Work Permit Holder</option>
+                <option category="Work" value="Hosting agreement">Hosting agreement</option>
+                <option category="Work" value="Working Holiday">Working Holiday</option>
+                <option category="Work" value="Atypical Working Schemes">Atypical Working Schemes</option>
+                <option category="Work" value="Invest or Start a Business">Invest or Start a Business</option>
+                <option category="Work" value="Visiting Academics">Visiting Academics</option>
+                <option category="Work" value="Doctor">Doctor</option>
+                <option category="Work" value="3rd Level Graduate Scheme ">3rd Level Graduate Scheme </option>
+                <!-- Study -->
+                <option category="Study" value="PhD">PhD</option>
+                <option category="Study" value="Masters">Masters</option>
+                <option category="Study" value="Higher National Diploma">Higher National Diploma</option>
+                <option category="Study" value="Degree">Degree</option>
+                <option category="Study" value="English Language Course">English Language Course</option>
+                <option category="Study" value="Second Level">Second Level</option>
+                <option category="Study" value="Pre-Masters">Pre-Masters</option>
+                <option category="Study" value="Visiting Students">Visiting Students</option>
+                <option category="Study" value="3rd Level Graduate Scheme">3rd Level Graduate Scheme</option>
+                <!-- Other -->
+                <option category="Other" value="Lost Card">Lost Card</option>
+                <option category="Other" value="Stolen Card">Stolen Card</option>
+                <option category="Other" value="Join family member">Join family member</option>
+                <option category="Other" value="Permission Letter">Permission Letter</option>
+            </select>
+        </div>
+        <span asp-validation-for="Category" class="form-text text-danger"></span>
+        <span asp-validation-for="SubCategory" class="form-text text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-success">Complete</button>
+</form>
+
+@section Scripts
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var $subCategoryWork = $(SubCategory).find('option[category="Work"]').clone();
+            var $subCategoryStudy = $(SubCategory).find('option[category="Study"]').clone();
+            var $subCategoryOther = $(SubCategory).find('option[category="Other"]').clone();
+            var $subCategories = [$subCategoryWork, $subCategoryStudy, $subCategoryOther];
+            var refreshSubCategory = function () {
+                var value = $(Category).attr('value') || $(Category).val();
+                $(Category).attr('value', null).val(value);
+                var subValue = $(SubCategory).attr('value');
+                $(SubCategory).empty();
+                for (var i in $subCategories) {
+                    $subCategories[i].attr('category') == value
+                    && $(SubCategory).append($subCategories[i].clone());
+                }
+
+                subValue && $(SubCategory).val(subValue);
+            }
+            refreshSubCategory();
+            $(Category).change(refreshSubCategory);
+        });
+    </script>
+}

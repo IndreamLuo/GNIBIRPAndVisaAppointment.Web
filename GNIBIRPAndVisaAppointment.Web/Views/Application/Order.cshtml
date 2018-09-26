@@ -44,17 +44,19 @@
         </table>
         <h4 class="mb-3">Service</h4>
         <div class="form-group pl-5">
-            <input class="form-check-input" id="appointment" type="checkbox" disabled checked amount="30">
-            <label class="form-check-label" for="rebook">€30 - Appointment</label>
+            <input class="form-check-input" id="appointment" type="checkbox" disabled checked amount="20">
+            <label class="form-check-label" for="rebook">€20 - Appointment</label>
         </div>
         <div class="form-group pl-5">
-            <input class="form-check-input" id="pickDate" name="pickDate" type="checkbox" amount="10">
+            <input class="form-check-input" id="pickDate" name="pickDate" type="checkbox" value="true" amount="10" @(Model.PickDate ? "checked" : string.Empty)>
             <label class="form-check-label" for="pickDate">€10 - Pick date:</label>
             <br />
             from
-            <input class="form-control form-control-sm from" name="from" placeholder="2018-11-30" />
+            <input class="form-control form-control-sm from" name="from" value="@Model.From" placeholder="30/11/2018" />
             to
-            <input class="form-control form-control-sm to" name="to" placeholder="YYYY-MM-DD" />
+            <input class="form-control form-control-sm to" name="to" value="@Model.To" placeholder="DD/MM/YYYY" />
+            <span asp-validation-for="From" class="form-text text-danger"></span>
+            <span asp-validation-for="To" class="form-text text-danger"></span>
         </div>
         <div class="form-group pl-5">
             <input class="form-check-input" id="cancellation" type="checkbox" checked amount="0">
@@ -64,8 +66,8 @@
             The wider range of dates you pick the more you are possible to get an appointment
         </div>
         <div class="form-group pl-5">
-            <input class="form-check-input" id="emergency" name="emergency" type="checkbox" value="true" amount="40">
-            <label class="form-check-label" for="emergency">€40 - Emergency</label>
+            <input class="form-check-input" id="emergency" name="emergency" type="checkbox" value="true" amount="20" @(Model.Emergency ? "checked" : string.Empty)>
+            <label class="form-check-label" for="emergency">€20 - Emergency</label>
         </div>
         <div class="alert alert-warning">
             You'll be put on top of the list.<br />
@@ -93,7 +95,7 @@
         $(pickDate).change(function () {
             $('.from, .to').prop('disabled', !$(this).prop('checked'));
         });
-         $('.from, .to').prop('disabled', !$(this).prop('checked'));
+         $('.from, .to').prop('disabled', !$(pickDate).prop('checked'));
 
         recalculateAmount();
     </script>

@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using GNIBIRPAndVisaAppointment.Web.Business;
 using GNIBIRPAndVisaAppointment.Web.Business.Application;
+using GNIBIRPAndVisaAppointment.Web.Business.Information;
 using GNIBIRPAndVisaAppointment.Web.Business.Payment;
 using GNIBIRPAndVisaAppointment.Web.DataAccess.Model.Storage;
 using GNIBIRPAndVisaAppointment.Web.Models;
@@ -77,7 +78,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
             }
             else if (string.IsNullOrEmpty(model.PPReason))
             {
-                ModelState.AddModelError("PPReason", "No Passport Reason required.");
+                ModelState.AddModelError("PPReason", "Passport Number or No Passport Reason required.");
             }
 
             ViewBag.reCaptchaVerified = null;
@@ -153,38 +154,52 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
         {
             var applicationManager = DomainHub.GetDomain<IApplicationManager>();
 
-            if (isOld && ModelState.IsValid)
+            if (isOld)
             {
-                var order = new Order
+                if (!IsFormattedDate(model.From))
                 {
-                    ApplicationId = model.ApplicationId,
-                    Base = 30,
-                    PickDate = model.PickDate ? 10 : 0,
-                    From = model.From,
-                    To = model.To,
-                    Emergency = model.Emergency ? 40 : 0
-                };
+                    ModelState.AddModelError("From", "Date format wrong, shoud be as 30/11/2018 in DD/MM/YYYY.");
+                }
 
-                var orderId = applicationManager.CreateOrder(order);
-
-                return RedirectToAction("Checkout", new
+                if (!IsFormattedDate(model.To))
                 {
-                    orderId = orderId
-                });
+                    ModelState.AddModelError("To", "Date format wrong, shoud be as 30/11/2018 in DD/MM/YYYY.");
+                }
+
+                if (ModelState.IsValid)
+                {
+                    var order = new Order
+                    {
+                        ApplicationId = model.ApplicationId,
+                        Base = 20,
+                        PickDate = model.PickDate ? 10 : 0,
+                        From = model.From,
+                        To = model.To,
+                        Emergency = model.Emergency ? 20 : 0
+                    };
+
+                    var orderId = applicationManager.CreateOrder(order);
+
+                    return RedirectToAction("Checkout", new
+                    {
+                        orderId = orderId
+                    });
+                }
             }
 
             ViewBag.Application = applicationManager[model.ApplicationId];
 
-            return View();
+            return View(model);
         }
 
-        [Route("Checkout/{orderId}/{isFaild?}")]
+        [Route("Checkout/{orderId}/{isFailed?}")]
         public IActionResult Checkout(string orderId, bool isFailed = false)
         {
             var applicationManager = DomainHub.GetDomain<IApplicationManager>();
             var paymentManager = DomainHub.GetDomain<IPaymentManager>();
 
             ViewBag.Order = applicationManager.GetOrder(orderId);
+            ViewBag.Assignment = applicationManager.GetAssignment(orderId);
             ViewBag.StripeKey = paymentManager.PublishableKey;
 
             return View();
@@ -206,7 +221,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
             return RedirectToAction("Checkout", new
             {
                 orderId = orderId,
-                failed = true
+                isFailed = true
             });
         }
 
@@ -214,7 +229,11 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
         public IActionResult PayAfter(string orderId)
         {
             var applicationManager = DomainHub.GetDomain<IApplicationManager>();
-            applicationManager.Pending(orderId);
+
+            if (applicationManager.GetAssignment(orderId) == null)
+            {
+                applicationManager.Pending(orderId);
+            }
 
             return RedirectToAction("Status", new
             {
@@ -234,7 +253,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
             });
         }
 
-        [Route("Status")]
+        [Route("Status/{orderId}")]
         public IActionResult Status(string orderId)
         {
             var applicationManager = DomainHub.GetDomain<IApplicationManager>();
@@ -243,33 +262,28 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
             ViewBag.Order = applicationManager.GetOrder(orderId);
             ViewBag.Application = applicationManager[orderId];
 
+            var paymentManager = DomainHub.GetDomain<IPaymentManager>();
+            ViewBag.Payment = paymentManager.GetPayment(orderId);
+
+            if (ViewBag.Payment != null)
+            {
+                ViewBag.AppointmentLetter = applicationManager.GetAppointmentLetter(orderId);
+            }
+
             return View();
         }
-        
 
+        [Route("Appointment/{orderId}")]
+        public IActionResult Appointment(string orderId)
+        {
+            var applicationManager = DomainHub.GetDomain<IApplicationManager>();
+            ViewBag.Appointment = applicationManager.GetAppointmentLetter(orderId);
 
-        // [Route("PlaceOrder")]
-        // public IActionResult PlaceOrder()
-        // {
-        //     return View();
-        // }
+            var informationManager = DomainHub.GetDomain<IInformationManager>();
+            var letterTemplate = informationManager["appointment-letter"];
+            ViewBag.AppointmentLetterTemplate = letterTemplate.Content;
 
-        // [Route("Pay")]
-        // public IActionResult Pay()
-        // {
-        //     return View();
-        // }
-
-        // [Route("ConfirmPayment")]
-        // public IActionResult ConfirmPayment()
-        // {
-        //     return View();
-        // }
-
-        // [Route("Status")]
-        // public IActionResult Status()
-        // {
-        //     return View();
-        // }
+            return View();
+        }
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using GNIBIRPAndVisaAppointment.Web.Business.Application;
 using GNIBIRPAndVisaAppointment.Web.DataAccess.Model.Storage;
 using GNIBIRPAndVisaAppointment.Web.DataAccess.Storage;
@@ -50,8 +51,9 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Payment
                 var payment = new DataAccess.Model.Storage.Payment
                 {
                     PartitionKey = orderId,
+                    ChargeId = charge.Id,
                     RowKey = charge.Id,
-                    Time = DateTime.UtcNow.AddHours(1),
+                    Time = DateTime.Now,
                     Type = Stripe,
                     Currency = charge.Currency,
                     Amount = ((double)charge.Amount) / 100,
@@ -64,9 +66,26 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Payment
             return charge.Paid;
         }
 
+        public void AdminPay(string orderId, string chargeId, string type, string currency, double amount, string payer)
+        {
+            var payment = new DataAccess.Model.Storage.Payment
+            {
+                PartitionKey = orderId,
+                ChargeId = chargeId,
+                RowKey = chargeId,
+                Time = DateTime.Now,
+                Type = type,
+                Currency = currency,
+                Amount = amount,
+                Payer = payer
+            };
+
+            PaymentTable.Insert(payment);
+        }
+
         public DataAccess.Model.Storage.Payment GetPayment(string orderId)
         {
-            return PaymentTable[orderId][0];
+            return PaymentTable[orderId].FirstOrDefault();
         }
 
         public bool IsPaid(string orderId)
