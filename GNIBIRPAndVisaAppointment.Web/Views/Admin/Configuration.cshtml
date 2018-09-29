@@ -1,0 +1,39 @@
+@{
+    Layout = "_AdminLayout";
+    var configurations = ViewBag.Configurations;
+}
+
+<table class="table table-sm">
+    <thead>
+        <tr>
+            <th>Area</th>
+            <th>Key</th>
+            <th>Value</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var area in configurations.Keys)
+        {
+            foreach (var key in configurations[area].Keys)
+            {
+                <tr>
+                    <td>@area</td>
+                    <td>@key</td>
+                    <td>@configurations[area][key]</td>
+                    <td>
+                        <a class="btn btn-primary" target="_self" href="/Admin/Configuration/Set/@area/@key">Set</a>
+                        <a class="btn btn-danger" target="_self" href="/Admin/Configuration/Remove/@area/@key">Remove</a>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="4">
+                <a class="btn btn-success" target="_self" href="/Admin/Configuration/Add">Add</a>
+            </td>
+        </tr>
+    </tfoot>
+</table>

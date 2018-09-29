@@ -1,0 +1,21 @@
+@{
+    Layout = "~/Views/Admin/_AdminLayout.cshtml";
+}
+
+<h2>Set Configuration</h2>
+
+<form>
+    <div class="form-group">
+        <label for="Area">Area</label>
+        <input class="form-control" id="Area" name="Area" type="text" value="@ViewBag.Area" disabled />
+    </div>
+    <div class="form-group">
+        <label for="Key">Key</label>
+        <input class="form-control" id="Key" name="Key" type="text" value="@ViewBag.Key" disabled />
+    </div>
+    <div class="form-group">
+        <label for="Value">Value</label>
+        <input class="form-control" id="Value" name="Value" type="text" value="@ViewBag.Value" />
+    </div>
+    <button class="btn btn-success" type="submit">Submit</button>
+</form>

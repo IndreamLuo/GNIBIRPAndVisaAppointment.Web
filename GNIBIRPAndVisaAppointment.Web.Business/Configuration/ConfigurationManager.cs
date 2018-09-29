@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using GNIBIRPAndVisaAppointment.Web.DataAccess.Storage;
 using GNIBIRPAndVisaAppointment.Web.Utility;
 
@@ -13,9 +15,39 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Configuration
             set
             {
                 var configuration = Table[area, key];
-                configuration.Value = value;
-                Table.Replace(configuration);
+
+                if (configuration == null)
+                {
+                    configuration = new DataAccess.Model.Storage.Configuration
+                    {
+                        PartitionKey = area,
+                        RowKey = key,
+                        Value = value
+                    };
+
+                    Table.Insert(configuration);
+                }
+                else
+                {
+                    configuration.Value = value;
+                    Table.Replace(configuration);
+                }
             }
+        }
+
+        public void Remove(string area, string key)
+        {
+            Table.Delete(Table[area, key]);
+        }
+        
+        public Dictionary<string, Dictionary<string, string>> GetAll()
+        {
+            return Table
+                .GetAll()
+                .GroupBy(item => item.PartitionKey)
+                .ToDictionary(group => group.Key,
+                    group => group
+                        .ToDictionary(item => item.RowKey, item => item.Value));
         }
     }
 }
