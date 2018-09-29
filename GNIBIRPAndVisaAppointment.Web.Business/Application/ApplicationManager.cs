@@ -169,9 +169,20 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Application
             return AssignmentTable[orderId, AssignmentStatus.Tracked];
         }
 
-        public List<Assignment> GetAssignments(string status)
+        public List<Assignment> GetAssignments(string status, bool withDetails = false)
         {
-            return AssignmentTable[status];
+            var assignments = AssignmentTable[status];
+
+            if (withDetails)
+            {
+                foreach (var assignment in assignments)
+                {
+                    assignment.Application = ApplicationTable[assignment.Id, New];
+                    assignment.Order = OrderTable[assignment.Id, Application];
+                }
+            }
+
+            return assignments;
         }
 
         public AppointmentLetter GetAppointmentLetter(string orderId)

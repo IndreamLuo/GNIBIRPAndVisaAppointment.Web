@@ -1,4 +1,9 @@
 using System;
+using System.Linq;
+using GNIBIRPAndVisaAppointment.Web.Business;
+using GNIBIRPAndVisaAppointment.Web.Business.Api;
+using GNIBIRPAndVisaAppointment.Web.Business.Application;
+using GNIBIRPAndVisaAppointment.Web.Models.Api;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GNIBIRPAndVisaAppointment.Web.Controllers
@@ -6,18 +11,42 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
     [Route("Api")]
     public class ApiController : Controller
     {
-        [HttpPost]
-        [Route("Application/Accepted")]
-        public IActionResult ApplicationAccepted(string token)
+        readonly IDomainHub DomainHub;
+        public ApiController(IDomainHub domainHub)
         {
-            throw new NotImplementedException();
+            DomainHub = domainHub;
         }
 
         [HttpPost]
-        [Route("Application/Appoint")]
-        public IActionResult ApplicationAppoint(string token, string id)
+        [Route("Assignment/Accepted")]
+        public IActionResult AssignmentAccepted(string token)
         {
-            throw new NotImplementedException();
+            var apiManager = DomainHub.GetDomain<IApiManager>();
+            if (apiManager.VerifyToken(token))
+            {
+                var applicationManager = DomainHub.GetDomain<IApplicationManager>();
+                var assignments = applicationManager
+                    .GetAssignments(AssignmentStatus.Accepted)
+                    .Select(assignment => new AssignmentModel(assignment));
+                
+                return Json(assignments);
+            }
+            
+            return Json(null);
+        }
+
+        [HttpPost]
+        [Route("Assignment/Appoint")]
+        public IActionResult AssignmentAppoint(string token, string id)
+        {
+            var apiManager = DomainHub.GetDomain<IApiManager>();
+            if (apiManager.VerifyToken(token))
+            {
+                var applicationManager = DomainHub.GetDomain<IApplicationManager>();
+                applicationManager.Appoint(id);
+            }
+
+            return Json(null);
         }
     }
 }
