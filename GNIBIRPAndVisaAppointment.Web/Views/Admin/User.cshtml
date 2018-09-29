@@ -1,0 +1,36 @@
+@{
+    Layout = "_AdminLayout";
+    var users = ViewBag.Users;
+}
+
+<table class="table table-sm">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Password</th>
+            <th>Name</th>
+            <th>Role</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in users)
+        {
+            <tr>
+                <td>@user.Id</td>
+                <td>@user.Name</td>
+                <td>@user.Role</td>
+                <td>
+                    <a class="btn btn-primary" target="_self" href="/Admin/User/Edit/@user.Id">Edit</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="5">
+                <a class="btn btn-success" target="_self" href="/Admin/User/Create">Create</a>
+            </td>
+        </tr>
+    </tfoot>
+</table>

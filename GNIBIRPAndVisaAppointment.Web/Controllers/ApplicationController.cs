@@ -150,7 +150,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
         }
 
         [Route("Order/{applicationId}")]
-        public IActionResult Order(OrderModel model, bool isOld = false)
+        public async Task<IActionResult> Order(OrderModel model, bool isOld = false)
         {
             var applicationManager = DomainHub.GetDomain<IApplicationManager>();
 
@@ -161,7 +161,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
                     ModelState.AddModelError("From", "Date format wrong, shoud be as 30/11/2018 in DD/MM/YYYY.");
                 }
 
-                if (!IsFormattedDate(model.To))
+                if (!string.IsNullOrEmpty(model.To) && !IsFormattedDate(model.To))
                 {
                     ModelState.AddModelError("To", "Date format wrong, shoud be as 30/11/2018 in DD/MM/YYYY.");
                 }
@@ -188,6 +188,12 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
             }
 
             ViewBag.Application = applicationManager[model.ApplicationId];
+
+            if (ViewBag.Application == null)
+            {
+                await Task.Delay(1000);
+                ViewBag.Application = applicationManager[model.ApplicationId];
+            }
 
             return View(model);
         }

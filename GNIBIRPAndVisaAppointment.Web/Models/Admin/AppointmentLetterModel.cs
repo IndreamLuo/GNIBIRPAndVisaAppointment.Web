@@ -13,7 +13,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Models.Admin
         public string AppointmentNo { get; set; }
         
         [Required]
-        [RegularExpression("[0-9]{2}/[0-9]{2}/[0-9]{4} [0-9]{2}:[0-9]{2}")]
+        [RegularExpression("[0-9]{2}/[0-9]{2}/[0-9]{4}, [0-9]{2}:[0-9]{2}")]
         public string Time { get; set; }
         
         [Required]
