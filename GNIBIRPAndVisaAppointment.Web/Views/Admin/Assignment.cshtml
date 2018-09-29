@@ -36,7 +36,7 @@
                 <td>@assignment.Id</td>
                 <td>@assignment.Time</td>
                 <td>
-                    @Html.Partial("../Application/StatusPartial", assignment.Status as string)
+                    @Html.Partial("~/Views/Application/StatusPartial.cshtml", assignment.Status as string)
                 </td>
                 <td>@assignment.AppointmentNo</td>
                 <td>
