@@ -43,29 +43,28 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
         [Route("User/Edit/{id}")]
         public async Task<IActionResult> UserEdit(UserModel model, bool isOld = false)
         {
+            var userEntity = await UserManager.FindByIdAsync(model.Id);
+
             if (isOld)
             {
                 if (ModelState.IsValid)
                 {
-                    var applicationUser = new ApplicationUser
-                    {
-                        Id = model.Id,
-                        UserName = model.Name,
-                        Role = model.Role
-                    };
-                    await UserManager.UpdateAsync(applicationUser);
+                    userEntity.UserName = model.Name;
+                    userEntity.Role = model.Role;
 
                     if (!string.IsNullOrEmpty(model.Password))
                     {
-                        await UserManager.ChangePasswordAsync(applicationUser, model.OldPassword, model.Password);
+                        userEntity.PasswordHash = UserManager.PasswordHasher.HashPassword(userEntity, model.Password);
                     }
+
+                    await UserManager.UpdateAsync(userEntity);
 
                     return RedirectToAction("User");
                 }
             }
             else
             {
-                model = new UserModel(await UserManager.GetUserAsync(base.User));
+                model = new UserModel(userEntity);
             }
 
             return View(model);
