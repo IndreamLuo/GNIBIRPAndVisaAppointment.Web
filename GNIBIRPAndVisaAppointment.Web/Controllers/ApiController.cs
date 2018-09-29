@@ -26,7 +26,9 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
             {
                 var applicationManager = DomainHub.GetDomain<IApplicationManager>();
                 var assignments = applicationManager
-                    .GetAssignments(AssignmentStatus.Accepted)
+                    .GetAssignments(AssignmentStatus.Accepted, true)
+                    .OrderByDescending(assignment => assignment.Order.Amount)
+                    .ThenBy(assignment => assignment.Time)
                     .Select(assignment => new AssignmentModel(assignment));
                 
                 return Json(assignments);
