@@ -11,12 +11,27 @@
     You'll be put on a queue.
     <hr />
     <ul>
-        <dt>Data usage</dt>
-        <li>Your GNIB number, passport number will be removed after the service ends.</li>
-        <li>Your e-mail and name will be remained in case any contact about the service.</li>
-        <li>If you want new service after this one you need to offer me your details again.</li>
+        <dt>Cost</dt>
+        <li>Regular appointment cost €20.</li>
+        <li>Appointment with dates picked cost extra €10.</li>
+        <li>Emergency which put you on top of the list cost extra €20</li>
+    </ul>
+    <hr />
+    <ul>
+        <dt>Notice</dt>
+        <li>Payment could be applied after appointment confirmed.</li>
     </ul>
 </div>
+
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a target="_self" href="#">Apply</a></li>
+    <li class="breadcrumb-item">Order</li>
+    <li class="breadcrumb-item">Checkout</li>
+    <li class="breadcrumb-item">Status</li>
+    <li class="breadcrumb-item">Print</li>
+  </ol>
+</nav>
 
 <form method="post">
     <h2 class="mt-5 mb-4">Appointment Info</h2>
@@ -371,7 +386,7 @@
     <h2 class="mt-5 mb-4">Comment</h2>
     <div class="container content">
         <div class="form-group">
-            <textarea name="Comment" style="height: 200px" class="form-control" placeholder="Hi, I you can also find me by 0876543210.">@Model.Comment</textarea>
+            <textarea name="Comment" style="height: 200px" class="form-control" placeholder="Hi, you can also find me by 0876543210.">@Model.Comment</textarea>
         </div>
     </div>
 

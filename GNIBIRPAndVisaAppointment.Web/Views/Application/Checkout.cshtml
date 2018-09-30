@@ -13,7 +13,17 @@
     </style>
 }
 
-<h2>Order</h2>
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">Apply</li>
+    <li class="breadcrumb-item">Order</li>
+    <li class="breadcrumb-item"><a target="_self" href="#">Checkout</a></li>
+    <li class="breadcrumb-item">Status</li>
+    <li class="breadcrumb-item">Print</li>
+  </ol>
+</nav>
+
+<h2>Checkout</h2>
 <table class="table table-sm">
     <thead>
         <tr>
@@ -65,13 +75,19 @@
         </td>
         @if (assignment == null || assignment.Status != AssignmentStatus.Complete || assignment.Status != AssignmentStatus.Closed)
         {
-            <td class="pl-2" rowspan="3">
+            <td class="pl-2">
                 <a class="btn btn-info" href="/Application/PayAfter/@order.Id">Pay Later</a>
             </td>
         }
+        else
+        {
+            <td></td>
+        }
     </tr>
     <tr>
-        <td></td>
+        <td colspan="2">
+            Other payment form please contact me on <a target="_blank" href="https://www.facebook.com/gnibirpvisa">Facebook Page</a>
+        </td>
     </tr>
     <tr>
         <td></td>

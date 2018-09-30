@@ -17,11 +17,22 @@
     </style>
 }
 
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">Apply</li>
+    <li class="breadcrumb-item">Order</li>
+    <li class="breadcrumb-item">Checkout</li>
+    <li class="breadcrumb-item">Status</li>
+    <li class="breadcrumb-item"><a target="_self" href="#">Print</a></li>
+  </ol>
+</nav>
+
+<div class="text-center mb-4">
+    <button class="btn btn-success print">Print</button>
+</div>
+
 <div class="email">
     @Html.Raw(appointmentLetter)
-</div>
-<div class="text-center">
-    <button class="btn btn-success print">Print</button>
 </div>
 
 @section Scripts

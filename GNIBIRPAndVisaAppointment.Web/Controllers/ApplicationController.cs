@@ -135,16 +135,21 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
 
         bool IsFormattedDate(string dateString)
         {
+            DateTime notUsed;
+            return IsFormattedDate(dateString, out notUsed);
+        }
+        bool IsFormattedDate(string dateString, out DateTime time)
+        {
             var dateRegex = new Regex(@"\d{2}/\d{2}/\d{4}");
             if (dateRegex.IsMatch(dateString))
             {
                 var numbers = dateString
                     .Split("/");
 
-                DateTime value;
-
-                return DateTime.TryParse($"{numbers[2]}-{numbers[1]}-{numbers[0]} 00:00:00", out value);
+                return DateTime.TryParse($"{numbers[2]}-{numbers[1]}-{numbers[0]} 00:00:00", out time);
             }
+
+            time = DateTime.MaxValue;
 
             return false;
         }
@@ -156,14 +161,24 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
 
             if (isOld)
             {
-                if (!IsFormattedDate(model.From))
+                if (model.PickDate)
                 {
-                    ModelState.AddModelError("From", "Date format wrong, shoud be as 30/11/2018 in DD/MM/YYYY.");
-                }
+                    DateTime from = DateTime.MinValue;
+                    if (!string.IsNullOrEmpty(model.From) && !IsFormattedDate(model.From, out from))
+                    {
+                        ModelState.AddModelError("From", "Date format wrong, shoud be as 30/11/2018 in DD/MM/YYYY.");
+                    }
 
-                if (!string.IsNullOrEmpty(model.To) && !IsFormattedDate(model.To))
-                {
-                    ModelState.AddModelError("To", "Date format wrong, shoud be as 30/11/2018 in DD/MM/YYYY.");
+                    DateTime to = DateTime.MaxValue;
+                    if (!string.IsNullOrEmpty(model.To) && !IsFormattedDate(model.To, out to))
+                    {
+                        ModelState.AddModelError("To", "Date format wrong, shoud be as 30/11/2018 in DD/MM/YYYY.");
+                    }
+
+                    if (from > to)
+                    {
+                        ModelState.AddModelError("To", "Date of 'To' can only be after 'From'.");
+                    }
                 }
 
                 if (ModelState.IsValid)

@@ -5,12 +5,14 @@ using GNIBIRPAndVisaAppointment.Web.Business.Application;
 using GNIBIRPAndVisaAppointment.Web.Business.Payment;
 using GNIBIRPAndVisaAppointment.Web.DataAccess.Model.Storage;
 using GNIBIRPAndVisaAppointment.Web.Models.Admin;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GNIBIRPAndVisaAppointment.Web.Controllers
 {
     public partial class AdminController
     {
+        [Authorize(Roles="Admin,Manager")]
         [Route("Assignment/{status?}")]
         public IActionResult Assignment(string status = AssignmentStatus.Pending)
         {
@@ -30,6 +32,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
             return View();
         }
 
+        [Authorize(Roles="Admin,Manager")]
         [Route("Assignment/Accept/{id}")]
         public IActionResult AssignmentAccept(string id)
         {
@@ -38,6 +41,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
             return RedirectToAction("Assignment");
         }
 
+        [Authorize(Roles="Admin,Manager")]
         [Route("Assignment/Reject/{id}")]
         public IActionResult AssignmentReject(string id)
         {
@@ -46,6 +50,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
             return RedirectToAction("Assignment");
         }
 
+        [Authorize(Roles="Admin,Manager")]
         [Route("Assignment/Appoint/{id}")]
         public IActionResult AssignmentAppoint(string id)
         {
@@ -54,6 +59,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
             return Redirect("/Admin/Assignment/Accepted");
         }
 
+        [Authorize(Roles="Admin,Manager")]
         [Route("Assignment/Complete/{assignmentId}")]
         public IActionResult AssignmentComplete(AppointmentLetterModel model)
         {
@@ -79,6 +85,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
             return View(model);
         }
 
+        [Authorize(Roles="Admin,Manager")]
         [Route("Assignment/Close/{id}")]
         public IActionResult AssignmentClose(string id)
         {
@@ -87,6 +94,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
             return Redirect("/Admin/Assignment/Complete");
         }
 
+        [Authorize(Roles="Admin,Manager")]
         [Route("Assignment/Pay/{assignmentId}")]
         public IActionResult AssignmentPay(AssignmentPayModel model)
         {

@@ -33,7 +33,11 @@
         @foreach (var assignment in assignments)
         {
             <tr>
-                <td>@assignment.Id</td>
+                <td>
+                    <a target="_blank" href="/Application/Status/@assignment.Id">
+                        @assignment.Id
+                    </a>
+                </td>
                 <td>@assignment.Time</td>
                 <td>
                     @Html.Partial("~/Views/Application/StatusPartial.cshtml", assignment.Status as string)

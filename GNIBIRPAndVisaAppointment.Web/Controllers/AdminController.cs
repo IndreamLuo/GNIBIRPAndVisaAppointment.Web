@@ -34,6 +34,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
             }
         }
         
+        [Authorize(Roles="Admin,Manager")]
         public IActionResult Index()
         {
             return View();
