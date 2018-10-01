@@ -4,7 +4,7 @@
 
     var appointmentLetter = appointmentLetterTemplate
         .Replace("{AppointmentNo}", appointment.AppointmentNo)
-        .Replace("{Time}", appointment.Time.ToString("DD/MM/YYYY HH:mm"))
+        .Replace("{Time}", appointment.Time.ToString("dd/MM/yyyy HH:mm"))
         .Replace("{Name}", appointment.Name)
         .Replace("{Category}", appointment.Category)
         .Replace("{SubCategory}", appointment.SubCategory);

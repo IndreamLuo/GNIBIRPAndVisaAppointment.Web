@@ -1,22 +1,31 @@
+using GNIBIRPAndVisaAppointment.Web.Business;
 using GNIBIRPAndVisaAppointment.Web.Business.Configuration;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GNIBIRPAndVisaAppointment.Web.Controllers
 {
-    public partial class AdminController
+    [Route("Admin/Configuration")]
+    [Authorize(Roles="Admin")]
+    public class AdminConfigurationController : Controller
     {
-        [Route("Configuration")]
-        public IActionResult Configuration()
+        readonly IDomainHub DomainHub;
+
+        public AdminConfigurationController(IDomainHub domainHub)
         {
-            
+            DomainHub = domainHub;
+        }
+
+        public IActionResult Index()
+        {
             var configurationManager = DomainHub.GetDomain<IConfigurationManager>();
             ViewBag.Configurations = configurationManager.GetAll();
 
             return View();
         }
 
-        [Route("Configuration/Add")]
-        public IActionResult ConfigurationAdd(string area, string key, string value)
+        [Route("Add")]
+        public IActionResult Add(string area, string key, string value)
         {
             if (!string.IsNullOrEmpty(area) && !string.IsNullOrEmpty(key) && !string.IsNullOrEmpty(key))
             {
@@ -33,8 +42,8 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
             return View();
         }
 
-        [Route("Configuration/Set/{area}/{key}")]
-        public IActionResult ConfigurationSet(string area, string key, string value)
+        [Route("Set/{area}/{key}")]
+        public IActionResult Set(string area, string key, string value)
         {
             var configurationManager = DomainHub.GetDomain<IConfigurationManager>();
             
@@ -42,18 +51,18 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
             {
                 configurationManager[area, key] = value;
 
-                return RedirectToAction("Configuration");
+                return RedirectToAction("Index");
             }
 
             ViewBag.Area = area;
             ViewBag.Key = key;
             ViewBag.Value = configurationManager[area, key];
 
-            return View("~/Views/Admin/ConfigurationSet.cshtml");
+            return View();
         }
 
-        [Route("Configuration/Remove/{area}/{key}")]
-        public IActionResult ConfigurationRemove(string area, string key, bool remove = false)
+        [Route("Remove/{area}/{key}")]
+        public IActionResult Remove(string area, string key, bool remove = false)
         {
             var configurationManager = DomainHub.GetDomain<IConfigurationManager>();
             
@@ -68,7 +77,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
             ViewBag.Key = key;
             ViewBag.Value = configurationManager[area, key];
 
-            return View("~/Views/Admin/ConfigurationRemove.cshtml");
+            return View();
         }
     }
 }

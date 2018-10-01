@@ -14,18 +14,15 @@ using Microsoft.AspNetCore.Mvc;
 namespace GNIBIRPAndVisaAppointment.Web.Controllers
 {
     [Route("Admin")]
-    [Authorize(Roles="Admin")]
     public partial class AdminController : Controller
     {
         IApplicationSettings ApplicationSettings;
         IDomainHub DomainHub;
-        UserManager<ApplicationUser> UserManager;
 
-        public AdminController(IApplicationSettings applicationSettings, IDomainHub domainHub, UserManager<ApplicationUser> userManager)
+        public AdminController(IApplicationSettings applicationSettings, IDomainHub domainHub)
         {
             ApplicationSettings = applicationSettings;
             DomainHub = domainHub;
-            UserManager = userManager;
 
             var adminAllowed = bool.Parse(applicationSettings["AdminAllowed"]);
             if (!adminAllowed)
@@ -41,12 +38,14 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
         }
 
         [Route("BrowseImages")]
+        [Authorize(Roles="Admin")]
         public IActionResult BrowseImages()
         {
             throw new NotImplementedException();
         }
 
         [Route("Upload")]
+        [Authorize(Roles="Admin")]
         public IActionResult Upload(IFormFile upload)
         {
             var informationManager = DomainHub.GetDomain<IInformationManager>();
@@ -61,6 +60,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
         }
 
         [Route("Info")]
+        [Authorize(Roles="Admin")]
         public IActionResult Infos()
         {
             var informationManager = DomainHub.GetDomain<IInformationManager>();
@@ -71,6 +71,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
         }
 
         [Route("Info/{operation}/{key}/{language}/")]
+        [Authorize(Roles="Admin")]
         public IActionResult Info(InformationModel model, string operation)
         {
             var informationManager = DomainHub.GetDomain<IInformationManager>();
@@ -82,6 +83,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
         }
 
         [Route("Info/Add/")]
+        [Authorize(Roles="Admin")]
         public IActionResult AddInfo(InformationModel model)
         {
             if (model.Key != null && model.Language != null)
@@ -96,6 +98,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
 
         [Route("Info/Update/")]
         [HttpPost]
+        [Authorize(Roles="Admin")]
         public IActionResult UpdateInfo(InformationModel model)
         {
             var informationManager = DomainHub.GetDomain<IInformationManager>();
@@ -105,6 +108,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
 
         [Route("Info/Delete/")]
         [HttpPost]
+        [Authorize(Roles="Admin")]
         public IActionResult DeleteInfo(InformationModel model)
         {
             var informationManager = DomainHub.GetDomain<IInformationManager>();

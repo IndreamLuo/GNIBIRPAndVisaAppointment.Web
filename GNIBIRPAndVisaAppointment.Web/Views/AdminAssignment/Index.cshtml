@@ -21,7 +21,9 @@
             </nav>
         </tr>
         <tr class="table-secondary">
-            <th>ID</th>
+            <th>Person</th>
+            <th>Category</th>
+            <th>Target</th>
             <th>Time</th>
             <th>Status</th>
             <th>Appointment No.</th>
@@ -35,8 +37,14 @@
             <tr>
                 <td>
                     <a target="_blank" href="/Application/Status/@assignment.Id">
-                        @assignment.Id
+                        @assignment.Application.GivenName @assignment.Application.SurName
                     </a>
+                </td>
+                <td>
+                    @assignment.Application.Category-@assignment.Application.SubCategory-@(assignment.Application.ConfirmGNIB == "Yes" ? "New" : "Renewal")
+                </td>
+                <td>
+                    @assignment.Order.From ~ @assignment.Order.To
                 </td>
                 <td>@assignment.Time</td>
                 <td>
