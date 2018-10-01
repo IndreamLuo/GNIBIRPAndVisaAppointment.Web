@@ -96,7 +96,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
                     {
                         Category = model.Category,
                         SubCategory = model.SubCategory,
-                        ConfirmGNIB = model.HasGNIB ? "Yes" : "No",
+                        ConfirmGNIB = model.HasGNIB ? "Renewal" : "New",
                         GNIBNo = model.GNIBNo,
                         GNIBExDT = model.GNIBExDT,
                         UsrDeclaration = model.UsrDeclaration ? 'Y' : 'N',
