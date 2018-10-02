@@ -25,6 +25,7 @@
                         @application.Category
                         -
                         @application.SubCategory
+                        -
                         @(application.ConfirmGNIB == "Renewal" ? $"- Renewal: ({application.GNIBNo})" : "New")
                     </td>
                 </tr>

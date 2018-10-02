@@ -27,7 +27,9 @@
     <tr>
         <th>Person</th>
         <td>
-            @application.GivenName @application.SurName
+            @application.GivenName
+            .
+            @application.SurName
             <br />
             @application.DOB
             <br />
@@ -83,6 +85,19 @@
             else
             {
                 <span>No date picked</span>
+            }
+        </td>
+    </tr>
+    <tr>
+        <th>Emergency</th>
+        <td>
+            @if (order.Emergency > 0)
+            {
+                <span>€ @order.Emergency</span>
+            }
+            else
+            {
+                <span>Not Emergency</span>
             }
         </td>
     </tr>

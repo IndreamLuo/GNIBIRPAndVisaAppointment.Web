@@ -83,6 +83,11 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Application
 
         public void Pending(string orderId)
         {
+            if (GetAssignment(orderId) != null)
+            {
+                return;
+            }
+
             var paymentManager = DomainHub.GetDomain<IPaymentManager>();
             
             var assignment = new Assignment
