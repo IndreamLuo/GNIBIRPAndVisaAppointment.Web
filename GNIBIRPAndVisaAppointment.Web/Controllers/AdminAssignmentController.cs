@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using GNIBIRPAndVisaAppointment.Web.Business;
 using GNIBIRPAndVisaAppointment.Web.Business.Application;
@@ -27,6 +28,12 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
         {
             var applicationManager = DomainHub.GetDomain<IApplicationManager>();
             var assignments = applicationManager.GetAssignments(status, true);
+
+            if (status == AssignmentStatus.Complete)
+            {
+                assignments = assignments.OrderBy(assignment => assignment.AppointmentLetter?.Time ?? DateTime.MaxValue).ToList();
+            }
+
             ViewBag.Assignments = assignments;
             ViewBag.Status = status;
 
