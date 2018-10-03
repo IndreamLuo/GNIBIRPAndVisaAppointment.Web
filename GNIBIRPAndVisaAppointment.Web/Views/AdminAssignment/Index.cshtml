@@ -34,7 +34,7 @@
     <tbody>
         @foreach (var assignment in assignments)
         {
-            <tr>
+            <tr @((assignment.AppointmentLetter?.Time.Date ?? DateTime.MaxValue) <= DateTime.Now ? "class=table-danger" : string.Empty)>
                 <td>
                     <a target="_blank" href="/Application/Status/@assignment.Id">
                         @assignment.Application.GivenName @assignment.Application.SurName
