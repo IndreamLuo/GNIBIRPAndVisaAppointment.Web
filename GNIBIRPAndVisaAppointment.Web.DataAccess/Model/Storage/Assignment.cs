@@ -11,5 +11,6 @@ namespace GNIBIRPAndVisaAppointment.Web.DataAccess.Model.Storage
         public string Status { get; set; }
         public Application Application { get; set; }
         public Order Order { get; set; }
+        public AppointmentLetter AppointmentLetter { get; set; }
     }
 }

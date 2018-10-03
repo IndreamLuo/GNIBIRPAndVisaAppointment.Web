@@ -184,6 +184,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Application
                 {
                     assignment.Application = ApplicationTable[assignment.Id, New];
                     assignment.Order = OrderTable[assignment.Id, Application];
+                    assignment.AppointmentLetter = GetAppointmentLetter(assignment.Id);
                 }
             }
 
@@ -192,12 +193,6 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Application
 
         public AppointmentLetter GetAppointmentLetter(string orderId)
         {
-            var paymentManager = DomainHub.GetDomain<IPaymentManager>();
-            if (!paymentManager.IsPaid(orderId))
-            {
-                throw new AccessViolationException("Not paid.");
-            }
-
             return AppointmentLetterTable[orderId].FirstOrDefault();
         }
     }

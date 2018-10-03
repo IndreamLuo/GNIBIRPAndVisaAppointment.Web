@@ -7,10 +7,12 @@ using GNIBIRPAndVisaAppointment.Web.Business.Application;
 using GNIBIRPAndVisaAppointment.Web.Business.Information;
 using GNIBIRPAndVisaAppointment.Web.Business.Payment;
 using GNIBIRPAndVisaAppointment.Web.DataAccess.Model.Storage;
+using GNIBIRPAndVisaAppointment.Web.Identity;
 using GNIBIRPAndVisaAppointment.Web.Models;
 using GNIBIRPAndVisaAppointment.Web.Utility;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GNIBIRPAndVisaAppointment.Web.Controllers
@@ -18,17 +20,19 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
     [Route("Application")]
     public class ApplicationController : Controller
     {
-        IDomainHub DomainHub;
-        IHttpContextAccessor HttpContextAccessor;
-        IHostingEnvironment HostingEnvironment;
-        reCaptchaHelper reCaptchaHelper;
+        readonly IDomainHub DomainHub;
+        readonly IHttpContextAccessor HttpContextAccessor;
+        readonly IHostingEnvironment HostingEnvironment;
+        readonly reCaptchaHelper reCaptchaHelper;
+        readonly SignInManager<ApplicationUser> SignInManager;
 
-        public ApplicationController(IDomainHub domainHub, IHttpContextAccessor httpContextAccessor, IHostingEnvironment hostingEnvironment, reCaptchaHelper reCaptchaHelper)
+        public ApplicationController(IDomainHub domainHub, IHttpContextAccessor httpContextAccessor, IHostingEnvironment hostingEnvironment, reCaptchaHelper reCaptchaHelper, SignInManager<ApplicationUser> signInManager)
         {
             DomainHub = domainHub;
             HttpContextAccessor = httpContextAccessor;
             HostingEnvironment = hostingEnvironment;
             this.reCaptchaHelper = reCaptchaHelper;
+            SignInManager = signInManager;
         }
 
         public async Task<IActionResult> Index(ApplicationModel model, string reCaptchaResponse)
@@ -295,8 +299,13 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
         }
 
         [Route("Appointment/{orderId}")]
-        public IActionResult Appointment(string orderId)
+        public async Task<IActionResult> Appointment(string orderId)
         {
+            if (!SignInManager.IsSignedIn(User) && DomainHub.GetDomain<IPaymentManager>().GetPayment(orderId) == null)
+            {
+                throw new InvalidOperationException("Not paid.");
+            }
+
             var applicationManager = DomainHub.GetDomain<IApplicationManager>();
             ViewBag.Appointment = applicationManager.GetAppointmentLetter(orderId);
 
