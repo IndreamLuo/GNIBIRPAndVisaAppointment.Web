@@ -34,7 +34,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
                 return Json(assignments);
             }
             
-            return Json(null);
+            return Accepted();
         }
 
         [HttpPost]
@@ -48,7 +48,21 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
                 applicationManager.Appoint(id);
             }
 
-            return Json(null);
+            return Accepted();
+        }
+
+        [HttpPost]
+        [Route("Assignment/Appoint/Log")]
+        public IActionResult AssignmentAppointLog(string token, string id, bool success, string result)
+        {
+            var apiManager = DomainHub.GetDomain<IApiManager>();
+            if (apiManager.VerifyToken(token))
+            {
+                var applicationManager = DomainHub.GetDomain<IApplicationManager>();
+                applicationManager.AppointLog(id, success, result);
+            }
+
+            return Accepted();
         }
     }
 }

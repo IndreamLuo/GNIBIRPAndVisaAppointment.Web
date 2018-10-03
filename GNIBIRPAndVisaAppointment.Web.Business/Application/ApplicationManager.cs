@@ -10,17 +10,19 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Application
     public class ApplicationManager : IApplicationManager
     {
         Table<DataAccess.Model.Storage.Application> ApplicationTable;
-        Table<DataAccess.Model.Storage.Order> OrderTable;
-        Table<DataAccess.Model.Storage.Assignment> AssignmentTable;
-        Table<DataAccess.Model.Storage.AppointmentLetter> AppointmentLetterTable;
+        Table<Order> OrderTable;
+        Table<Assignment> AssignmentTable;
+        Table<AppointmentLetter> AppointmentLetterTable;
+        Table<AppointLog> AppointLogTable;
         IDomainHub DomainHub;
 
         public ApplicationManager(IStorageProvider storageProvider, IDomainHub domainHub)
         {
             ApplicationTable = storageProvider.GetTable<DataAccess.Model.Storage.Application>();
-            OrderTable = storageProvider.GetTable<DataAccess.Model.Storage.Order>();
-            AssignmentTable = storageProvider.GetTable<DataAccess.Model.Storage.Assignment>();
-            AppointmentLetterTable = storageProvider.GetTable<DataAccess.Model.Storage.AppointmentLetter>();
+            OrderTable = storageProvider.GetTable<Order>();
+            AssignmentTable = storageProvider.GetTable<Assignment>();
+            AppointmentLetterTable = storageProvider.GetTable<AppointmentLetter>();
+            AppointLogTable = storageProvider.GetTable<AppointLog>();
             DomainHub = domainHub;
         }
 
@@ -194,6 +196,18 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Application
         public AppointmentLetter GetAppointmentLetter(string orderId)
         {
             return AppointmentLetterTable[orderId].FirstOrDefault();
+        }
+
+        public void AppointLog(string orderId, bool success, string result)
+        {
+            AppointLogTable.Insert(new AppointLog
+            {
+                PartitionKey = orderId,
+                RowKey = success ? "Success" : "Failed",
+                Id = orderId,
+                Success = success,
+                Result = result
+            });
         }
     }
 }

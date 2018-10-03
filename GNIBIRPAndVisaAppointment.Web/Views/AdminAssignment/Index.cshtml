@@ -34,7 +34,7 @@
     <tbody>
         @foreach (var assignment in assignments)
         {
-            <tr @((assignment.AppointmentLetter?.Time.Date ?? DateTime.MaxValue) <= DateTime.Now ? "class=table-danger" : string.Empty)>
+            <tr @(status != "Closed" && (assignment.AppointmentLetter?.Time.Date ?? DateTime.MaxValue) <= DateTime.Now ? "class=table-danger" : string.Empty)>
                 <td>
                     <a target="_blank" href="/Application/Status/@assignment.Id">
                         @assignment.Application.GivenName @assignment.Application.SurName
@@ -68,7 +68,22 @@
                         else
                         {
                             <span class="badge badge-success">Paid</span>
-                            <span>@payment.Type - @payment.Currency @payment.Amount</span>
+                            <br />
+                            @payment.Type
+                            <br />
+                            @switch(payment.Currency)
+                            {
+                                case "cny":
+                                    <span>¥</span>
+                                    break;
+                                case "eur":
+                                    <span>€</span>
+                                    break;
+                                case "usd":
+                                    <span>$</span>
+                                    break;
+                            }
+                            <span>@payment.Amount</span>
                         }
                     }
                 </td>

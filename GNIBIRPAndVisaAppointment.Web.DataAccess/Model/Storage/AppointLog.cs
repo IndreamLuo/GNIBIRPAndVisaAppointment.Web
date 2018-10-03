@@ -3,9 +3,10 @@ using Microsoft.WindowsAzure.Storage.Table;
 
 namespace GNIBIRPAndVisaAppointment.Web.DataAccess.Model.Storage
 {
-    public class Account : TableEntity
+    public class AppointLog : TableEntity
     {
         public string Id { get; set; }
-        public string Password { get; internal set; }
+        public bool Success { get; set; }
+        public string Result { get; set; }
     }
 }
