@@ -27,7 +27,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
 
         [Route("Login")]
         [AllowAnonymous]
-        public async Task<IActionResult> Login(string id, string password)
+        public async Task<IActionResult> Login(string id, string password, string returnUrl = "/Admin")
         {
             if (SignInManager.IsSignedIn(User))
             {
@@ -39,7 +39,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
                 var signInResult = await SignInManager.PasswordSignInAsync(id, password, false, true);
                 if (signInResult.Succeeded)
                 {
-                    return RedirectToAction("Index");
+                    return Redirect(returnUrl);
                 }
             }
 

@@ -51,9 +51,12 @@
                     @Html.Partial("~/Views/Application/StatusPartial.cshtml", assignment.Status as string)
                 </td>
                 <td>
-                    <a target="_blank" href="/Application/Appointment/@assignment.Id">@assignment.AppointmentLetter.AppointmentNo</a>
-                    <br />
-                    @assignment.AppointmentLetter.Time.ToString("MM/dd HH")
+                    @if (assignment.AppointmentLetter != null)
+                    {
+                        <a target="_blank" href="/Application/Appointment/@assignment.Id">@assignment.AppointmentLetter.AppointmentNo</a>
+                        <br />
+                        @assignment.AppointmentLetter.Time.ToString("MM/dd HH")
+                    }
                 </td>
                 <td>
                     @{
