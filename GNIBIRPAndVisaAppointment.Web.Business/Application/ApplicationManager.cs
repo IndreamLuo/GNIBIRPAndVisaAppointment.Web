@@ -1,9 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
+using GNIBIRPAndVisaAppointment.Web.Business.Configuration;
 using GNIBIRPAndVisaAppointment.Web.Business.Payment;
 using GNIBIRPAndVisaAppointment.Web.DataAccess.Model.Storage;
 using GNIBIRPAndVisaAppointment.Web.DataAccess.Storage;
+using GNIBIRPAndVisaAppointment.Web.Utility;
 
 namespace GNIBIRPAndVisaAppointment.Web.Business.Application
 {
@@ -193,6 +197,11 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Application
                 trackedAssignment.AppointmentNo = assignmentNo;
             }
             AssignmentTable.Replace(trackedAssignment);
+
+            if (fromStatus == AssignmentStatus.Accepted || toStatus == AssignmentStatus.Accepted)
+            {
+                NotifyWorkerUpdateAsync();
+            }
         }
 
         public Assignment GetAssignment(string orderId)
@@ -232,6 +241,21 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Application
                 Success = success,
                 Result = result
             });
+        }
+
+        public async Task NotifyWorkerUpdateAsync()
+        {
+            using (var httpClient = new HttpClient())
+            {
+                var configurationManager = DomainHub.GetDomain<IConfigurationManager>();
+                var notifyWorkerUpdateApi = configurationManager["API", "NotifyWorkerUpdate"];
+                var token = configurationManager["API", "Token"];
+
+                await httpClient.PostAsync(notifyWorkerUpdateApi, new FormUrlEncodedContent(new []
+                {
+                    new KeyValuePair<string, string>("token", token)
+                }));
+            }
         }
     }
 }

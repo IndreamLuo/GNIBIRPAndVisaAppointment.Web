@@ -32,7 +32,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
                 var configurationManager = DomainHub.GetDomain<IConfigurationManager>();
                 configurationManager[area, key] = value;
 
-                return RedirectToAction("Configuration");
+                return RedirectToAction("Index");
             }
 
             ViewBag.Area = area;
@@ -58,7 +58,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
             ViewBag.Key = key;
             ViewBag.Value = configurationManager[area, key];
 
-            return View();
+            return View("~/Views/AdminConfiguration/Set.cshtml");
         }
 
         [Route("Remove/{area}/{key}")]
