@@ -163,6 +163,15 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
         {
             var applicationManager = DomainHub.GetDomain<IApplicationManager>();
 
+            var assignment = applicationManager.GetAssignment(model.ApplicationId);
+            if (assignment != null && assignment.Status != AssignmentStatus.Pending && !SignInManager.IsSignedIn(User))
+            {
+                return RedirectToAction("Checkout", new
+                {
+                    orderId = model.ApplicationId
+                });
+            }
+
             if (isOld)
             {
                 if (model.PickDate)
@@ -204,6 +213,10 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
                         orderId = orderId
                     });
                 }
+            }
+            else
+            {
+                model.PickDate = true;
             }
 
             ViewBag.Application = applicationManager[model.ApplicationId];

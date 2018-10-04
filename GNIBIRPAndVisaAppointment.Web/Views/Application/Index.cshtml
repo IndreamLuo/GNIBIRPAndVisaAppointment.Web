@@ -356,7 +356,7 @@
             <div class="input-group">
                 <div class="input-group-prepend">
                     <span class="input-group-text">
-                        <input name="HasPassport" id="HasPassport" value="true" type="radio" @(!Model.HasPassport ? "checked" : string.Empty)>
+                        <input name="HasPassport" id="HasPassport" value="true" type="radio" @(Model.HasPassport ? "checked" : string.Empty)>
                     </span>
                 </div>
                 <input name="PPNo" value="@Model.PPNo" id="PPNo" class="form-control" placeholder="Enter your passport or travel document number" maxlength="30">
@@ -365,7 +365,7 @@
             <div class="input-group">
                 <div class="input-group-prepend">
                     <span class="input-group-text">
-                        <input name="HasPassport" id="HasPassport" value="false" type="radio" @(Model.HasPassport ? "checked" : string.Empty)>
+                        <input name="HasPassport" id="HasPassport" value="false" type="radio" @(!Model.HasPassport ? "checked" : string.Empty)>
                     </span>
                 </div>
                 <select name="PPReason" value="@Model.PPReason" id="PPReason" class="form-control" placeholder="Enter your passport number">
