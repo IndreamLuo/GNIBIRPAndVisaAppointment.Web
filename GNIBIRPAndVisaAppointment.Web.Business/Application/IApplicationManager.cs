@@ -22,6 +22,6 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Application
         Assignment GetAssignment(string orderId);
         List<Assignment> GetAssignments(string status, bool withDetails = false);
         AppointmentLetter GetAppointmentLetter(string orderId);
-        void AppointLog(string orderId, bool success, string result);
+        void AppointLog(string orderId, string slot, bool success, string result);
     }
 }

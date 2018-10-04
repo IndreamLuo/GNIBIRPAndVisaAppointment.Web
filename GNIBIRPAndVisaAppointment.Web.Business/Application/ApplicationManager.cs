@@ -231,12 +231,12 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Application
             return AppointmentLetterTable[orderId].FirstOrDefault();
         }
 
-        public void AppointLog(string orderId, bool success, string result)
+        public void AppointLog(string orderId, string slot, bool success, string result)
         {
             AppointLogTable.Insert(new AppointLog
             {
                 PartitionKey = orderId,
-                RowKey = success ? "Success" : "Failed",
+                RowKey = $"{slot}-{DateTime.UtcNow.Ticks}",
                 Id = orderId,
                 Success = success,
                 Result = result

@@ -51,13 +51,13 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
 
         [HttpPost]
         [Route("Assignment/Appoint/Log")]
-        public IActionResult AssignmentAppointLog(string token, string id, bool success, string result)
+        public IActionResult AssignmentAppointLog(string token, string id, string slot, bool success, string result)
         {
             var apiManager = DomainHub.GetDomain<IApiManager>();
             if (apiManager.VerifyToken(token))
             {
                 var applicationManager = DomainHub.GetDomain<IApplicationManager>();
-                applicationManager.AppointLog(id, success, result);
+                applicationManager.AppointLog(id, slot, success, result);
             }
 
             return Accepted();
