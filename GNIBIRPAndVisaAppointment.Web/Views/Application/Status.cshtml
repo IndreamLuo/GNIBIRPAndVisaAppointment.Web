@@ -101,6 +101,15 @@
             }
         </td>
     </tr>
+    @if (assignment.Status == AssignmentStatus.Pending)
+    {
+        <tr>
+            <th></th>
+            <td>
+                <a target="_self" href="/Application/Order/@assignment.Id">Change</a>
+            </td>
+        </tr>
+    }
     <tr class="table-active">
         <th colspan="2">
             Assignment
@@ -129,6 +138,19 @@
                     </div>
                     break;
                 case AssignmentStatus.Complete:
+                    if (payment == null)
+                    {
+                        <div class="alert alert-warning">
+                            Your appointment is booked and uploaded. Please pay to download.
+                        </div>
+                    }
+                    break;
+                case AssignmentStatus.Duplicated:
+                    <div class="alert alert-danger">
+                        You already have an appointment. I failed to book you another.
+                        <br />
+                        If you want to make a new appointment, you need to cancel the old one.
+                    </div>
                     break;
             }
         </td>

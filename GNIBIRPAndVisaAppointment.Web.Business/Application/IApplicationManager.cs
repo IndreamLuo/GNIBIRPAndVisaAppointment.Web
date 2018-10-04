@@ -14,6 +14,9 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Application
         void Accept(string orderId);
         void Reject(string orderId);
         void Appoint(string orderId);
+        void Reaccept(string orderId);
+        void Duplicate(string orderId);
+        void Cancel(string orderId);
         void Complete(string orderId, string appointmentNo, DateTime time, string name, string category, string subCategory);
         void Close(string orderId);
         Assignment GetAssignment(string orderId);

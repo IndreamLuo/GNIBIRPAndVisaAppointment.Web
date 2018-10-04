@@ -14,7 +14,9 @@
                     <a class="nav-item nav-link pending" href="/Admin/Assignment/Pending">Pending</a>
                     <a class="nav-item nav-link accepted" href="/Admin/Assignment/Accepted">Accepted</a>
                     <a class="nav-item nav-link appointed" href="/Admin/Assignment/Appointed">Appointed</a>
+                    <a class="nav-item nav-link duplicated" href="/Admin/Assignment/Duplicated">Duplicated</a>
                     <a class="nav-item nav-link complete" href="/Admin/Assignment/Complete">Complete</a>
+                    <a class="nav-item nav-link cancelled" href="/Admin/Assignment/Cancelled">Cancelled</a>
                     <a class="nav-item nav-link rejected" href="/Admin/Assignment/Rejected">Rejected</a>
                     <a class="nav-item nav-link closed" href="/Admin/Assignment/Closed">Closed</a>
                 </li>
@@ -41,7 +43,11 @@
                     </a>
                 </td>
                 <td>
-                    @assignment.Application.Category-@assignment.Application.SubCategory-@assignment.Application.ConfirmGNIB
+                    @assignment.Application.Category
+                    <br />
+                    @assignment.Application.SubCategory
+                    <br />
+                    @assignment.Application.ConfirmGNIB
                 </td>
                 <td>
                     @assignment.Order.From ~ @assignment.Order.To
@@ -96,9 +102,18 @@
                             break;
                         case AssignmentStatus.Accepted:
                             <a class="btn btn-warning btn-sm" href="/Admin/Assignment/Appoint/@assignment.Id" target="_self">Appoint</a>
+                            <a class="btn btn-danger btn-sm" href="/Admin/Assignment/Duplicate/@assignment.Id" target="_self">Duplicate</a>
                             break;
                         case AssignmentStatus.Appointed:
                             <a class="btn btn-success btn-sm" href="/Admin/Assignment/Complete/@assignment.Id" target="_self">Complete</a>
+                            <a class="btn btn-info btn-sm" href="/Admin/Assignment/Reaccept/@assignment.Id" target="_self">Reaccept</a>
+                            <a class="btn btn-danger btn-sm" href="/Admin/Assignment/Cancel/@assignment.Id" target="_self">Cancel</a>
+                            break;
+                        case AssignmentStatus.Duplicated:
+                            <a class="btn btn-info btn-sm" href="/Admin/Assignment/Reaccept/@assignment.Id" target="_self">Reaccept</a>
+                            <a class="btn btn-danger btn-sm" href="/Admin/Assignment/Cancel/@assignment.Id" target="_self">Cancel</a>
+                            break;
+                        case AssignmentStatus.Cancelled:
                             break;
                         case AssignmentStatus.Complete:
                             if (payments[assignment.Id] == null)

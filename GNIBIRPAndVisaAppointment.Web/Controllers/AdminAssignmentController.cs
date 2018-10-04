@@ -56,6 +56,30 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
             return RedirectToAction("Index");
         }
 
+        [Route("Reaccept/{id}")]
+        public IActionResult Reaccept(string id)
+        {
+            var applicationManager = DomainHub.GetDomain<IApplicationManager>();
+            applicationManager.Reaccept(id);
+            return Redirect("/Admin/Assignment/Appointed");
+        }
+
+        [Route("Duplicate/{id}")]
+        public IActionResult Duplicate(string id)
+        {
+            var applicationManager = DomainHub.GetDomain<IApplicationManager>();
+            applicationManager.Duplicate(id);
+            return Redirect("/Admin/Assignment/Accepted");
+        }
+
+        [Route("Cancel/{id}")]
+        public IActionResult Cancel(string id)
+        {
+            var applicationManager = DomainHub.GetDomain<IApplicationManager>();
+            applicationManager.Cancel(id);
+            return Redirect("/Admin/Assignment/Appointed");
+        }
+
         [Route("Reject/{id}")]
         public IActionResult Reject(string id)
         {

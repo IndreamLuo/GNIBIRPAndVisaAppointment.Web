@@ -216,7 +216,18 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
             }
             else
             {
-                model.PickDate = true;
+                var order = applicationManager.GetOrder(model.ApplicationId);
+                if (order != null)
+                {
+                    model.PickDate = order.PickDate > 0;
+                    model.From = order.From;
+                    model.To = order.To;
+                    model.Emergency = order.Emergency > 0;
+                }
+                else
+                {
+                    model.PickDate = true;
+                }
             }
 
             ViewBag.Application = applicationManager[model.ApplicationId];

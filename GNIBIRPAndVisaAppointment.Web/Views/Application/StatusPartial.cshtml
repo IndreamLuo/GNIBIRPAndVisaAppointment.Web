@@ -13,8 +13,14 @@
         case AssignmentStatus.Rejected:
             showingStatus = "danger";
             break;
+        case AssignmentStatus.Duplicated:
+            showingStatus = "danger";
+            break;
         case AssignmentStatus.Appointed:
             showingStatus = "warning";
+            break;
+        case AssignmentStatus.Cancelled:
+            showingStatus = "dark";
             break;
         case AssignmentStatus.Complete:
             showingStatus = "success";

@@ -124,6 +124,30 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Application
             UpdataAssignmentStatus(orderId, AssignmentStatus.Accepted, AssignmentStatus.Appointed);
         }
 
+        public void Reaccept(string orderId)
+        {
+            var assignment = GetAssignment(orderId);
+
+            if (assignment.Status == AssignmentStatus.Appointed || assignment.Status == AssignmentStatus.Duplicated)
+            {
+                UpdataAssignmentStatus(orderId, assignment.Status, AssignmentStatus.Accepted);
+            }
+        }
+
+        public void Duplicate(string orderId)
+        {
+            UpdataAssignmentStatus(orderId, AssignmentStatus.Accepted, AssignmentStatus.Duplicated);
+        }
+
+        public void Cancel(string orderId)
+        {
+            var assignment = GetAssignment(orderId);
+            if (assignment.Status == AssignmentStatus.Appointed || assignment.Status == AssignmentStatus.Duplicated)
+            {
+                UpdataAssignmentStatus(assignment.Id, assignment.Status, AssignmentStatus.Cancelled);
+            }
+        }
+
         public void Complete(string orderId, string appointmentNo, DateTime time, string name, string category, string subCategory)
         {
             AppointmentLetterTable.Insert(new AppointmentLetter
