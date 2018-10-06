@@ -162,9 +162,11 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
         public async Task<IActionResult> Order(OrderModel model, bool isOld = false)
         {
             var applicationManager = DomainHub.GetDomain<IApplicationManager>();
+            var isSignedIn = SignInManager.IsSignedIn(User);
+            ViewBag.IsSignedIn = isSignedIn;
 
             var assignment = applicationManager.GetAssignment(model.ApplicationId);
-            if (assignment != null && assignment.Status != AssignmentStatus.Pending && !SignInManager.IsSignedIn(User))
+            if (assignment != null && assignment.Status != AssignmentStatus.Pending && !isSignedIn)
             {
                 return RedirectToAction("Checkout", new
                 {
@@ -176,21 +178,28 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
             {
                 if (model.PickDate)
                 {
-                    DateTime from = DateTime.MinValue;
-                    if (!string.IsNullOrEmpty(model.From) && !IsFormattedDate(model.From, out from))
+                    if (string.IsNullOrEmpty(model.From) && string.IsNullOrEmpty(model.To))
                     {
-                        ModelState.AddModelError("From", "Date format wrong, shoud be as 30/11/2018 in DD/MM/YYYY.");
+                        ModelState.AddModelError("From", "You need to specify the date range you want for appointment.");
                     }
-
-                    DateTime to = DateTime.MaxValue;
-                    if (!string.IsNullOrEmpty(model.To) && !IsFormattedDate(model.To, out to))
+                    else
                     {
-                        ModelState.AddModelError("To", "Date format wrong, shoud be as 30/11/2018 in DD/MM/YYYY.");
-                    }
+                        DateTime from = DateTime.MinValue;
+                        if (!string.IsNullOrEmpty(model.From) && !IsFormattedDate(model.From, out from))
+                        {
+                            ModelState.AddModelError("From", "Date format wrong, shoud be as 30/11/2018 in DD/MM/YYYY.");
+                        }
 
-                    if (from > to)
-                    {
-                        ModelState.AddModelError("To", "Date of 'To' can only be after 'From'.");
+                        DateTime to = DateTime.MaxValue;
+                        if (!string.IsNullOrEmpty(model.To) && !IsFormattedDate(model.To, out to))
+                        {
+                            ModelState.AddModelError("To", "Date format wrong, shoud be as 30/11/2018 in DD/MM/YYYY.");
+                        }
+
+                        if (from > to)
+                        {
+                            ModelState.AddModelError("To", "Date of 'To' can only be after 'From'.");
+                        }
                     }
                 }
 
@@ -203,12 +212,14 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
                         PickDate = model.PickDate ? 10 : 0,
                         From = model.From,
                         To = model.To,
-                        Emergency = model.Emergency ? 20 : 0
+                        Emergency = model.Emergency ? 20 : 0,
+                        Special = model.Special,
+                        Comment = model.Comment
                     };
 
                     var orderId = applicationManager.CreateOrder(order);
 
-                    return RedirectToAction("Checkout", new
+                    return RedirectToAction("PayAfter", new
                     {
                         orderId = orderId
                     });

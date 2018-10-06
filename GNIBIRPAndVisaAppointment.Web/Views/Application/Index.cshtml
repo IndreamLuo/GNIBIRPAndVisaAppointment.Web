@@ -398,7 +398,7 @@
         <input type="hidden" name="reCaptchaResponse" id="reCaptchaResponse" />
         @if (Microsoft.AspNetCore.Hosting.HostingEnvironmentExtensions.IsDevelopment(HostingEnvironment))
         {
-            <button class="btn btn-success g-recaptcha submit" type="Submit">Submit</button>
+            <button class="btn btn-success g-recaptcha submit" type="Submit">Next</button>
         }
         else
         {
@@ -411,7 +411,7 @@
 
             <button class="btn btn-success g-recaptcha submit"
                 data-sitekey="@ViewBag.reCaptchaUserCode"
-                data-callback="submit">Submit
+                data-callback="submit">Next
             </button>
         }
     </div>
@@ -460,8 +460,8 @@
             setFamilyApplication();
 
             var setPassport = function () {
-                $(PPNo).prop('disabled', !$(HasPassport).val());
-                $(PPReason).prop('disabled', $(HasPassport).val());
+                $(PPNo).prop('disabled', $(HasPassport).val());
+                $(PPReason).prop('disabled', !$(HasPassport).val());
             }
             $(HasPassport).change(setPassport);
             setPassport();

@@ -14,6 +14,8 @@ namespace GNIBIRPAndVisaAppointment.Web.DataAccess.Model.Storage
         public string From { get; set; }
         public string To { get; set; }
         public double Emergency { get; set; }
+        public double Special { get; set; }
+        public string Comment { get; set; }
         public double Amount { get; set; }
     }
 }

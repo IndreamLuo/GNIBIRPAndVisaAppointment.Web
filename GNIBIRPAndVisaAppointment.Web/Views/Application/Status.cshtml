@@ -52,7 +52,11 @@
     </tr>
     <tr>
         <th>Comment</th>
-        <td>@application.Comment</td>
+        <td>
+            <div class="alert alert-info">
+                @application.Comment
+            </div>
+        </td>
     </tr>
     <tr class="table-active">
         <th colspan="2">
@@ -101,12 +105,25 @@
             }
         </td>
     </tr>
+    @if (order.Special > 0)
+    {
+        <tr>
+            <th>Special</th>
+            <td>
+                € @order.Special
+            </td>
+        </tr>
+    }
+    <tr>
+        <th>Comment</th>
+        <td>@order.Comment</td>
+    </tr>
     @if (assignment.Status == AssignmentStatus.Pending)
     {
         <tr>
             <th></th>
             <td>
-                <a target="_self" href="/Application/Order/@assignment.Id">Change</a>
+                <a class="btn btn-info" target="_self" href="/Application/Order/@assignment.Id">Change</a>
             </td>
         </tr>
     }
