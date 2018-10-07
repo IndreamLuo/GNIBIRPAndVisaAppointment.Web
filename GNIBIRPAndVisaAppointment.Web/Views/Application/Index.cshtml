@@ -76,7 +76,7 @@
         </div>
 
         <div class="form-group">
-            <label class="control-label">GNIB:</label>
+            <label class="control-label">Has GNIB(IRP) No:</label>
             <div class="input-group">
                 <div class="input-group-prepend">
                     <span class="input-group-text">
@@ -106,6 +106,8 @@
                     Conditions available on <a href="http://www.inis.gov.ie/en/INIS/Pages/registration-stamps">INIS website.</a> 
                 </p>
             </div>
+        </div>
+        <div class="alert alert-secondary">
             <div>
                 <input type="checkbox" name="UsrDeclaration" value="true" id="UsrDeclaration" @Html.Raw(Model.UsrDeclaration ? "checked" : string.Empty) />
                 I confirm that all of the above statements are true.
@@ -352,11 +354,12 @@
         </div>
 
         <div class="form-group">
-            <label class="control-label">Passport:</label>
+            <label class="control-label">Has Passport:</label>
             <div class="input-group">
                 <div class="input-group-prepend">
                     <span class="input-group-text">
                         <input name="HasPassport" id="HasPassport" value="true" type="radio" @(Model.HasPassport ? "checked" : string.Empty)>
+                        Yes
                     </span>
                 </div>
                 <input name="PPNo" value="@Model.PPNo" id="PPNo" class="form-control" placeholder="Enter your passport or travel document number" maxlength="30">
@@ -366,6 +369,7 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text">
                         <input name="HasPassport" id="HasPassport" value="false" type="radio" @(!Model.HasPassport ? "checked" : string.Empty)>
+                        No
                     </span>
                 </div>
                 <select name="PPReason" value="@Model.PPReason" id="PPReason" class="form-control" placeholder="Enter your passport number">
@@ -385,6 +389,11 @@
 
     <h2 class="mt-5 mb-4">Comment</h2>
     <div class="container content">
+        <div class="alert alert-info">
+            If you're in urgent situation or accept close dates, please leave me an emergency contact so that I could reach you when the appointment is made for the same day or next day.
+            <br />
+            Leave me more message about you, such as what you expect, helps me offer better service.
+        </div>
         <div class="form-group">
             <textarea name="Comment" style="height: 200px" class="form-control" placeholder="Hi, you can also find me by 0876543210.">@Model.Comment</textarea>
         </div>
@@ -460,8 +469,8 @@
             setFamilyApplication();
 
             var setPassport = function () {
-                $(PPNo).prop('disabled', $(HasPassport).val());
-                $(PPReason).prop('disabled', !$(HasPassport).val());
+                $(PPNo).prop('disabled', $('#HasPassport:checked').val() == 'false');
+                $(PPReason).prop('disabled', $('#HasPassport:checked').val() == 'true');
             }
             $(HasPassport).change(setPassport);
             setPassport();
