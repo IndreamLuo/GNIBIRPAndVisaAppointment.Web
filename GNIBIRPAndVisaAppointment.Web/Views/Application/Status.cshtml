@@ -6,6 +6,8 @@
     var application = ViewBag.Application;
     var payment = ViewBag.Payment;
     var AppointmentLetter = ViewBag.AppointmentLetter;
+    
+    ViewData["Title"] = $"{application.GivenName} {application.SurName} - ";
 }
 
 <nav aria-label="breadcrumb">
@@ -149,9 +151,21 @@
         <td>
             @switch (assignment.Status)
             {
+                case AssignmentStatus.Pending:
+                    <div class="alert alert-info">
+                        Your application is submitted.
+                    </div>
+                    break;
                 case AssignmentStatus.Appointed:
                     <div class="alert alert-warning">
                         Waiting for the application e-mail.
+                    </div>
+                    break;
+                case AssignmentStatus.Duplicated:
+                    <div class="alert alert-danger">
+                        You already have an appointment. I failed to book you another.
+                        <br />
+                        If you want to make a new appointment, you need to cancel the old one.
                     </div>
                     break;
                 case AssignmentStatus.Complete:
@@ -161,13 +175,6 @@
                             Your appointment is booked and uploaded. Please pay to download.
                         </div>
                     }
-                    break;
-                case AssignmentStatus.Duplicated:
-                    <div class="alert alert-danger">
-                        You already have an appointment. I failed to book you another.
-                        <br />
-                        If you want to make a new appointment, you need to cancel the old one.
-                    </div>
                     break;
             }
         </td>

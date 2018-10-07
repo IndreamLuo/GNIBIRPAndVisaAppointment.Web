@@ -16,51 +16,62 @@
 
 <form method="POST">
     <input type="hidden" name="isOld" value="true" />
+    
+    <h4 class="mb-3">Your Application</h4>
+    <table class="table table-sm">
+        <tbody>
+            <tr>
+                <td>
+                    @application.Category
+                    -
+                    @application.SubCategory
+                    -
+                    @(application.ConfirmGNIB == "Renewal" ? $"- Renewal: ({application.GNIBNo})" : "New")
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @application.GivenName
+                    @application.SurName
+                    (
+                        @application.DOB
+                    )
+                    @(application.FamAppYN == "Yes" ? $"* {application.FamAppNo} person(s)" : "Individual")
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @application.Nationality
+                    -
+                    @(application.PPNoYN == "Yes" ? application.PPNo : application.PPReason)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @application.Comment
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
     <div class="jumbotron">
-        <h4 class="mb-3">Appointment</h4>
-        <table class="table table-sm">
-            <tbody>
-                <tr>
-                    <td>
-                        @application.Category
-                        -
-                        @application.SubCategory
-                        -
-                        @(application.ConfirmGNIB == "Renewal" ? $"- Renewal: ({application.GNIBNo})" : "New")
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        @application.GivenName
-                        @application.SurName
-                        (
-                            @application.DOB
-                        )
-                        @(application.FamAppYN == "Yes" ? $"* {application.FamAppNo} person(s)" : "Individual")
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        @application.Nationality
-                        -
-                        @(application.PPNoYN == "Yes" ? application.PPNo : application.PPReason)
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        @application.Comment
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <h4 class="mb-3">Service</h4>
-        <div class="form-group pl-5">
+        <h4 class="mb-3">Select Your Service(s)</h4>
+        <div class="alert alert-warning">
+            Remember to submit this form after selecting service(s) you need.
+        </div>
+
+        <hr class="my-4" />
+
+        <div class="form-group pl-4">
             <input class="form-check-input" id="appointment" type="checkbox" disabled checked amount="20">
             <label class="form-check-label" for="rebook">€20 - Appointment</label>
         </div>
-        <div class="form-group pl-5">
+
+        <hr class="my-4" />
+
+        <div class="form-group pl-4">
             <input class="form-check-input" id="pickDate" name="pickDate" type="checkbox" value="true" amount="10" @(Model.PickDate ? "checked" : string.Empty)>
-            <label class="form-check-label" for="pickDate">€10 - Pick date:</label>
+            <label class="form-check-label" for="pickDate">€10 - Appointment in date range:</label>
             <br />
             from
             <input class="form-control form-control-sm from" name="from" value="@Model.From" placeholder="30/11/2018" />
@@ -69,11 +80,11 @@
             <span asp-validation-for="From" class="form-text text-danger"></span>
             <span asp-validation-for="To" class="form-text text-danger"></span>
         </div>
-        <div class="form-group pl-5">
+        <div class="form-group pl-4">
             <input class="form-check-input" id="cancellation" type="checkbox" checked amount="0">
             <label class="form-check-label" for="cancellation">€0, free cancellation when I booked the date out of your selection</label>
         </div>
-        <div class="alert alert-warning">
+        <div class="alert alert-info">
             The wider range of dates you pick the more you are possible to get an appointment.
         </div>
         <div class="alert alert-danger">
@@ -81,17 +92,19 @@
             <br />
             If don't pick from date, it could be from today.
         </div>
-        <div class="form-group pl-5">
+
+        <hr class="my-4" />
+
+        <div class="form-group pl-4">
             <input class="form-check-input" id="emergency" name="emergency" type="checkbox" value="true" amount="20" @(Model.Emergency ? "checked" : string.Empty)>
-            <label class="form-check-label" for="emergency">€20 - Emergency</label>
+            <label class="form-check-label" for="emergency">€10 - Emergency</label>
         </div>
-        <div class="alert alert-warning">
-            You'll be put on top of the list.<br />
-            <strong>You don't need this if you're not that urgent.</strong>
+        <div class="alert alert-info">
+            You'll be put on top of the list.
         </div>
-        <hr />
         @if (ViewBag.IsSignedIn)
         {
+            <hr class="my-5" />
             <div class="form-group pl-5">
                 <label class="form-check-label" for="special">Special: €</label>
                 <input type="input" id="special" name="special" value="@Model.Special" />
@@ -103,6 +116,7 @@
                 <span asp-validation-for="Special" class="form-text text-danger"></span>
             </div>
         }
+        <hr class="my-5" />
         <p>Total Amount: <span class="text-success amount"></span></p>
         <input class="btn btn-success" type="submit" value="Submit" />
     </div>
