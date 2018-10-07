@@ -9,5 +9,6 @@ namespace GNIBIRPAndVisaAppointment.Web.DataAccess.Model.Storage
         public string Slot { get; set; }
         public bool Success { get; set; }
         public string Result { get; set; }
+        public double TimeSpan { get; set; }
     }
 }

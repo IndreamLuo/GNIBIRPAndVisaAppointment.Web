@@ -232,7 +232,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Application
             return AppointmentLetterTable[orderId].FirstOrDefault();
         }
 
-        public void AppointLog(string orderId, string slot, bool success, string result)
+        public void AppointLog(string orderId, string slot, bool success, string result, double timeSpan)
         {
             AppointLogTable.Insert(new AppointLog
             {
@@ -240,7 +240,8 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Application
                 RowKey = $"{slot}-{DateTime.UtcNow.Ticks}",
                 Id = orderId,
                 Success = success,
-                Result = result
+                Result = result,
+                TimeSpan = timeSpan
             });
         }
 
