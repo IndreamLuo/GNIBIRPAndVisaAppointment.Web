@@ -234,6 +234,8 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
                     model.From = order.From;
                     model.To = order.To;
                     model.Emergency = order.Emergency > 0;
+                    model.Special = order.Special;
+                    model.Comment = order.Comment;
                 }
                 else
                 {
