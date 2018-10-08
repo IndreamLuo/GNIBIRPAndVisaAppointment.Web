@@ -212,7 +212,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
                         PickDate = model.PickDate ? 10 : 0,
                         From = model.From,
                         To = model.To,
-                        Emergency = model.Emergency ? 20 : 0,
+                        Emergency = model.Emergency ? 10 : 0,
                         Special = model.Special,
                         Comment = model.Comment
                     };
