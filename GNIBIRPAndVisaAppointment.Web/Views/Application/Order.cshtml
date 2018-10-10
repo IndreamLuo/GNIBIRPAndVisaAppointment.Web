@@ -73,24 +73,26 @@
             <input class="form-check-input" id="pickDate" name="pickDate" type="checkbox" value="true" amount="10" @(Model.PickDate ? "checked" : string.Empty)>
             <label class="form-check-label" for="pickDate">€10 - Appointment in date range:</label>
             <br />
-            from
+            <div class="mt-3">FROM</div>
             <input class="form-control form-control-sm from" name="from" value="@Model.From" placeholder="30/11/2018" />
-            to
+            <div class="mt-3">TO</div>
             <input class="form-control form-control-sm to" name="to" value="@Model.To" placeholder="DD/MM/YYYY" />
             <span asp-validation-for="From" class="form-text text-danger"></span>
             <span asp-validation-for="To" class="form-text text-danger"></span>
         </div>
-        <div class="form-group pl-4">
-            <input class="form-check-input" id="cancellation" type="checkbox" checked amount="0">
-            <label class="form-check-label" for="cancellation">€0, free cancellation when I booked the date out of your selection</label>
-        </div>
         <div class="alert alert-info">
             The wider range of dates you pick the more you are possible to get an appointment.
+            <br />
+            A date range for wider than 2 weeks is highly suggested.
         </div>
         <div class="alert alert-danger">
             If you don't pick any date, you could be booked for any date in the following 10 weeks.
             <br />
-            If don't pick from date, it could be from today.
+            If don't set FROM date, it could be from <strong>Today</strong>.
+        </div>
+        <div class="form-group pl-4">
+            <input class="form-check-input" id="cancellation" type="checkbox" checked amount="0">
+            <label class="form-check-label" for="cancellation">€0, free cancellation when I booked the date out of your selection</label>
         </div>
 
         <hr class="my-4" />
