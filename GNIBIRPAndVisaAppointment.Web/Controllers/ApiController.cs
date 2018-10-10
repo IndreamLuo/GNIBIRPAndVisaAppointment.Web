@@ -50,6 +50,34 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
         }
 
         [HttpPost]
+        [Route("Assignment/Duplicate")]
+        public IActionResult AssignmentDuplicate(string token, string id)
+        {
+            var apiManager = DomainHub.GetDomain<IApiManager>();
+            if (apiManager.VerifyToken(token))
+            {
+                var applicationManager = DomainHub.GetDomain<IApplicationManager>();
+                applicationManager.Duplicate(id);
+            }
+
+            return Accepted();
+        }
+
+        [HttpPost]
+        [Route("Assignment/Unverify")]
+        public IActionResult AssignmentUnverify(string token, string id)
+        {
+            var apiManager = DomainHub.GetDomain<IApiManager>();
+            if (apiManager.VerifyToken(token))
+            {
+                var applicationManager = DomainHub.GetDomain<IApplicationManager>();
+                applicationManager.Duplicate(id);
+            }
+
+            return Accepted();
+        }
+
+        [HttpPost]
         [Route("Assignment/Appoint/Log")]
         public IActionResult AssignmentAppointLog(string token, string id, string slot, bool success, string result, double timeSpan)
         {

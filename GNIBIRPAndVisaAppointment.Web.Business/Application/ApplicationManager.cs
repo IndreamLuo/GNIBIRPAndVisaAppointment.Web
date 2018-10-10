@@ -144,6 +144,11 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Application
             UpdataAssignmentStatus(orderId, AssignmentStatus.Accepted, AssignmentStatus.Duplicated);
         }
 
+        public void Unverify(string orderId)
+        {
+            UpdataAssignmentStatus(orderId, AssignmentStatus.Accepted, AssignmentStatus.Unverify);
+        }
+
         public void Cancel(string orderId)
         {
             var assignment = GetAssignment(orderId);
