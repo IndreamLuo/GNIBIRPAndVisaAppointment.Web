@@ -212,6 +212,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
                         PickDate = model.PickDate ? 10 : 0,
                         From = model.From,
                         To = model.To,
+                        AnyCategory = model.AnyCategory ? 1 : 0,
                         Emergency = model.Emergency ? 10 : 0,
                         Special = model.Special,
                         Comment = model.Comment
@@ -233,6 +234,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
                     model.PickDate = order.PickDate > 0;
                     model.From = order.From;
                     model.To = order.To;
+                    model.AnyCategory = order.AnyCategory != 0;
                     model.Emergency = order.Emergency > 0;
                     model.Special = order.Special;
                     model.Comment = order.Comment;

@@ -68,6 +68,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Application
 
             order.Amount = order.Base
             + order.PickDate
+            //+ order.AnyCategory
             + order.Emergency
             + order.Special;
 

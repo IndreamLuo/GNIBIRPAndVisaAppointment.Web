@@ -95,11 +95,24 @@
         </td>
     </tr>
     <tr>
+        <th>Any Category</th>
+        <td>
+            @if (order.AnyCategory != 0)
+            {
+                <span class="text-success">Accept Any Category</span>
+            }
+            else
+            {
+                <span>Not Accept Other Category</span>
+            }
+        </td>
+    </tr>
+    <tr>
         <th>Emergency</th>
         <td>
             @if (order.Emergency > 0)
             {
-                <span>€ @order.Emergency</span>
+                <span class="text-warning">€ @order.Emergency</span>
             }
             else
             {
@@ -156,6 +169,11 @@
                         Your application is submitted.
                     </div>
                     break;
+                case AssignmentStatus.Accepted:
+                    <div class="alert alert-primary">
+                        I'm working on your application and looking for an appointment for you.
+                    </div>
+                    break;
                 case AssignmentStatus.Appointed:
                     <div class="alert alert-warning">
                         Waiting for the application e-mail.
@@ -202,7 +220,7 @@
     <tr>
         <th></th>
         <td>
-            @if (payment != null)
+            @if (payment != null && (assignment.Status == AssignmentStatus.Complete || assignment.Status == AssignmentStatus.Closed))
             {
                 <a class="btn btn-success" target="_blank" href="/Application/Appointment/@order.Id">View Appointment Letter</a>
             }

@@ -54,11 +54,12 @@
         </tbody>
     </table>
 
+    <div class="alert alert-danger">
+        <strong>Warning:</strong> The application is not finished yet. You need to submit the following order with picked service(s)!
+    </div>
+
     <div class="jumbotron">
         <h4 class="mb-3">Select Your Service(s)</h4>
-        <div class="alert alert-warning">
-            Remember to submit this form after selecting service(s) you need.
-        </div>
 
         <hr class="my-4" />
 
@@ -104,6 +105,23 @@
         <div class="alert alert-info">
             You'll be put on top of the list.
         </div>
+
+        <hr class="my-4" />
+
+        <div class="form-group pl-4">
+            <input class="form-check-input" id="anyCategory" name="anyCategory" type="checkbox" value="true" @(Model.AnyCategory ? "checked" : string.Empty)>
+            <label class="form-check-label" for="anyCategory">Accept Any Category</label>
+        </div>
+        <div class="alert alert-info">
+            You accept any category that suits your time range. I will try all 3 different categories for you. This makes you *3 more possible to get an appointment.
+            <br />
+            According to the registration office, appointment from another category will be accepted if you are hard to find an appointment.
+            <br />
+            <strong>You will be proceeded as your original category at last.</strong>
+        </div>
+        <div class="alert alert-danger">
+            You are highly suggested accept any category if you're looking for dates within next 2 weeks only.
+        </div>
         @if (ViewBag.IsSignedIn)
         {
             <hr class="my-5" />
@@ -129,7 +147,7 @@
         var recalculateAmount = function () {
             var amount = $('#special').val() ? parseFloat($('#special').val()) : 0;
             $('input').each(function () {
-                if ($(this).prop('checked')) {
+                if ($(this).prop('checked') && $(this).attr('amount')) {
                     amount += parseFloat($(this).attr('amount'));
                 }
             });
