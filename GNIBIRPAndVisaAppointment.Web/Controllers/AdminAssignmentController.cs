@@ -33,6 +33,10 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
             {
                 assignments = assignments.OrderBy(assignment => assignment.AppointmentLetter?.Time ?? DateTime.MaxValue).ToList();
             }
+            else
+            {
+                assignments = assignments.OrderBy(assignment => assignment.Time).ToList();
+            }
 
             ViewBag.Assignments = assignments;
             ViewBag.Status = status;
