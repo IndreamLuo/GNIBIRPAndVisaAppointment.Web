@@ -43,11 +43,15 @@
                     </a>
                 </td>
                 <td>
-                    @assignment.Application.Category
+                    @if (assignment.Order.AnyCategory != 0)
+                    {
+                        <span class="badge badge-primary">ANY</span>
+                    }
+                    <strong>@assignment.Application.Category</strong>
                     <br />
                     @assignment.Application.SubCategory
                     <br />
-                    @assignment.Application.ConfirmGNIB
+                    <strong>@assignment.Application.ConfirmGNIB</strong>
                 </td>
                 <td>
                     @assignment.Order.From ~ @assignment.Order.To

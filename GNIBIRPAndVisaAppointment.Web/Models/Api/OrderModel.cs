@@ -13,10 +13,12 @@ namespace GNIBIRPAndVisaAppointment.Web.Models.Api
             From = entity.From;
             To = entity.To;
             Emergency = entity.Emergency > 0;
+            AnyCategory = entity.AnyCategory != 0;
         }
 
         public string From { get; set; }
         public string To { get; set; }
         public bool Emergency { get; set; }
+        public bool AnyCategory { get; set; }
     }
 }
