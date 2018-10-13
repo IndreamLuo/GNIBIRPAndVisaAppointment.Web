@@ -24,5 +24,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Models.Admin
         
         [Required]
         public string SubCategory { get; set; }
+
+        public string Content { get; set; }
     }
 }

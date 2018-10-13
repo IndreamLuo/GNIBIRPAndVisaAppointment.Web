@@ -20,6 +20,7 @@
         <label for="Category">Category - Sub Category:</label>
         <div class="input-group">
             <select name="Category" id="Category" value="@Model.Category" class="form-control" placeholder="Select...">
+                <option value=""></option>
                 <option value="Other">Other</option>
                 <option value="Study">Study</option>
                 <option value="Work">Work</option>
@@ -53,6 +54,11 @@
         </div>
         <span asp-validation-for="Category" class="form-text text-danger"></span>
         <span asp-validation-for="SubCategory" class="form-text text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="Content">Content</label>
+        <textarea class="form-control" id="Content" name="Content" value="@Model.Content" placeholder="Donald Trump"></textarea>
+        <span asp-validation-for="Content" class="form-text text-danger"></span>
     </div>
     <button type="submit" class="btn btn-success">Complete</button>
 </form>

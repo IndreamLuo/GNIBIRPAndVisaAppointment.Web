@@ -121,6 +121,16 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
                 applicationManager.Complete(model.AssignmentId, model.AppointmentNo, time, model.Name, model.Category, model.SubCategory);
                 return Redirect("/Admin/Assignment/Appointed");
             }
+            else if (!string.IsNullOrEmpty(model.Content))
+            {
+                var regex = new Regex(@"Name: (?<name>.*)\r\n.*Appointment Date: (?<time>.*)\r\n.*Registration Appointment Reference: (?<reference>.*)[\r\n.]*Category: (?<category>[^ ]*) \| (?<subCategory>[^\r]*)");
+                var match = regex.Match(model.Content);
+                model.Name = match.Groups["name"].Value;
+                model.Time = match.Groups["time"].Value;
+                model.AppointmentNo = match.Groups["reference"].Value;
+                model.Category = match.Groups["category"].Value;
+                model.SubCategory = match.Groups["subCategory"].Value;
+            }
 
             return View(model);
         }
