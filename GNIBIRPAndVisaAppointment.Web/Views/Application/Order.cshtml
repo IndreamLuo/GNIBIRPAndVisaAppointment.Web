@@ -85,15 +85,20 @@
             The wider range of dates you pick the more you are possible to get an appointment.
             <br />
             A date range for wider than 2 weeks is highly suggested.
+            <br />
+            If the appointment is booked in your set date range but you cannot go, the service will still be considered as done.
         </div>
-        <div class="alert alert-danger">
+        <div class="alert alert-warning">
             If you don't pick any date, you could be booked for any date in the following 10 weeks.
             <br />
             If don't set FROM date, it could be from <strong>Today</strong>.
         </div>
         <div class="form-group pl-4">
             <input class="form-check-input" id="cancellation" type="checkbox" checked amount="0">
-            <label class="form-check-label" for="cancellation">€0, free cancellation when I booked the date out of your selection</label>
+            <label class="form-check-label" for="cancellation">
+                <span class="badge badge-success">FREE</span>
+                Free cancellation when I booked the date out of your selection
+            </label>
         </div>
 
         <hr class="my-4" />
@@ -110,7 +115,10 @@
 
         <div class="form-group pl-4">
             <input class="form-check-input" id="anyCategory" name="anyCategory" type="checkbox" value="true" @(Model.AnyCategory ? "checked" : string.Empty)>
-            <label class="form-check-label" for="anyCategory">Accept Any Category</label>
+            <label class="form-check-label" for="anyCategory">
+                <span class="badge badge-success">FREE</span>
+                Accept Any Category
+            </label>
         </div>
         <div class="alert alert-info">
             You accept any category that suits your time range. I will try all 3 different categories for you. This makes you *3 more possible to get an appointment.
@@ -119,7 +127,7 @@
             <br />
             <strong>You will be proceeded as your original category at last.</strong>
         </div>
-        <div class="alert alert-danger">
+        <div class="alert alert-warning">
             You are highly suggested to accept any category if you're looking for dates within next 2 weeks only.
         </div>
         @if (ViewBag.IsSignedIn)
@@ -137,8 +145,12 @@
             </div>
         }
         <hr class="my-5" />
+        <div class="alert alert-danger">
+            <input class="agreement" type="checkbox" value="true" name="agreement" />
+            I agree to pay for the service(s) I choose and set once it is done.
+        </div>
         <p>Total Amount: <span class="text-success amount"></span></p>
-        <input class="btn btn-success" type="submit" value="Submit" />
+        <input class="btn btn-success submit" type="submit" disabled value="Submit" />
     </div>
 </form>
 
@@ -161,5 +173,9 @@
          $('.from, .to').prop('disabled', !$(pickDate).prop('checked'));
 
         recalculateAmount();
+
+        $('.agreement').change(function () {
+            $('.submit').prop('disabled', !this.checked);
+        });
     </script>
 }

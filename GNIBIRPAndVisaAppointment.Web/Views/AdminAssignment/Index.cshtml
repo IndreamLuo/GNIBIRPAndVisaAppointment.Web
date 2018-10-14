@@ -15,6 +15,7 @@
                     <a class="nav-item nav-link accepted" href="/Admin/Assignment/Accepted">Accepted</a>
                     <a class="nav-item nav-link appointed" href="/Admin/Assignment/Appointed">Appointed</a>
                     <a class="nav-item nav-link duplicated" href="/Admin/Assignment/Duplicated">Duplicated</a>
+                    <a class="nav-item nav-link duplicated" href="/Admin/Assignment/Unverify">Unverify</a>
                     <a class="nav-item nav-link complete" href="/Admin/Assignment/Complete">Complete</a>
                     <a class="nav-item nav-link cancelled" href="/Admin/Assignment/Cancelled">Cancelled</a>
                     <a class="nav-item nav-link rejected" href="/Admin/Assignment/Rejected">Rejected</a>
@@ -43,6 +44,10 @@
                     </a>
                 </td>
                 <td>
+                    @if (assignment.Order.Emergency != 0)
+                    {
+                        <span class="badge badge-danger">EMERGENCY</span>
+                    }
                     @if (assignment.Order.AnyCategory != 0)
                     {
                         <span class="badge badge-primary">ANY</span>
