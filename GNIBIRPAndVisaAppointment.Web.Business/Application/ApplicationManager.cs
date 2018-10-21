@@ -134,7 +134,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Application
         {
             var assignment = GetAssignment(orderId);
 
-            if (assignment.Status == AssignmentStatus.Appointed || assignment.Status == AssignmentStatus.Duplicated)
+            if (assignment.Status == AssignmentStatus.Accepted || assignment.Status == AssignmentStatus.Appointed || assignment.Status == AssignmentStatus.Duplicated)
             {
                 UpdataAssignmentStatus(orderId, assignment.Status, AssignmentStatus.Accepted);
             }
@@ -182,7 +182,9 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Application
 
         protected void UpdataAssignmentStatus(string orderId, string fromStatus, string toStatus, string assignmentNo = null)
         {
-            var assignment = AssignmentTable[fromStatus, orderId];
+            var assignment = AssignmentTable[fromStatus, orderId]
+                ?? AssignmentTable[AssignmentStatus.Duplicated, orderId]
+                ?? AssignmentTable[AssignmentStatus.Appointed, orderId];
             AssignmentTable.Delete(assignment);
 
             assignment.ETag = "*";
