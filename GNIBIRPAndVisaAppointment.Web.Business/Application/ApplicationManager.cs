@@ -235,9 +235,18 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Application
             return assignments;
         }
 
+        static DateTime TimeZoneAdjusted = new DateTime(2018, 10, 22);
+        static TimeZoneInfo DublinTimeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time");
         public AppointmentLetter GetAppointmentLetter(string orderId)
         {
-            return AppointmentLetterTable[orderId].FirstOrDefault();
+            var appointmentLetter = AppointmentLetterTable[orderId].FirstOrDefault();
+
+            if (appointmentLetter.Timestamp > TimeZoneAdjusted)
+            {
+                appointmentLetter.Time = TimeZoneInfo.ConvertTimeFromUtc(appointmentLetter.Time, DublinTimeZoneInfo);
+            }
+
+            return appointmentLetter;
         }
 
         public void AppointLog(string orderId, string slot, bool success, string result, double timeSpan)
