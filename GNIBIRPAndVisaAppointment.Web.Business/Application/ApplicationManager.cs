@@ -166,7 +166,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Application
                 PartitionKey = orderId,
                 RowKey = appointmentNo,
                 AppointmentNo = appointmentNo,
-                Time = time,
+                Time = TimeZoneInfo.ConvertTimeFromUtc(time, DublinTimeZoneInfo),
                 Name = name,
                 Category = category,
                 SubCategory = subCategory
@@ -239,14 +239,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Application
         static TimeZoneInfo DublinTimeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time");
         public AppointmentLetter GetAppointmentLetter(string orderId)
         {
-            var appointmentLetter = AppointmentLetterTable[orderId].FirstOrDefault();
-
-            if (appointmentLetter.Timestamp > TimeZoneAdjusted)
-            {
-                appointmentLetter.Time = TimeZoneInfo.ConvertTimeFromUtc(appointmentLetter.Time, DublinTimeZoneInfo);
-            }
-
-            return appointmentLetter;
+            return AppointmentLetterTable[orderId].FirstOrDefault();
         }
 
         public void AppointLog(string orderId, string slot, bool success, string result, double timeSpan)
