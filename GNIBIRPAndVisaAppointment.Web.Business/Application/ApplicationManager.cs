@@ -180,11 +180,24 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Application
             UpdataAssignmentStatus(orderId, AssignmentStatus.Complete, AssignmentStatus.Closed);
         }
 
-        protected void UpdataAssignmentStatus(string orderId, string fromStatus, string toStatus, string assignmentNo = null)
+        Dictionary<string, DateTime> UpdateAssignmentBuffer = new Dictionary<string, DateTime>();
+
+        protected async Task UpdataAssignmentStatus(string orderId, string fromStatus, string toStatus, string assignmentNo = null)
         {
-            var assignment = AssignmentTable[fromStatus, orderId]
-                ?? AssignmentTable[AssignmentStatus.Duplicated, orderId]
-                ?? AssignmentTable[AssignmentStatus.Appointed, orderId];
+            if (UpdateAssignmentBuffer.ContainsKey(orderId) && (UpdateAssignmentBuffer[orderId] - DateTime.Now).TotalMilliseconds < 2)
+            {
+                Task.Run(async () =>
+                {
+                    await Task.Delay(2000);
+                    UpdataAssignmentStatus(orderId, fromStatus, toStatus, assignmentNo);
+                });
+                return;
+            }
+
+            UpdateAssignmentBuffer[orderId] = DateTime.Now;
+
+            var assignment = AssignmentTable[fromStatus, orderId];
+
             AssignmentTable.Delete(assignment);
 
             assignment.ETag = "*";
