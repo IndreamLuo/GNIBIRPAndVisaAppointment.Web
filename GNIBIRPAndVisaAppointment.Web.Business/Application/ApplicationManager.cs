@@ -184,7 +184,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Application
 
         protected async Task UpdataAssignmentStatus(string orderId, string fromStatus, string toStatus, string assignmentNo = null)
         {
-            if (UpdateAssignmentBuffer.ContainsKey(orderId) && (UpdateAssignmentBuffer[orderId] - DateTime.Now).TotalSeconds < 2)
+            if (UpdateAssignmentBuffer.ContainsKey(orderId) && (DateTime.Now - UpdateAssignmentBuffer[orderId]).TotalSeconds < 2)
             {
                 Task.Run(async () =>
                 {
