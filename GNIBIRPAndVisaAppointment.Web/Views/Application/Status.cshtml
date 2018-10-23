@@ -37,7 +37,7 @@
             <br />
             @application.Nationality - @(application.PPNoYN == "Yes" ? application.PPNo : application.PPReason)
             <br />
-            @(application.FamAppYN == "Y" ? $"{application.FamNo} family applicants" : string.Empty)
+            @(application.FamAppYN == "Yes" ? $"* {application.FamAppNo} person(s)" : "Individual")
         </td>
     </tr>
     <tr>
