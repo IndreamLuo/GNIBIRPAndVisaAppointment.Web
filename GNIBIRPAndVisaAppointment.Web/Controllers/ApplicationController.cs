@@ -202,6 +202,10 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
                         }
                     }
                 }
+                else if (model.Emergency)
+                {
+                    ModelState.AddModelError("PickDate", "Emergency service has to select with target date range.");
+                }
 
                 if (ModelState.IsValid)
                 {

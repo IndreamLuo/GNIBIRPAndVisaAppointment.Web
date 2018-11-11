@@ -28,6 +28,8 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Application
             AppointmentLetterTable = storageProvider.GetTable<AppointmentLetter>();
             AppointLogTable = storageProvider.GetTable<AppointLog>();
             DomainHub = domainHub;
+
+            CachedAssignments = new Dictionary<string, List<Assignment>>();
         }
 
         const string New = "New";
@@ -251,8 +253,12 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Application
                 }
             }
 
+            CachedAssignments[status] = assignments;
+
             return assignments;
         }
+
+        public Dictionary<string, List<Assignment>> CachedAssignments { get; private set; }
 
         static DateTime TimeZoneAdjusted = new DateTime(2018, 10, 22);
         static TimeZoneInfo DublinTimeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time");

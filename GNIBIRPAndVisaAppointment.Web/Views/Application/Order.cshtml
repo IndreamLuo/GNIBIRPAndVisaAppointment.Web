@@ -74,6 +74,7 @@
             <input class="form-check-input" id="pickDate" name="pickDate" type="checkbox" value="true" amount="10" @(Model.PickDate ? "checked" : string.Empty)>
             <label class="form-check-label" for="pickDate">€10 - Appointment in date range:</label>
             <br />
+            <span asp-validation-for="PickDate" class="form-text text-danger"></span>
             <div class="mt-3">FROM</div>
             <input class="form-control form-control-sm from" name="from" value="@Model.From" placeholder="30/11/2018" />
             <div class="mt-3">TO</div>
@@ -81,6 +82,7 @@
             <span asp-validation-for="From" class="form-text text-danger"></span>
             <span asp-validation-for="To" class="form-text text-danger"></span>
         </div>
+        @await Component.InvokeAsync("AppointmentPrediction")
         <div class="alert alert-info">
             The wider range of dates you pick the more you are possible to get an appointment.
             <br />
@@ -147,7 +149,7 @@
         <hr class="my-5" />
         <div class="alert alert-danger">
             <input class="agreement" type="checkbox" value="true" name="agreement" />
-            I agree to pay for the service(s) I choose and set once it is done.
+            I agree to follow the service process to pay for the service(s) I choose and set once it is done.
         </div>
         <p>Total Amount: <span class="text-success amount"></span></p>
         <input class="btn btn-success submit" type="submit" disabled value="Submit" />
