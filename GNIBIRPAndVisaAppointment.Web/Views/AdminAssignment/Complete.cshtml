@@ -21,11 +21,14 @@
         <div class="input-group">
             <select name="Category" id="Category" value="@Model.Category" class="form-control" placeholder="Select...">
                 <option value=""></option>
+                <option value="All">All</option>
                 <option value="Other">Other</option>
                 <option value="Study">Study</option>
                 <option value="Work">Work</option>
             </select>
             <select name="SubCategory" id="SubCategory" value="@Model.SubCategory" class="form-control" placeholder="Select...">
+                <!-- All -->
+                <option category="All" value="All">All</option>
                 <!-- Work -->
                 <option category="Work" value="Work Permit Holder">Work Permit Holder</option>
                 <option category="Work" value="Hosting agreement">Hosting agreement</option>
@@ -34,7 +37,7 @@
                 <option category="Work" value="Invest or Start a Business">Invest or Start a Business</option>
                 <option category="Work" value="Visiting Academics">Visiting Academics</option>
                 <option category="Work" value="Doctor">Doctor</option>
-                <option category="Work" value="3rd Level Graduate Scheme ">3rd Level Graduate Scheme </option>
+                <option category="Work" value="3rd Level Graduate Scheme">3rd Level Graduate Scheme</option>
                 <!-- Study -->
                 <option category="Study" value="PhD">PhD</option>
                 <option category="Study" value="Masters">Masters</option>
