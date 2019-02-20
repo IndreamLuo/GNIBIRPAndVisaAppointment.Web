@@ -70,10 +70,11 @@
 {
     <script type="text/javascript">
         $(document).ready(function () {
+            var $subCategoryAll = $(SubCategory).find('option[category="All"]').clone();
             var $subCategoryWork = $(SubCategory).find('option[category="Work"]').clone();
             var $subCategoryStudy = $(SubCategory).find('option[category="Study"]').clone();
             var $subCategoryOther = $(SubCategory).find('option[category="Other"]').clone();
-            var $subCategories = [$subCategoryWork, $subCategoryStudy, $subCategoryOther];
+            var $subCategories = [$subCategoryAll, $subCategoryWork, $subCategoryStudy, $subCategoryOther];
             var refreshSubCategory = function () {
                 var value = $(Category).attr('value') || $(Category).val();
                 $(Category).attr('value', null).val(value);
