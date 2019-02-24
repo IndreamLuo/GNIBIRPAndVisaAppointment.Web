@@ -40,11 +40,14 @@
             <label for="Category">Category - Sub Category:</label>
             <div class="input-group">
                 <select name="Category" id="Category" value="@Model.Category" class="form-control" placeholder="Select...">
+                    <option value="All">All</option>
                     <option value="Other">Other</option>
                     <option value="Study">Study</option>
                     <option value="Work">Work</option>
                 </select>
                 <select name="SubCategory" id="SubCategory" value="@Model.SubCategory" class="form-control" placeholder="Select...">
+                    <!-- All -->
+                    <option category="All" value="All">All</option>
                     <!-- Work -->
                     <option category="Work" value="Work Permit Holder">Work Permit Holder</option>
                     <option category="Work" value="Hosting agreement">Hosting agreement</option>
@@ -440,10 +443,11 @@
         }
 
         $(document).ready(function () {
+            var $subCategoryAll = $(SubCategory).find('option[category="All"]').clone();
             var $subCategoryWork = $(SubCategory).find('option[category="Work"]').clone();
             var $subCategoryStudy = $(SubCategory).find('option[category="Study"]').clone();
             var $subCategoryOther = $(SubCategory).find('option[category="Other"]').clone();
-            var $subCategories = [$subCategoryWork, $subCategoryStudy, $subCategoryOther];
+            var $subCategories = [$subCategoryAll, $subCategoryWork, $subCategoryStudy, $subCategoryOther];
             var refreshSubCategory = function () {
                 var value = $(Category).attr('value') || $(Category).val();
                 $(Category).attr('value', null).val(value);
