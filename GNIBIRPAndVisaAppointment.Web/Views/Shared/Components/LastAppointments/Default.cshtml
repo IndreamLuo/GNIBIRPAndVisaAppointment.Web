@@ -4,7 +4,7 @@
 
 @{
     var groups = Model
-        .GroupBy(appointment => appointment.Category + appointment.SubCategory)
+        .GroupBy(appointment => appointment.Type + (appointment.SubCategory ?? appointment.Category))
         .ToDictionary(group => group.Key, group => group.ToArray());
 }
 
@@ -31,37 +31,26 @@
 }
 
 <h1>GNIB / IRP</h1>
+<div class="alert alert-warning">
+    <a href="https://burghquayregistrationoffice.inis.gov.ie/Website/AMSREG/AMSRegWeb.nsf/AppSelect?OpenForm" target="_blank">Categories are bing removed. An All category will replace original 3 categories in future.</a>
+    You don't need to worry about categories any more when making appointments.
+</div>
 <table class="table irp">
     <thead>
         <tr>
-            <th scope="col"></th>
-            <th scope="col">Work</th>
-            <th scope="col">Study</th>
-            <th scope="col">Other</th>
+            <th scope="col">New</th>
+            <th scope="col">Renewal</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var set in new [] { "New", "Renewal" })
         {
             <tr>
-                <th scope="row">@set</th>
                 <td>
-                    <h6>
-                        <span class="badge badge-info">@set</span>
-                    </h6>
-                    @Html.Raw(showAppointments(groups, $"Work{set}"))
+                    @Html.Raw(showAppointments(groups, "IRPNew"))
                 </td>
                 <td>
-                    <h6>
-                        <span class="badge badge-info">@set</span>
-                    </h6>
-                    @Html.Raw(showAppointments(groups, $"Study{set}"))
-                </td>
-                <td>
-                    <h6>
-                        <span class="badge badge-info">@set</span>
-                    </h6>
-                    @Html.Raw(showAppointments(groups, $"Other{set}"))
+                    @Html.Raw(showAppointments(groups, "IRPRenewal"))
                 </td>
             </tr>
         }
@@ -100,7 +89,7 @@
     <tbody>
         <tr>
             <td>
-                @Html.Raw(showAppointments(groups, "Emergency"))
+                @Html.Raw(showAppointments(groups, "VisaEmergency"))
             </td>
         </tr>
     </tbody>
