@@ -3,6 +3,7 @@ using System.Linq;
 using GNIBIRPAndVisaAppointment.Web.Business;
 using GNIBIRPAndVisaAppointment.Web.Business.Api;
 using GNIBIRPAndVisaAppointment.Web.Business.Application;
+using GNIBIRPAndVisaAppointment.Web.Business.Configuration;
 using GNIBIRPAndVisaAppointment.Web.Models.Api;
 using Microsoft.AspNetCore.Mvc;
 
@@ -89,6 +90,38 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
             }
 
             return Accepted();
+        }
+
+        [HttpPost]
+        [Route("Configuration/Get")]
+        public IActionResult ConfigurationGet(string token, string area, string key)
+        {
+            var apiManager = DomainHub.GetDomain<IApiManager>();
+            if (apiManager.VerifyToken(token))
+            {
+                var configurationManager = DomainHub.GetDomain<IConfigurationManager>();
+                var result = configurationManager[area, key];
+
+                return Content(result);
+            }
+
+            return Accepted();
+        }
+
+        [HttpPost]
+        [Route("Configuration/Set")]
+        public IActionResult ConfigurationSet(string token, string area, string key, string value)
+        {
+            var apiManager = DomainHub.GetDomain<IApiManager>();
+            if (apiManager.VerifyToken(token))
+            {
+                var configurationManager = DomainHub.GetDomain<IConfigurationManager>();
+                var result = configurationManager[area, key] = value;
+
+                return Accepted();
+            }
+
+            return BadRequest();
         }
     }
 }
