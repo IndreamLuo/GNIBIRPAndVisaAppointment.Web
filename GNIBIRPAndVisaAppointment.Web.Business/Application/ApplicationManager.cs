@@ -187,9 +187,9 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Application
             UpdataAssignmentStatus(orderId, AssignmentStatus.Complete, AssignmentStatus.Closed);
         }
 
-        Dictionary<string, DateTime> UpdateAssignmentBuffer = new Dictionary<string, DateTime>();
+        static Dictionary<string, DateTime> UpdateAssignmentBuffer = new Dictionary<string, DateTime>();
 
-        protected async Task UpdataAssignmentStatus(string orderId, string fromStatus, string toStatus, string assignmentNo = null)
+        protected async Task UpdataAssignmentStatus(string orderId, string fromStatus, string toStatus)
         {
             lock(UpdateAssignmentBuffer)
             {
@@ -198,7 +198,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Application
                     Task.Run(async () =>
                     {
                         await Task.Delay(2000);
-                        UpdataAssignmentStatus(orderId, fromStatus, toStatus, assignmentNo);
+                        UpdataAssignmentStatus(orderId, fromStatus, toStatus);
                     }).Start();
                     
                     return;
@@ -215,20 +215,11 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Application
             assignment.Status = toStatus;
             assignment.PartitionKey = assignment.Status;
 
-            if (!string.IsNullOrEmpty(assignmentNo))
-            {
-                assignment.AppointmentNo = assignmentNo;
-            }
-
             AssignmentTable.Insert(assignment);
 
             var trackedAssignment = GetAssignment(orderId);
             trackedAssignment.Status = toStatus;
-
-            if (!string.IsNullOrEmpty(assignmentNo))
-            {
-                trackedAssignment.AppointmentNo = assignmentNo;
-            }
+            
             AssignmentTable.Replace(trackedAssignment);
 
             if (fromStatus == AssignmentStatus.Accepted || toStatus == AssignmentStatus.Accepted)
