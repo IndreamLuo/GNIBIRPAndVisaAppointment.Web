@@ -1,8 +1,10 @@
 using System;
 using System.Linq;
+using System.Text.RegularExpressions;
 using GNIBIRPAndVisaAppointment.Web.Business;
 using GNIBIRPAndVisaAppointment.Web.Business.Api;
 using GNIBIRPAndVisaAppointment.Web.Business.Application;
+using GNIBIRPAndVisaAppointment.Web.Business.AppointmnetLetter;
 using GNIBIRPAndVisaAppointment.Web.Business.Configuration;
 using GNIBIRPAndVisaAppointment.Web.Models.Api;
 using Microsoft.AspNetCore.Mvc;
@@ -117,6 +119,34 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
             {
                 var configurationManager = DomainHub.GetDomain<IConfigurationManager>();
                 var result = configurationManager[area, key] = value;
+
+                return Accepted();
+            }
+
+            return BadRequest();
+        }
+
+        [HttpPost]
+        [Route("AppointmentLetter/Submit")]
+        public IActionResult ConfigurationSet(string token, string id, string appointmentNo, string time, string name, string category, string subCategory)
+        {
+            var apiManager = DomainHub.GetDomain<IApiManager>();
+
+            if (apiManager.VerifyToken(token))
+            {
+                var regex = new Regex("(?<day>[0-9]{2})/(?<month>[0-9]{2})/(?<year>[0-9]{4}), (?<hour>[0-9]{2}):(?<minute>[0-9]{2})");
+                var match = regex.Match(time);
+                var deserializedTime = new DateTime(
+                    int.Parse(match.Groups["year"].Value),
+                    int.Parse(match.Groups["month"].Value),
+                    int.Parse(match.Groups["day"].Value),
+                    int.Parse(match.Groups["hour"].Value),
+                    int.Parse(match.Groups["minute"].Value),
+                    0
+                );
+                
+                var appointmentLetterManager = DomainHub.GetDomain<IAppointmentLetterManager>();
+                appointmentLetterManager.SubmitLetter(id, appointmentNo, name, deserializedTime, category, subCategory);
 
                 return Accepted();
             }

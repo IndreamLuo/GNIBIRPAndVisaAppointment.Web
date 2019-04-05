@@ -1,0 +1,26 @@
+@{
+    var appointmentLetters = ViewBag.AppointmentLetters;
+}
+
+<table class="table table-sm">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Appointment No</th>
+            <th>Name</th>
+            <th>Time</th>
+            <th>Category</th>
+            <th>Sub Category</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var appointmentLetter in appointmentLetters)
+        {
+            <tr>
+                <td>
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

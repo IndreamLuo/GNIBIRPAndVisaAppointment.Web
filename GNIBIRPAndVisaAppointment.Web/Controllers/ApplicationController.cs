@@ -324,11 +324,35 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
         [Route("Status/{orderId}")]
         public IActionResult Status(string orderId)
         {
+            var isSignedIn = SignInManager.IsSignedIn(User);
+            ViewBag.IsSignedIn = isSignedIn;
+
             var applicationManager = DomainHub.GetDomain<IApplicationManager>();
 
-            ViewBag.Assignment = applicationManager.GetAssignment(orderId);
+            var assignment = applicationManager.GetAssignment(orderId);
+            ViewBag.Assignment = assignment;
             ViewBag.Order = applicationManager.GetOrder(orderId);
-            ViewBag.Application = applicationManager[orderId];
+
+            var application = applicationManager[orderId];
+            if (assignment.Status == AssignmentStatus.Closed && !isSignedIn)
+            {
+                application.GivenName = "Closed";
+                application.SurName = "Closed";
+                application.DOB = "Closed";
+                application.GNIBNo = "Closed";
+                application.GNIBExDT = "Closed";
+                application.PPNo = "Closed";
+                application.PPReason = "Closed";
+                application.Nationality = "Closed";
+                application.Comment = "Closed";
+                application.Email = "Closed";
+                application.Category = "Closed";
+                application.SubCategory = "Closed";
+                application.FamAppYN = "Yes";
+                application.FamAppNo = "Closed";
+            }
+
+            ViewBag.Application = application;
 
             var paymentManager = DomainHub.GetDomain<IPaymentManager>();
             ViewBag.Payment = paymentManager.GetPayment(orderId);
