@@ -128,14 +128,14 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
 
         [HttpPost]
         [Route("AppointmentLetter/Submit")]
-        public IActionResult ConfigurationSet(string token, string id, string appointmentNo, string time, string name, string category, string subCategory)
+        public IActionResult AppointmentLetterSubmit(string token, string id, string message)
         {
             var apiManager = DomainHub.GetDomain<IApiManager>();
 
             if (apiManager.VerifyToken(token))
             {
-                var regex = new Regex("(?<day>[0-9]{2})/(?<month>[0-9]{2})/(?<year>[0-9]{4}), (?<hour>[0-9]{2}):(?<minute>[0-9]{2})");
-                var match = regex.Match(time);
+                var regex = new Regex(@"Name: (?<firstName>.*)  (?<secondName>.*)\nAppointment Date: (?<day>[0-9]{2})/(?<month>[0-9]{2})/(?<year>[0-9]{4}), (?<hour>[0-9]{2}):(?<minute>[0-9]{2})\nRegistration Appointment Reference: (?<appointmentNo>.*)\nCategory: (?<category>[a-zA-Z]*) \| (?<subCategory>[a-zA-Z]*)\n\n");
+                var match = regex.Match(message);
                 var deserializedTime = new DateTime(
                     int.Parse(match.Groups["year"].Value),
                     int.Parse(match.Groups["month"].Value),
@@ -146,7 +146,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
                 );
                 
                 var appointmentLetterManager = DomainHub.GetDomain<IAppointmentLetterManager>();
-                appointmentLetterManager.SubmitLetter(id, appointmentNo, name, deserializedTime, category, subCategory);
+                appointmentLetterManager.SubmitLetter(id, match.Groups["appointmentNo"].Value, $"{match.Groups["firstName"].Value}  {match.Groups["secondName"].Value}", deserializedTime, match.Groups["category"].Value, match.Groups["subCategory"].Value);
 
                 return Accepted();
             }

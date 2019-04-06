@@ -1,4 +1,5 @@
 @{
+    Layout = "_AdminLayout";
     var appointmentLetters = ViewBag.AppointmentLetters;
 }
 
@@ -17,9 +18,12 @@
         @foreach (var appointmentLetter in appointmentLetters)
         {
             <tr>
-                <td>
-
-                </td>
+                <td>@appointmentLetter.EmailId</td>
+                <td>@appointmentLetter.AppointmentNo</td>
+                <td>@appointmentLetter.Name</td>
+                <td>@appointmentLetter.Time</td>
+                <td>@appointmentLetter.Category</td>
+                <td>@appointmentLetter.SubCategory</td>
             </tr>
         }
     </tbody>
