@@ -186,9 +186,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Application
         public void Complete(string orderId, string emailId)
         {
             var appointmentLetterManager = DomainHub.GetDomain<IAppointmentLetterManager>();
-            var appointmentLetter = appointmentLetterManager[emailId];
-
-            Complete(orderId, appointmentLetter.AppointmentNo, appointmentLetter.Time, appointmentLetter.Name, appointmentLetter.Category, appointmentLetter.SubCategory);
+            appointmentLetterManager.Assign(emailId, orderId);
         }
 
         public void Close(string orderId)
