@@ -1,9 +1,11 @@
 using GNIBIRPAndVisaAppointment.Web.Business;
 using GNIBIRPAndVisaAppointment.Web.Business.AppointmnetLetter;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GNIBIRPAndVisaAppointment.Web.Controllers
 {
+    [Authorize(Roles="Admin,Manager")]
     [Route("Admin/AppointmentLetter")]
     public partial class AdminAppointmentLetterController : Controller
     {

@@ -8,6 +8,8 @@
         .Replace("{Name}", appointment.Name)
         .Replace("{Category}", appointment.Category)
         .Replace("{SubCategory}", appointment.SubCategory);
+
+    ViewData["Title"] = $"{appointment.Name} - ";
 }
 
 @section Head

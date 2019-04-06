@@ -113,25 +113,6 @@
             You'll be put on top of the list.
         </div>
 
-        <hr class="my-4" />
-
-        <div class="form-group pl-4">
-            <input class="form-check-input" id="anyCategory" name="anyCategory" type="checkbox" value="true" @(Model.AnyCategory ? "checked" : string.Empty)>
-            <label class="form-check-label" for="anyCategory">
-                <span class="badge badge-success">FREE</span>
-                Accept Any Category
-            </label>
-        </div>
-        <div class="alert alert-info">
-            You accept any category that suits your time range. I will try all 3 different categories for you. This makes you *3 more possible to get an appointment.
-            <br />
-            According to the registration office, appointment from another category will be accepted if you are hard to find an appointment.
-            <br />
-            <strong>You will be proceeded as your original category at last.</strong>
-        </div>
-        <div class="alert alert-warning">
-            You are highly suggested to accept any category if you're looking for dates within next 2 weeks only.
-        </div>
         @if (ViewBag.IsSignedIn)
         {
             <hr class="my-5" />

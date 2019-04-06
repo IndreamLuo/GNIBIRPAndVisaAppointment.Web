@@ -413,13 +413,6 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
                     "<.*?>",
                     string.Empty));
 
-                // .Replace("<p>", string.Empty)
-                // .Replace("</p>", string.Empty)
-                // .Replace("<hr />", "------------------------------------------------------------------------------------------")
-                // .Replace("&nbsp;", " ")
-                // .Replace("&lt;", "<")
-                // .Replace("&gt;", ">")
-
             return File(Encoding.UTF8.GetBytes(appointmentLetterText),
                 "text/plain",
                 $"{appointmentLetter.Name} - INIS IRP Appointment Letter.txt");
