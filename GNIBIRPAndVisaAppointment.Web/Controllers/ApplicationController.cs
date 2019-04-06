@@ -1,5 +1,7 @@
 using System;
 using System.Linq;
+using System.Net;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using GNIBIRPAndVisaAppointment.Web.Business;
@@ -373,6 +375,8 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
                 throw new InvalidOperationException("Not paid.");
             }
 
+            ViewBag.ApplicationId = orderId;
+
             var applicationManager = DomainHub.GetDomain<IApplicationManager>();
             ViewBag.Appointment = applicationManager.GetAppointmentLetter(orderId);
 
@@ -381,6 +385,44 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
             ViewBag.AppointmentLetterTemplate = letterTemplate.Content;
 
             return View();
+        }
+
+        [Route("Download/{orderId}")]
+        public async Task<IActionResult> Download(string orderId)
+        {
+            if (!SignInManager.IsSignedIn(User) && DomainHub.GetDomain<IPaymentManager>().GetPayment(orderId) == null)
+            {
+                throw new InvalidOperationException("Not paid.");
+            }
+
+            var applicationManager = DomainHub.GetDomain<IApplicationManager>();
+            var appointmentLetter = applicationManager.GetAppointmentLetter(orderId);
+
+            var informationManager = DomainHub.GetDomain<IInformationManager>();
+            var letterTemplate = informationManager["appointment-letter"];
+
+            var appointmentLetterText = WebUtility
+                    .HtmlDecode(Regex
+                        .Replace(letterTemplate
+                        .Content
+                        .Replace("{AppointmentNo}", appointmentLetter.AppointmentNo)
+                        .Replace("{Time}", appointmentLetter.Time.ToString("dd/MM/yyyy HH:mm"))
+                        .Replace("{Name}", appointmentLetter.Name)
+                        .Replace("{Category}", appointmentLetter.Category)
+                        .Replace("{SubCategory}", appointmentLetter.SubCategory),
+                    "<.*?>",
+                    string.Empty));
+
+                // .Replace("<p>", string.Empty)
+                // .Replace("</p>", string.Empty)
+                // .Replace("<hr />", "------------------------------------------------------------------------------------------")
+                // .Replace("&nbsp;", " ")
+                // .Replace("&lt;", "<")
+                // .Replace("&gt;", ">")
+
+            return File(Encoding.UTF8.GetBytes(appointmentLetterText),
+                "text/plain",
+                $"{appointmentLetter.Name} - INIS IRP Appointment Letter.txt");
         }
     }
 }
