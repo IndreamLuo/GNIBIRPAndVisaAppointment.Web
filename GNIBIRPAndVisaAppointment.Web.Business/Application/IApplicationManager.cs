@@ -19,6 +19,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Application
         void Unverify(string orderId);
         void Cancel(string orderId);
         void Complete(string orderId, string appointmentNo, DateTime time, string name, string category, string subCategory);
+        void Complete(string orderId, string emailId);
         void Close(string orderId);
         Assignment GetAssignment(string orderId);
         List<Assignment> GetAssignments(string status, bool withDetails = false);

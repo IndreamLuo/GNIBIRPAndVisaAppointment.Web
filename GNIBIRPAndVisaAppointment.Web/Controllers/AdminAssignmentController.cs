@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using GNIBIRPAndVisaAppointment.Web.Business;
 using GNIBIRPAndVisaAppointment.Web.Business.Application;
+using GNIBIRPAndVisaAppointment.Web.Business.AppointmnetLetter;
 using GNIBIRPAndVisaAppointment.Web.Business.Payment;
 using GNIBIRPAndVisaAppointment.Web.DataAccess.Model.Storage;
 using GNIBIRPAndVisaAppointment.Web.Models.Admin;
@@ -100,10 +101,21 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
             return Redirect("/Admin/Assignment/Accepted");
         }
 
-        [Route("Complete/{assignmentId}")]
-        public IActionResult Complete(AppointmentLetterModel model)
+        [Route("Complete/{assignmentId}/{emailId?}")]
+        public IActionResult Complete(AppointmentLetterModel model, string emailId)
         {
             var applicationManager = DomainHub.GetDomain<IApplicationManager>();
+            var application = applicationManager[model.AssignmentId];
+            var fullName = $"{application.GivenName.Trim()}  {application.SurName.Trim()}";
+
+            var appointmentLetterManger = DomainHub.GetDomain<IAppointmentLetterManager>();
+            var availableAppointmentLetters = appointmentLetterManger.FindByName(fullName);
+            ViewBag.AvailableAppointmentLetters = availableAppointmentLetters;
+
+            if (model.Name != fullName)
+            {
+                ModelState.AddModelError("Name", "Name doesn't match with applicant.");
+            }
             
             if (ModelState.IsValid)
             {
@@ -117,8 +129,15 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
                     int.Parse(match.Groups["minute"].Value),
                     0
                 );
-
-                applicationManager.Complete(model.AssignmentId, model.AppointmentNo, time, model.Name, model.Category, model.SubCategory);
+                
+                if (emailId != null)
+                {
+                    applicationManager.Complete(model.AssignmentId, emailId);
+                }
+                else
+                {
+                    applicationManager.Complete(model.AssignmentId, model.AppointmentNo, time, model.Name, model.Category, model.SubCategory);
+                }
                 return Redirect("/Admin/Assignment/Appointed");
             }
             else if (!string.IsNullOrEmpty(model.Content))
@@ -130,6 +149,15 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
                 model.AppointmentNo = match.Groups["reference"].Value;
                 model.Category = match.Groups["category"].Value;
                 model.SubCategory = match.Groups["subCategory"].Value;
+            }
+            else if (emailId != null)
+            {
+                var appointmentLetter = availableAppointmentLetters.First(letter => letter.EmailId == emailId);
+                model.Name = appointmentLetter.Name;
+                model.AppointmentNo = appointmentLetter.AppointmentNo;
+                model.Time = appointmentLetter.Time.ToString("dd/MM/yyyy, HH:mm");
+                model.Category = application.Category;
+                model.SubCategory = application.SubCategory;
             }
 
             return View(model);

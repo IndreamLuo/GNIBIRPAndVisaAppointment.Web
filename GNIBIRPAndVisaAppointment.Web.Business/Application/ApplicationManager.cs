@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using GNIBIRPAndVisaAppointment.Web.Business.AppointmnetLetter;
 using GNIBIRPAndVisaAppointment.Web.Business.Configuration;
 using GNIBIRPAndVisaAppointment.Web.Business.Payment;
 using GNIBIRPAndVisaAppointment.Web.DataAccess.Model.Storage;
@@ -180,6 +181,14 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Application
             });
 
             UpdataAssignmentStatus(orderId, AssignmentStatus.Appointed, AssignmentStatus.Complete);
+        }
+
+        public void Complete(string orderId, string emailId)
+        {
+            var appointmentLetterManager = DomainHub.GetDomain<IAppointmentLetterManager>();
+            var appointmentLetter = appointmentLetterManager[emailId];
+
+            Complete(orderId, appointmentLetter.AppointmentNo, appointmentLetter.Time, appointmentLetter.Name, appointmentLetter.Category, appointmentLetter.SubCategory);
         }
 
         public void Close(string orderId)

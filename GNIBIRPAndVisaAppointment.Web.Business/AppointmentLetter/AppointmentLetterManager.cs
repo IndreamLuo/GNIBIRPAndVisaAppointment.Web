@@ -31,6 +31,15 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.AppointmnetLetter
             }
         }
 
+        public AppointmentLetter this[string emailId]
+        {
+            get
+            {
+                EnsureCacheLoaded();
+                return Cache.FirstOrDefault(letter => letter.EmailId == emailId);
+            }
+        }
+
         public List<AppointmentLetter> UnassignedLetters
         {
             get
@@ -65,10 +74,10 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.AppointmnetLetter
             }
         }
 
-        public AppointmentLetter FindByName(string name)
+        public AppointmentLetter[] FindByName(string name)
         {
             EnsureCacheLoaded();
-            return Cache.FirstOrDefault(appointmentLetter => appointmentLetter.Name == name);
+            return Cache.Where(appointmentLetter => appointmentLetter.Name == name).ToArray();
         }
 
         public void Assign(string id, string applicationId)

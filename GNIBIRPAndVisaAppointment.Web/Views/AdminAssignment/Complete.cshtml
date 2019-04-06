@@ -1,4 +1,7 @@
 @model GNIBIRPAndVisaAppointment.Web.Models.Admin.AppointmentLetterModel
+@{
+    var availableAppointmentLetters = ViewBag.AvailableAppointmentLetters;
+}
 
 <form method="POST">
     <div class="form-group">
@@ -63,6 +66,18 @@
         <textarea class="form-control" id="Content" name="Content" value="@Model.Content" placeholder="Donald Trump"></textarea>
         <span asp-validation-for="Content" class="form-text text-danger"></span>
     </div>
+    <table class="table">
+        @foreach (var appointmentLetter in availableAppointmentLetters)
+        {
+            <tr>
+                <td>@appointmentLetter.AppointmentNo</td>
+                <td>@appointmentLetter.Time</td>
+                <td>
+                    <a href="/Admin/Assignment/Complete/@Model.AssignmentId/@appointmentLetter.EmailId" class="btn btn-primary">Select</a>
+                </td>
+            </tr>
+        }
+    </table>
     <button type="submit" class="btn btn-success">Complete</button>
 </form>
 
