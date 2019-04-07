@@ -94,6 +94,13 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.AppointmnetLetter
                 appointmentLetter.SubCategory);
 
             AppointmentLetterTable.Delete(appointmentLetter);
+            
+            EnsureCacheLoaded();
+            var cached = Cache.FirstOrDefault(letter => letter.EmailId == id);
+            if (cached != null)
+            {
+                Cache.Remove(cached);
+            }
         }
     }
 }
