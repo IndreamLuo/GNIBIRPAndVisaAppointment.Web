@@ -4,6 +4,7 @@ using System.Linq;
 using GNIBIRPAndVisaAppointment.Web.Business.Application;
 using GNIBIRPAndVisaAppointment.Web.DataAccess.Model.Storage;
 using GNIBIRPAndVisaAppointment.Web.DataAccess.Storage;
+using GNIBIRPAndVisaAppointment.Web.Utility;
 
 namespace GNIBIRPAndVisaAppointment.Web.Business.AppointmnetLetter
 {
@@ -62,7 +63,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.AppointmnetLetter
                     EmailId = id,
                     AppointmentNo = appointmentNo,
                     Name = name,
-                    Time = time,
+                    Time = TimeZoneInfo.ConvertTimeFromUtc(time, Localization.DublinTimeZoneInfo),
                     Category = category,
                     SubCategory = subCategory
                 };

@@ -10,20 +10,34 @@
             <th>Appointment No</th>
             <th>Name</th>
             <th>Time</th>
-            <th>Category</th>
-            <th>Sub Category</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
         @foreach (var appointmentLetter in appointmentLetters)
         {
-            <tr>
+            var tableClass = string.Empty;
+            if (appointmentLetter.Time <= DateTime.Now.AddDays(2))
+            {
+                tableClass = "table-warning";
+            }
+            else if (appointmentLetter.Time < DateTime.Now.AddDays(1))
+            {
+                tableClass = "table-dark";
+            }
+            <tr class="@tableClass">
                 <td>@appointmentLetter.EmailId</td>
-                <td>@appointmentLetter.AppointmentNo</td>
+                <td>
+                    @appointmentLetter.AppointmentNo
+                    <span class="badge badge-info">
+                        @appointmentLetter.Category
+                        -
+                        @appointmentLetter.SubCategory
+                    </span>
+                </td>
                 <td>@appointmentLetter.Name</td>
                 <td>@appointmentLetter.Time</td>
-                <td>@appointmentLetter.Category</td>
-                <td>@appointmentLetter.SubCategory</td>
+                <td></td>
             </tr>
         }
     </tbody>
