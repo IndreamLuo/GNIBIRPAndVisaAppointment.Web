@@ -139,7 +139,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
 
             if (apiManager.VerifyToken(token))
             {
-                var regex = new Regex(@"Name: (?<firstName>.*)  (?<secondName>.*)\nAppointment Date: (?<day>[0-9]{2})/(?<month>[0-9]{2})/(?<year>[0-9]{4}), (?<hour>[0-9]{2}):(?<minute>[0-9]{2})\nRegistration Appointment Reference: (?<appointmentNo>.*)\nCategory: (?<category>[a-zA-Z]*) \| (?<subCategory>[a-zA-Z]*)\n\n");
+                var regex = new Regex("Name: (?<firstName>.*)  (?<secondName>.*)\r\nAppointment Date: (?<day>[0-9]{2})/(?<month>[0-9]{2})/(?<year>[0-9]{4}), (?<hour>[0-9]{2}):(?<minute>[0-9]{2})\r\nRegistration Appointment Reference: (?<appointmentNo>.*)\r\nCategory: (?<category>[a-zA-Z]*) \\| (?<subCategory>[a-zA-Z]*)\r\n", RegexOptions.CultureInvariant);
                 var match = regex.Match(message);
                 var deserializedTime = new DateTime(
                     int.Parse(match.Groups["year"].Value),
