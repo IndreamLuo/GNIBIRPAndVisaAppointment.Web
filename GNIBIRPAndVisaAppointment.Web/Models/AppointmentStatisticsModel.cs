@@ -11,6 +11,14 @@ namespace GNIBIRPAndVisaAppointment.Web.Models
         {
             StartTime = appointmentStatistics.StartTime;
             EndTime = appointmentStatistics.EndTime;
+
+            ValidIRPAllNew = appointmentStatistics.ValidIRPAllNew;
+            PublishIRPAllNew = appointmentStatistics.PublishIRPAllNew;
+            TotalContinuousIRPAllNew  = appointmentStatistics.TotalContinuousIRPAllNew;
+            ValidIRPAllRenew = appointmentStatistics.ValidIRPAllRenew;
+            PublishIRPAllRenew = appointmentStatistics.PublishIRPAllRenew;
+            TotalContinuousIRPAllRenew = appointmentStatistics.TotalContinuousIRPAllRenew;
+
             ValidIRPWorkNew = appointmentStatistics.ValidIRPWorkNew;
             PublishIRPWorkNew = appointmentStatistics.PublishIRPWorkNew;
             TotalContinuousIRPWorkNew = appointmentStatistics.TotalContinuousIRPWorkNew;
@@ -42,6 +50,15 @@ namespace GNIBIRPAndVisaAppointment.Web.Models
 
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
+
+        #region All
+        public int ValidIRPAllNew { get; set; }
+        public int PublishIRPAllNew { get; set; }
+        public double TotalContinuousIRPAllNew { get; set; }
+        public int ValidIRPAllRenew { get; set; }
+        public int PublishIRPAllRenew { get; set; }
+        public double TotalContinuousIRPAllRenew { get; set; }
+        #endregion
         public int ValidIRPWorkNew { get; set; }
         public int PublishIRPWorkNew { get; set; }
         public double TotalContinuousIRPWorkNew { get; set; }

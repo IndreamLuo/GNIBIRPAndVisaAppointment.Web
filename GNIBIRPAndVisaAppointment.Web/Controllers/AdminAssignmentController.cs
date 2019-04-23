@@ -184,5 +184,17 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
 
             return View(model);
         }
+
+        [Route("Contact/{id}")]
+        public IActionResult Contact(string id)
+        {
+            var applicationManager = DomainHub.GetDomain<IApplicationManager>();
+            var application = applicationManager[id];
+            var contacts = new [] { application.Email };
+
+            ViewBag.Contacts = contacts;
+
+            return View();
+        }
     }
 }

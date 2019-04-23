@@ -7,6 +7,16 @@ namespace GNIBIRPAndVisaAppointment.Web.DataAccess.Model.Storage
     {
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
+
+        #region All
+        public int ValidIRPAllNew { get; set; }
+        public int PublishIRPAllNew { get; set; }
+        public double TotalContinuousIRPAllNew { get; set; }
+        public int ValidIRPAllRenew { get; set; }
+        public int PublishIRPAllRenew { get; set; }
+        public double TotalContinuousIRPAllRenew { get; set; }
+        #endregion
+
         public int ValidIRPWorkNew { get; set; }
         public int PublishIRPWorkNew { get; set; }
         public double TotalContinuousIRPWorkNew { get; set; }
