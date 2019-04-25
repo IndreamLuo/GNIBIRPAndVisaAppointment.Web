@@ -3,6 +3,7 @@
 @{
     var order = ViewBag.Order;
     var assignment = ViewBag.Assignment;
+    var unpaidAmount = ViewBag.UnpaidAmount;
 }
 
 @section Head {
@@ -45,6 +46,10 @@
             <td>€ @order.Emergency</td>
         </tr>
         <tr>
+            <td>Paid</td>
+            <td>€ @(unpaidAmount - order.Amount)</td>
+        </tr>
+        <tr>
             <td>Special</td>
             <td>€ @order.Special</td>
         </tr>
@@ -58,7 +63,7 @@
                 Total:
             </th>
             <td>
-                <span class="text-success">€ @order.Amount.ToString("F2")</span>
+                <span class="text-success">€ @unpaidAmount.ToString("F2")</span>
             </td>
         </tr>
     </tfoot>
@@ -71,7 +76,7 @@
             <script
                 src="https://checkout.stripe.com/checkout.js" class="stripe-button"
                 data-key="@ViewBag.StripeKey"
-                data-amount="@(order.Amount * 100)"
+                data-amount="@(unpaidAmount * 100)"
                 data-name="Indream"
                 data-description="Widget"
                 data-image="https://stripe.com/img/documentation/checkout/marketplace.png"

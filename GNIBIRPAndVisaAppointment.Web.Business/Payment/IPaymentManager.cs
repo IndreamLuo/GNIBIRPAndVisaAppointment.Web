@@ -11,5 +11,6 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Payment
         void AdminPay(string orderId, string chargeId, string type, string currency, double amount, string payer);
         List<DataAccess.Model.Storage.Payment> GetPayments(string orderId);
         bool IsPaid(string orderId);
+        double GetUnpaidAmount(string orderId);
     }
 }

@@ -270,6 +270,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
 
             ViewBag.Order = applicationManager.GetOrder(orderId);
             ViewBag.Assignment = applicationManager.GetAssignment(orderId);
+            ViewBag.UnpaidAmount = paymentManager.GetUnpaidAmount(orderId);
             ViewBag.StripeKey = paymentManager.PublishableKey;
 
             return View();

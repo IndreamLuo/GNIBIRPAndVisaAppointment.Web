@@ -91,13 +91,19 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Payment
 
         public bool IsPaid(string orderId)
         {
+            return this.GetUnpaidAmount(orderId) <= 0;
+        }
+
+        public double GetUnpaidAmount(string orderId)
+        {
             var applicationManager = DomainHub.GetDomain<IApplicationManager>();
             var order = applicationManager.GetOrder(orderId);
             var payments = PaymentTable[orderId];
+
             var amount = payments
                 .Sum(payment => ExchangeHelper.ToEUR(payment.Currency, payment.Amount));
 
-            return amount == order.Amount;
+            return order.Amount - amount;
         }
     }
 }
