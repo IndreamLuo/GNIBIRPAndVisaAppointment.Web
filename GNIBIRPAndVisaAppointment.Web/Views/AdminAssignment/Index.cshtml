@@ -4,6 +4,7 @@
     var status = ViewBag.Status;
     var assignments = ViewBag.Assignments;
     var payments = ViewBag.Payments;
+    var isPaids = ViewBag.IsPaids;
 }
 
 <table class="table table-sm">
@@ -75,30 +76,31 @@
                 </td>
                 <td>
                     @{
-                        var payment = payments[assignment.Id];
-                        if (payment == null)
+                        var paymentList = payments[assignment.Id];
+                        if (paymentList == null || paymentList.Count == 0)
                         {
                             <span class="badge badge-danger">Unpaid</span>
                         }
                         else
                         {
-                            <span class="badge badge-success">Paid</span>
-                            <br />
-                            @payment.Type
-                            <br />
-                            @switch(payment.Currency)
+                            foreach (var payment in paymentList)
                             {
-                                case "cny":
-                                    <span>¥</span>
-                                    break;
-                                case "eur":
-                                    <span>€</span>
-                                    break;
-                                case "usd":
-                                    <span>$</span>
-                                    break;
+                                <span class="badge badge-success">@payment.Type</span>
+                                @switch(payment.Currency)
+                                {
+                                    case "cny":
+                                        <span>¥</span>
+                                        break;
+                                    case "eur":
+                                        <span>€</span>
+                                        break;
+                                    case "usd":
+                                        <span>$</span>
+                                        break;
+                                }
+                                <span>@payment.Amount</span>
+                                <br />
                             }
-                            <span>@payment.Amount</span>
                         }
                     }
                 </td>
@@ -125,7 +127,7 @@
                         case AssignmentStatus.Cancelled:
                             break;
                         case AssignmentStatus.Complete:
-                            if (payments[assignment.Id] == null)
+                            if (!isPaids[assignment.Id])
                             {
                                 <a class="btn btn-info btn-sm" href="/Admin/Assignment/Pay/@assignment.Id">Confirm Payment</a>
                             }

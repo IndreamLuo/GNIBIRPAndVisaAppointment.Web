@@ -336,7 +336,10 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
             ViewBag.Order = applicationManager.GetOrder(orderId);
 
             var application = applicationManager[orderId];
-            if (assignment.Status == AssignmentStatus.Closed && !isSignedIn)
+            if ((assignment.Status == AssignmentStatus.Closed
+                    || assignment.Status == AssignmentStatus.Cancelled
+                    || assignment.Status == AssignmentStatus.Rejected)
+                && !isSignedIn)
             {
                 application.GivenName = "Closed";
                 application.SurName = "Closed";
@@ -357,7 +360,8 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
             ViewBag.Application = application;
 
             var paymentManager = DomainHub.GetDomain<IPaymentManager>();
-            ViewBag.Payment = paymentManager.GetPayment(orderId);
+            ViewBag.Payments = paymentManager.GetPayments(orderId);
+            ViewBag.IsPaid = paymentManager.IsPaid(orderId);
 
             if (ViewBag.Payment != null)
             {
@@ -370,14 +374,17 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
         [Route("Appointment/{orderId}")]
         public async Task<IActionResult> Appointment(string orderId)
         {
-            if (!SignInManager.IsSignedIn(User) && DomainHub.GetDomain<IPaymentManager>().GetPayment(orderId) == null)
+            var applicationManager = DomainHub.GetDomain<IApplicationManager>();
+            var order = applicationManager.GetOrder(orderId);
+            var paymentManager = DomainHub.GetDomain<IPaymentManager>();
+
+            if (!SignInManager.IsSignedIn(User) && paymentManager.IsPaid(orderId))
             {
                 throw new InvalidOperationException("Not paid.");
             }
 
             ViewBag.ApplicationId = orderId;
 
-            var applicationManager = DomainHub.GetDomain<IApplicationManager>();
             ViewBag.Appointment = applicationManager.GetAppointmentLetter(orderId);
 
             var informationManager = DomainHub.GetDomain<IInformationManager>();
@@ -390,12 +397,15 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
         [Route("Download/{orderId}")]
         public async Task<IActionResult> Download(string orderId)
         {
-            if (!SignInManager.IsSignedIn(User) && DomainHub.GetDomain<IPaymentManager>().GetPayment(orderId) == null)
+            var applicationManager = DomainHub.GetDomain<IApplicationManager>();
+            var order = applicationManager.GetOrder(orderId);
+            var paymentManager = DomainHub.GetDomain<IPaymentManager>();
+
+            if (!SignInManager.IsSignedIn(User) && paymentManager.IsPaid(orderId))
             {
                 throw new InvalidOperationException("Not paid.");
             }
 
-            var applicationManager = DomainHub.GetDomain<IApplicationManager>();
             var appointmentLetter = applicationManager.GetAppointmentLetter(orderId);
 
             var informationManager = DomainHub.GetDomain<IInformationManager>();

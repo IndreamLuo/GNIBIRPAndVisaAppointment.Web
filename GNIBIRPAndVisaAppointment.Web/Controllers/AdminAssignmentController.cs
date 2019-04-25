@@ -43,12 +43,15 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
             ViewBag.Status = status;
 
             var paymentManager = DomainHub.GetDomain<IPaymentManager>();
-            var payments = new Dictionary<string, Payment>();
+            var payments = new Dictionary<string, List<Payment>>();
+            var isPaids = new Dictionary<string, bool>();
             foreach (var assignment in assignments)
             {
-                payments.Add(assignment.Id, paymentManager.GetPayment(assignment.Id));
+                payments.Add(assignment.Id, paymentManager.GetPayments(assignment.Id));
+                isPaids.Add(assignment.Id, paymentManager.IsPaid(assignment.Id));
             }
             ViewBag.Payments = payments;
+            ViewBag.IsPaids = isPaids;
 
             return View();
         }

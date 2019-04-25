@@ -4,7 +4,8 @@
     var assignment = ViewBag.Assignment;
     var order = ViewBag.Order;
     var application = ViewBag.Application;
-    var payment = ViewBag.Payment;
+    var payments = ViewBag.Payments;
+    var isPaid = ViewBag.isPaid;
     var AppointmentLetter = ViewBag.AppointmentLetter;
     
     ViewData["Title"] = $"{application.GivenName} {application.SurName} - ";
@@ -174,7 +175,7 @@
                     </div>
                     break;
                 case AssignmentStatus.Complete:
-                    if (payment == null)
+                    if (!isPaid)
                     {
                         <div class="alert alert-warning">
                             Your appointment is booked and uploaded. Please pay to download.
@@ -187,7 +188,7 @@
     <tr>
         <th>Payment</th>
         <td>
-            @if (payment == null)
+            @if (!isPaid)
             {
                 if (assignment.Status == AssignmentStatus.Complete || assignment.Status == AssignmentStatus.Closed)
                 {
@@ -197,17 +198,19 @@
                 {
                     <a class="btn btn-primary" target="_self" href="/Application/Checkout/@order.Id">Prepay</a>
                 }
+                <br />
             }
-            else
+            @foreach (var payment in payments)
             {
                 <span>@payment.Type: @payment.Amount @payment.Currency.ToUpper()</span>
+                <br />
             }
         </td>
     </tr>
     <tr>
         <th></th>
         <td>
-            @if (payment != null && (assignment.Status == AssignmentStatus.Complete || assignment.Status == AssignmentStatus.Closed))
+            @if (isPaid && (assignment.Status == AssignmentStatus.Complete || assignment.Status == AssignmentStatus.Closed))
             {
                 <a class="btn btn-success" target="_blank" href="/Application/Appointment/@order.Id">View Appointment Letter</a>
             }

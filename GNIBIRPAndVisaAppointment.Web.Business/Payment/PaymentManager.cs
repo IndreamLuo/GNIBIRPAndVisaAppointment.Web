@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using GNIBIRPAndVisaAppointment.Web.Business.Application;
 using GNIBIRPAndVisaAppointment.Web.DataAccess.Model.Storage;
@@ -83,14 +84,20 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Payment
             PaymentTable.Insert(payment);
         }
 
-        public DataAccess.Model.Storage.Payment GetPayment(string orderId)
+        public List<DataAccess.Model.Storage.Payment> GetPayments(string orderId)
         {
-            return PaymentTable[orderId].FirstOrDefault();
+            return PaymentTable[orderId];
         }
 
         public bool IsPaid(string orderId)
         {
-            return PaymentTable[orderId].Count > 0;
+            var applicationManager = DomainHub.GetDomain<IApplicationManager>();
+            var order = applicationManager.GetOrder(orderId);
+            var payments = PaymentTable[orderId];
+            var amount = payments
+                .Sum(payment => ExchangeHelper.ToEUR(payment.Currency, payment.Amount));
+
+            return amount == order.Amount;
         }
     }
 }
