@@ -402,7 +402,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
             var order = applicationManager.GetOrder(orderId);
             var paymentManager = DomainHub.GetDomain<IPaymentManager>();
 
-            if (!SignInManager.IsSignedIn(User) && paymentManager.IsPaid(orderId))
+            if (!SignInManager.IsSignedIn(User) && !paymentManager.IsPaid(orderId))
             {
                 throw new InvalidOperationException("Not paid.");
             }
