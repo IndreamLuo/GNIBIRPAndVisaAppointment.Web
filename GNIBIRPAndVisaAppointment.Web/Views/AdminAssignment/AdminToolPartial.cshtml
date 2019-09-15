@@ -1,0 +1,8 @@
+@model GNIBIRPAndVisaAppointment.Web.DataAccess.Model.Storage.Application
+@inject Microsoft.AspNetCore.Identity.SignInManager<GNIBIRPAndVisaAppointment.Web.Identity.ApplicationUser> SignInManager
+@inject Microsoft.AspNetCore.Identity.UserManager<GNIBIRPAndVisaAppointment.Web.Identity.ApplicationUser> UserManager
+
+@if (SignInManager.IsSignedIn(this.User) && (await UserManager.GetRolesAsync(await UserManager.GetUserAsync(this.User))).Contains("Admin"))
+{
+    <a class="btn btn-primary" href="/Application/Contact/@Model.Id">Contact</a>
+}

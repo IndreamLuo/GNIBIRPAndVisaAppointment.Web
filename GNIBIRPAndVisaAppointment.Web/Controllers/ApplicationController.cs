@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -12,6 +13,7 @@ using GNIBIRPAndVisaAppointment.Web.DataAccess.Model.Storage;
 using GNIBIRPAndVisaAppointment.Web.Identity;
 using GNIBIRPAndVisaAppointment.Web.Models;
 using GNIBIRPAndVisaAppointment.Web.Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -427,6 +429,41 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
             return File(Encoding.UTF8.GetBytes(appointmentLetterText),
                 "text/plain",
                 $"{appointmentLetter.Name} - INIS IRP Appointment Letter.txt");
+        }
+
+        [Authorize(Roles="Admin,Manager")]
+        [Route("Contact/{orderId}")]
+        public IActionResult Contact(string orderId)
+        {
+            var applicationManager = DomainHub.GetDomain<IApplicationManager>();
+            var application = applicationManager[orderId];
+            var assignment = applicationManager.GetAssignment(orderId);
+            var appointment = applicationManager.GetAppointmentLetter(orderId);
+            var informationManager = DomainHub.GetDomain<InformationManager>();
+            string emailTitle = string.Empty;
+            string emailContent = string.Empty;
+
+            if (assignment.Status == AssignmentStatus.Complete)
+            {
+                var email = informationManager["contact-email-complete"];
+                emailTitle = email.Title;
+                emailContent = email
+                    .Content
+                    .Replace("{data}", appointment.Time.ToString("dddd, dd MMMM"))
+                    .Replace("{id}", orderId);
+            }
+
+            var model = new List<ContactModel>();
+            
+            model.Add(new ContactModel
+            {
+                Contact = application.Email,
+                Title = emailTitle,
+                Content = emailContent,
+                IsHtml = true
+            });
+
+            return View(model);
         }
     }
 }

@@ -216,6 +216,12 @@
             }
         </td>
     </tr>
+    <tr>
+        <th></th>
+        <td>
+            @await Html.PartialAsync("../AdminAssignment/AdminToolPartial.cshtml", ViewBag.Application as GNIBIRPAndVisaAppointment.Web.DataAccess.Model.Storage.Application)
+        </td>
+    </tr>
 </table>
 
 @await Component.InvokeAsync("ApplicationAdminTool")
