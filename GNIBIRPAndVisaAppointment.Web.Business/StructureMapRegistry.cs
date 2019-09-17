@@ -7,6 +7,7 @@ using GNIBIRPAndVisaAppointment.Web.Business.Payment;
 using GNIBIRPAndVisaAppointment.Web.Business.User;
 using GNIBIRPAndVisaAppointment.Web.Business.Api;
 using GNIBIRPAndVisaAppointment.Web.Business.AppointmnetLetter;
+using GNIBIRPAndVisaAppointment.Web.Business.Email;
 
 namespace GNIBIRPAndVisaAppointment.Web.Business
 {
@@ -16,6 +17,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Business
         {
             For<IDomainHub>().Singleton().Use<DomainHub>();
             For<IConfigurationManager>().Singleton().Use<ConfigurationManager>();
+            For<IEmailApplication>().Singleton().Use<EmailApplication>();
             For<IInformationManager>().Singleton().Use<InformationManager>();
             For<IAppointmentManager>().Singleton().Use<AppointmentManager>();
             For<IApplicationManager>().Singleton().Use<ApplicationManager>();

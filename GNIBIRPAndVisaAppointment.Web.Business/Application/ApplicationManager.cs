@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using GNIBIRPAndVisaAppointment.Web.Business.AppointmnetLetter;
 using GNIBIRPAndVisaAppointment.Web.Business.Configuration;
+using GNIBIRPAndVisaAppointment.Web.Business.Email;
 using GNIBIRPAndVisaAppointment.Web.Business.Payment;
 using GNIBIRPAndVisaAppointment.Web.DataAccess.Model.Storage;
 using GNIBIRPAndVisaAppointment.Web.DataAccess.Storage;
@@ -116,6 +117,9 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Application
             assignment.PartitionKey = assignment.RowKey;
             assignment.RowKey = AssignmentStatus.Tracked;
             AssignmentTable.Insert(assignment);
+
+            var emailApplication = DomainHub.GetDomain<IEmailApplication>();
+            emailApplication.NotifyApplicationChangedAsync(orderId, assignment.Status).Wait();
         }
 
         public void Accept(string orderId)
