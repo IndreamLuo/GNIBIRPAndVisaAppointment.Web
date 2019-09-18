@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using GNIBIRPAndVisaAppointment.Web.Business.Application;
+using GNIBIRPAndVisaAppointment.Web.Business.Email;
 using GNIBIRPAndVisaAppointment.Web.DataAccess.Model.Storage;
 using GNIBIRPAndVisaAppointment.Web.DataAccess.Storage;
 using GNIBIRPAndVisaAppointment.Web.Utility;
@@ -62,6 +63,14 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Payment
                 };
                 
                 PaymentTable.Insert(payment);
+
+                var assignment = applicationManager.GetAssignment(orderId);
+
+                if (assignment.Status == AssignmentStatus.Complete)
+                {
+                    var emailApplication = DomainHub.GetDomain<IEmailApplication>();
+                    emailApplication.NotifyApplicationChangedAsync(orderId, assignment.Status);
+                }
             }
 
             return charge.Paid;

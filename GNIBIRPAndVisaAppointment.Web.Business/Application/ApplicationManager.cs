@@ -237,6 +237,9 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Application
             {
                 NotifyWorkerUpdateAsync();
             }
+
+            var emailApplication = DomainHub.GetDomain<IEmailApplication>();
+            emailApplication.NotifyApplicationChangedAsync(orderId, assignment.Status);
         }
 
         public Assignment GetAssignment(string orderId)
