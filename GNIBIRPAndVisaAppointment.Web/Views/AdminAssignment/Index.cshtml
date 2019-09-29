@@ -7,7 +7,7 @@
     var isPaids = ViewBag.IsPaids;
 }
 
-<table class="table table-sm">
+<table class="table table-sm table-striped">
     <thead>
         <tr>
             <nav>
@@ -137,6 +137,11 @@
                             }
                             break;
                     }
+                </td>
+            </tr>
+            <tr>
+                <td colspan="8">
+                    @assignment.Application.Comment
                 </td>
             </tr>
         }
