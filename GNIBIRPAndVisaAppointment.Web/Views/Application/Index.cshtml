@@ -34,6 +34,7 @@
 </nav>
 
 <form method="post">
+    <input type="hidden" name="IsInitialized" value="true">
     <h2 class="mt-5 mb-4">Appointment Info</h2>
     <div class="container content">
         <div class="form-group">
@@ -93,29 +94,9 @@
             <span asp-validation-for="GNIBExDT" class="form-text text-danger"></span>
         </div>
 
-        <div class="form-group alert alert-warning">
-            <div>
-                I confirm that I understand the conditions of my permission. Conditions available on <a href="http://www.inis.gov.ie/en/INIS/Pages/registration-stamps">Permission, stamps &amp; conditions.</a> 
-            </div>
-            <div>
-                <p>
-                    You must confirm that ALL of the following statements are true:
-                </p>
-                <ol>
-                    <li>I confirm I have selected the Category and Sub-Category that applies to me. </li>
-                    <li>I confirm that I understand the conditions of my permission.</li>
-                </ol>
-                <p>
-                    Conditions available on <a href="http://www.inis.gov.ie/en/INIS/Pages/registration-stamps">INIS website.</a> 
-                </p>
-            </div>
-        </div>
-        <div class="alert alert-secondary">
-            <div>
-                <input type="checkbox" name="UsrDeclaration" value="true" id="UsrDeclaration" @Html.Raw(Model.UsrDeclaration ? "checked" : string.Empty) />
-                I confirm that all of the above statements are true.
-            </div>
-            <span asp-validation-for="UsrDeclaration" class="form-text text-danger"></span>
+        <div class="alert alert-warning">
+            If you don't have an old GNIB/IRP number you may uncheck it.
+            But if you do have you'd better to put it in which makes getting your appointment much faster.
         </div>
 
         <div class="form-group">
@@ -137,184 +118,11 @@
         <div class="form-group">
             <label for="Nationality" class="control-label">Nationality:</label>
             <select name="Nationality" value="@Model.Nationality" id="Nationality" class="form-control" placeholder="Select...">
-                <option>Select...
-                </option><option>Afghanistan, Islamic Republic of
-                </option><option>Albania, Republic of
-                </option><option>Algeria, People's Democratic Republic of
-                </option><option>Angola, Republic of
-                </option><option>Anguilla
-                </option><option>Antigua and Barbuda
-                </option><option>Argentina
-                </option><option>Armenia, Republic of
-                </option><option>Aruba
-                </option><option>Australia
-                </option><option>Azerbaijan, Republic of
-                </option><option>Bahamas
-                </option><option>Bahrain, Kingdom of
-                </option><option>Bangladesh
-                </option><option>Bangladesh, People's Republic of
-                </option><option>Barbados
-                </option><option>Belarus, Republic of
-                </option><option>Belize
-                </option><option>Benin, Republic of
-                </option><option>Bermuda
-                </option><option>Bhutan, Kingdom of
-                </option><option>Bolivia
-                </option><option>Bosnia and Herzegovina
-                </option><option>Botswana
-                </option><option>Brazil
-                </option><option>British Virgin Islands
-                </option><option>Brunei
-                </option><option>Burkina Faso
-                </option><option>Burma/Myanmar
-                </option><option>Burma/Republic of the Union of Myanmar
-                </option><option>Burundi, Republic of
-                </option><option>Cambodia, Kingdom of
-                </option><option>Cameroon, Republic of
-                </option><option>Canada
-                </option><option>Cape Verde, Republic of
-                </option><option>Cayman Islands
-                </option><option>Central African Republic
-                </option><option>Chad, Republic of
-                </option><option>Chile
-                </option><option>China, People's Republic of
-                </option><option>Colombia, Republic of
-                </option><option>Comoros, Union of the
-                </option><option>Congo, Democratic Republic of
-                </option><option>Congo, Republic of (Brazzaville)
-                </option><option>Costa Rica
-                </option><option>Cote d'Ivoire, republic of ivory coast
-                </option><option>Cuba, Republic of
-                </option><option>Djibouti, Republic of
-                </option><option>Dominica
-                </option><option>Dominican Republic
-                </option><option>Ecuador, Republic of
-                </option><option>Egypt, arab republic of
-                </option><option>El Salvador
-                </option><option>Equatorial Guinea, Republic of
-                </option><option>Eritrea, State of
-                </option><option>Ethiopia, Federal democratic republic of
-                </option><option>Falkland Islands
-                </option><option>Fiji
-                </option><option>Gabon, Republic of
-                </option><option>Gambia, Republic of
-                </option><option>Georgia
-                </option><option>Ghana, Republic of
-                </option><option>Greenland
-                </option><option>Grenada
-                </option><option>Guatemala
-                </option><option>Guinea-Bissau, Republic of
-                </option><option>Guinea, Republic of
-                </option><option>Guyana
-                </option><option>Haiti, Republic of
-                </option><option>Honduras
-                </option><option>Hong Kong
-                </option><option>India, Republic of
-                </option><option>Indonesia, Republic of
-                </option><option>Iran, Islamic Republic of
-                </option><option>Iraq, Republic of
-                </option><option>Israel
-                </option><option>Jamaica
-                </option><option>Japan
-                </option><option>Jordan, Hashemite Kingdom of
-                </option><option>Kazakhstan, Republic of
-                </option><option>Kenya, Republic of
-                </option><option>Kiribati
-                </option><option>Korea (North), Democratic Republic of
-                </option><option>Kosovo, Republic of
-                </option><option>Kuwait, State of
-                </option><option>Kyrgyzstan
-                </option><option>Laos People's Republic of
-                </option><option>Lebanon, Republic of
-                </option><option>Lesotho
-                </option><option>Liberia, Republic of
-                </option><option>Libya, State of
-                </option><option>Macao
-                </option><option>Macedonia, The former Yuoslav Republic of
-                </option><option>Madagascar, Republic of
-                </option><option>Malawi
-                </option><option>Malaysia
-                </option><option>Maldives
-                </option><option>Mali, Republic of
-                </option><option>Marshall Islands, Republic of
-                </option><option>Mauritania, Islamic Republic of
-                </option><option>Mauritius, Republic of
-                </option><option>Mexico
-                </option><option>Micronesia, Federated States of
-                </option><option>Moldova, Republic of
-                </option><option>Mongolia
-                </option><option>Montenegro
-                </option><option>Montserrat
-                </option><option>Morocco, Kingdom of
-                </option><option>Mozambique, Republic of
-                </option><option>Namibia, Republic of
-                </option><option>Nauru
-                </option><option>Nepal, Federal Democratic Republic of
-                </option><option>New Zealand
-                </option><option>Nicaragua
-                </option><option>Nigeria, Federal Republic of
-                </option><option>Niger, Republic of
-                </option><option>Oman, Sultanate of
-                </option><option>Pakistan, Islamic Republic of
-                </option><option>Palau, Republic of
-                </option><option>Palestinian National Authority
-                </option><option>Panama
-                </option><option>Papua New Guinea
-                </option><option>Paraguay
-                </option><option>Peru, republic of
-                </option><option>Philippines, Republic of
-                </option><option>Pitcairn Island
-                </option><option>Qatar, State of
-                </option><option>Russian Federation
-                </option><option>Rwanda, Republic of
-                </option><option>Saint-Barthelemy
-                </option><option>Samoa
-                </option><option>Sao Tome and Principe, Democratic Republic of
-                </option><option>Saudi Arabia, Kingdom of
-                </option><option>Senegal, Republic of
-                </option><option>Serbia, Republic of
-                </option><option>Seychelles
-                </option><option>Sierra Leone, Republic of
-                </option><option>Singapore
-                </option><option>Solomon Islands
-                </option><option>Somalia, Federal Republic of
-                </option><option>South Africa
-                </option><option>South Korea
-                </option><option>Sri Lanka, Democratic Socialist Republic of
-                </option><option>St Helena, Ascension and Tristan da Cunha
-                </option><option>St Kitts and Nevis
-                </option><option>St Lucia
-                </option><option>St Martin
-                </option><option>St Vincent and The Grenadines
-                </option><option>Sudan, Republic of the
-                </option><option>Suriname, Republic of
-                </option><option>Swaziland
-                </option><option>Syrian Arab Republic
-                </option><option>Taiwan
-                </option><option>Tajikistan
-                </option><option>Tanzania
-                </option><option>Thailand, Kingdom of
-                </option><option>Timor-Leste, Democratic Republic of
-                </option><option>Togo, Republic of
-                </option><option>Tonga
-                </option><option>Trinidad and Tobago
-                </option><option>Tunisia, Republic of
-                </option><option>Turkey, Republic of
-                </option><option>Turkmenistan
-                </option><option>Turks and Caicos Islands
-                </option><option>Tuvalu
-                </option><option>Uganda, Republic of
-                </option><option>Ukraine
-                </option><option>United Arab Emirates
-                </option><option>United States
-                </option><option>Uruguay
-                </option><option>Uzbekistan, Republic of
-                </option><option>Vanuatu
-                </option><option>Venezuela (Bolivarian Republic of)
-                </option><option>Vietnam, Socialist Republic of
-                </option><option>Yemen, Republic of
-                </option><option>Zambia, Republic of
-                </option><option>Zimbabwe, Republic of</option>
+                <option value="">Select...</option>
+                @foreach (var nationality in ApplicationModel.Nationalities)
+                {
+                    <option value="@nationality">@nationality</option>
+                }
             </select>
             <span asp-validation-for="Nationality" class="form-text text-danger"></span>
         </div>
@@ -332,7 +140,7 @@
         </div>
 
         <div class="form-group">
-            <label class="control-label">This is a family application:</label>
+            <label class="control-label">If this is a family appointment, select the total number of family:</label>
             <div class="input-group">
                 <div class="input-group-prepend">
                     <span class="input-group-text">
@@ -340,7 +148,6 @@
                     </span>
                 </div>
                 <select name="FamAppNo" value="@Model.FamAppNo" id="FamAppNo" class="form-control" placeholder="Select...">
-                    <option value="1">1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
                     <option value="4">4</option>
@@ -406,7 +213,32 @@
     </div>
 
     <div class="container content">
-        <div class="alert alert-danger">
+        <div class="form-group alert alert-secondary">
+            <div>
+                I confirm that I understand the conditions of my permission. Conditions available on <a href="http://www.inis.gov.ie/en/INIS/Pages/registration-stamps">Permission, stamps &amp; conditions.</a> 
+            </div>
+            <div>
+                <p>
+                    You must confirm that ALL of the following statements are true:
+                </p>
+                <ol>
+                    <li>I confirm I have selected the Category and Sub-Category that applies to me. </li>
+                    <li>I confirm that I understand the conditions of my permission.</li>
+                </ol>
+                <p>
+                    Conditions available on <a href="http://www.inis.gov.ie/en/INIS/Pages/registration-stamps">INIS website.</a> 
+                </p>
+            </div>
+        </div>
+        <div class="alert alert-warning">
+            <div>
+                <input type="checkbox" name="UsrDeclaration" value="true" id="UsrDeclaration" @Html.Raw(Model.UsrDeclaration ? "checked" : string.Empty) />
+                I confirm that all of the above statements are true.
+            </div>
+            <span asp-validation-for="UsrDeclaration" class="form-text text-danger"></span>
+        </div>
+
+        <div class="alert alert-warning">
             <input type="checkbox" value="true" name="AuthorizeDataUsage" id="AuthorizeDataUsage" />
             I authorize the use of personal data for the services of making GNIB/IRP appointment.
         </div>
@@ -432,7 +264,7 @@
     </div>
 </form>
 
-<h1 class="mt-5"></h1>
+<hr class="m-5" />
 <div class="fb-comments" data-href="http://gnibirpvisa.ie/Application" data-order-by="reverse_time" width="100%" data-numposts="20"></div>
 
 @section scripts {
