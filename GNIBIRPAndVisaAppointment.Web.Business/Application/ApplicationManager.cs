@@ -199,16 +199,17 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Application
         }
 
         static Dictionary<string, DateTime> UpdateAssignmentBuffer = new Dictionary<string, DateTime>();
+        const int UpdateTaskDelaySeconds = 4;
 
         protected async Task UpdataAssignmentStatus(string orderId, string fromStatus, string toStatus)
         {
             lock(UpdateAssignmentBuffer)
             {
-                if (UpdateAssignmentBuffer.ContainsKey(orderId) && (DateTime.Now - UpdateAssignmentBuffer[orderId]).TotalSeconds < 2)
+                if (UpdateAssignmentBuffer.ContainsKey(orderId) && (DateTime.Now - UpdateAssignmentBuffer[orderId]).TotalSeconds < UpdateTaskDelaySeconds)
                 {
                     Task.Run(async () =>
                     {
-                        await Task.Delay(2000);
+                        await Task.Delay(UpdateTaskDelaySeconds * 1000);
                         UpdataAssignmentStatus(orderId, fromStatus, toStatus);
                     }).Start();
                     
