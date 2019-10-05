@@ -21,23 +21,31 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
         }
 
         [HttpPost]
-        [Route("Assignment/Accepted")]
-        public IActionResult AssignmentAccepted(string token)
+        [Route("Assignment/{status}")]
+        public IActionResult AssignmentInStatus(string token, string status)
         {
-            var apiManager = DomainHub.GetDomain<IApiManager>();
-            if (apiManager.VerifyToken(token))
+            switch (status)
             {
-                var applicationManager = DomainHub.GetDomain<IApplicationManager>();
-                var assignments = applicationManager
-                    .GetAssignments(AssignmentStatus.Accepted, true)
-                    .Select(assignment =>
+                case AssignmentStatus.Pending:
+                case AssignmentStatus.Accepted:
+                case AssignmentStatus.Appointed:
+                case AssignmentStatus.Duplicated:
+                    var apiManager = DomainHub.GetDomain<IApiManager>();
+                    if (apiManager.VerifyToken(token))
                     {
-                        var assignmentModel = new AssignmentModel(assignment);
-                        assignmentModel.Order.AnyCategory = true;
-                        return assignmentModel;
-                    });
-                
-                return Json(assignments);
+                        var applicationManager = DomainHub.GetDomain<IApplicationManager>();
+                        var assignments = applicationManager
+                            .GetAssignments(status, true)
+                            .Select(assignment =>
+                            {
+                                var assignmentModel = new AssignmentModel(assignment);
+                                assignmentModel.Order.AnyCategory = true;
+                                return assignmentModel;
+                            });
+                        
+                        return Json(assignments);
+                    }
+                    break;
             }
             
             return Accepted();
