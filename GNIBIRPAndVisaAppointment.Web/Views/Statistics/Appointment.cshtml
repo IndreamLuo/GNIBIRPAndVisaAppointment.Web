@@ -14,7 +14,26 @@
     public string vailabilityTd(int validAppointments, int publishAppointments, double totalContinuous)
     {
         var vailability = appointmentVailability(validAppointments, publishAppointments, totalContinuous);
-        return $"<td vailability=\"{vailability}\">{(vailability < 0.01 ? string.Empty : $"{vailability:F0}%")}</td>";
+        string style;
+
+        if (vailability >= 40)
+        {
+            style = "success";
+        }
+        else if (vailability >= 20)
+        {
+            style = "warning";
+        }
+        else if (vailability >= 1)
+        {
+            style = "danger";
+        }
+        else
+        {
+            style = "secondary";
+        }
+
+        return $"<td class=\"table-{style}\" vailability=\"{vailability}\">{(vailability < 0.01 ? string.Empty : $"{vailability:F0}%")}</td>";
     }
 }
 
@@ -25,24 +44,24 @@
 <table class="table table-sm text-center">
     <thead>
         <tr>
-            <th rowspan="3"></th>
-            <th colspan="2" class="table-danger">Work</th>
+            <th rowspan="3" style="width: 100px"></th>
+            <!-- <th colspan="2" class="table-danger">Work</th>
             <th colspan="2" class="table-danger">Study</th>
-            <th colspan="2" class="table-danger">Other</th>
-            <th colspan="2" class="table-danger">All</th>
+            <th colspan="2" class="table-danger">Other</th> -->
+            <th colspan="2" class="table-primary">All</th>
             <!-- <th rowspan="2" class="table-success align-middle">Individual</th>
             <th rowspan="2" class="table-success align-middle">Family</th> -->
             <!-- <th rowspan="2" class="table-success align-middle">Emergency</th> -->
         </tr>
         <tr>
-            <th class="table-danger">New</th>
+            <!-- <th class="table-danger">New</th>
             <th class="table-danger">Renew</th>
             <th class="table-danger">New</th>
             <th class="table-danger">Renew</th>
             <th class="table-danger">New</th>
-            <th class="table-danger">Renew</th>
-            <th class="table-danger">New</th>
-            <th class="table-danger">Renew</th>
+            <th class="table-danger">Renew</th> -->
+            <th class="table-info">New</th>
+            <th class="table-info">Renew</th>
         </tr>
         <tr>
             
@@ -64,12 +83,12 @@
                 <th>
                     @time.ToString("HH : mm")
                 </th>
-                @Html.Raw(vailabilityTd(statistics.ValidIRPWorkNew, statistics.PublishIRPWorkNew, statistics.TotalContinuousIRPWorkNew))
+                <!-- @Html.Raw(vailabilityTd(statistics.ValidIRPWorkNew, statistics.PublishIRPWorkNew, statistics.TotalContinuousIRPWorkNew))
                 @Html.Raw(vailabilityTd(statistics.ValidIRPWorkRenew, statistics.PublishIRPWorkRenew, statistics.TotalContinuousIRPWorkRenew))
                 @Html.Raw(vailabilityTd(statistics.ValidIRPStudyNew, statistics.PublishIRPStudyNew, statistics.TotalContinuousIRPStudyNew))
                 @Html.Raw(vailabilityTd(statistics.ValidIRPStudyRenew, statistics.PublishIRPStudyRenew, statistics.TotalContinuousIRPStudyRenew))
                 @Html.Raw(vailabilityTd(statistics.ValidIRPOtherNew, statistics.PublishIRPOtherNew, statistics.TotalContinuousIRPOtherNew))
-                @Html.Raw(vailabilityTd(statistics.ValidIRPOtherRenew, statistics.PublishIRPOtherRenew, statistics.TotalContinuousIRPOtherRenew))
+                @Html.Raw(vailabilityTd(statistics.ValidIRPOtherRenew, statistics.PublishIRPOtherRenew, statistics.TotalContinuousIRPOtherRenew)) -->
                 @Html.Raw(vailabilityTd(statistics.ValidIRPAllNew, statistics.PublishIRPAllNew, statistics.TotalContinuousIRPAllNew))
                 @Html.Raw(vailabilityTd(statistics.ValidIRPAllRenew, statistics.PublishIRPAllRenew, statistics.TotalContinuousIRPAllRenew))
                 <!--
