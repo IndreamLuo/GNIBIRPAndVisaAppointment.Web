@@ -43,7 +43,7 @@ namespace GNIBIRPAndVisaAppointment.Web
 
             services.Configure<IdentityOptions>(options =>
             {
-                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromHours(4);
                 options.Lockout.MaxFailedAccessAttempts = 50;
             });
 
