@@ -57,55 +57,55 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
         }
 
         [Route("Accept/{id}")]
-        public IActionResult Accept(string id)
+        public IActionResult Accept(string id, string returnUrl)
         {
             var applicationManager = DomainHub.GetDomain<IApplicationManager>();
             applicationManager.Accept(id);
-            return RedirectToAction("Index");
+            return Redirect(returnUrl ?? "/Admin/Assignment/Index");
         }
 
         [Route("Reaccept/{id}")]
-        public IActionResult Reaccept(string id)
+        public IActionResult Reaccept(string id, string returnUrl)
         {
             var applicationManager = DomainHub.GetDomain<IApplicationManager>();
             applicationManager.Reaccept(id);
-            return Redirect("/Admin/Assignment/Appointed");
+            return Redirect(returnUrl ?? "/Admin/Assignment/Appointed");
         }
 
         [Route("Duplicate/{id}")]
-        public IActionResult Duplicate(string id)
+        public IActionResult Duplicate(string id, string returnUrl)
         {
             var applicationManager = DomainHub.GetDomain<IApplicationManager>();
             applicationManager.Duplicate(id);
-            return Redirect("/Admin/Assignment/Accepted");
+            return Redirect(returnUrl ?? "/Admin/Assignment/Accepted");
         }
 
         [Route("Cancel/{id}")]
-        public IActionResult Cancel(string id)
+        public IActionResult Cancel(string id, string returnUrl)
         {
             var applicationManager = DomainHub.GetDomain<IApplicationManager>();
             applicationManager.Cancel(id);
-            return Redirect("/Admin/Assignment/Appointed");
+            return Redirect(returnUrl ?? "/Admin/Assignment/Appointed");
         }
 
         [Route("Reject/{id}")]
-        public IActionResult Reject(string id)
+        public IActionResult Reject(string id, string returnUrl)
         {
             var applicationManager = DomainHub.GetDomain<IApplicationManager>();
             applicationManager.Reject(id);
-            return RedirectToAction("Index");
+            return Redirect(returnUrl ?? "/Admin/Assignment/Index");
         }
 
         [Route("Appoint/{id}")]
-        public IActionResult Appoint(string id)
+        public IActionResult Appoint(string id, string returnUrl)
         {
             var applicationManager = DomainHub.GetDomain<IApplicationManager>();
             applicationManager.Appoint(id);
-            return Redirect("/Admin/Assignment/Accepted");
+            return Redirect(returnUrl ?? "/Admin/Assignment/Accepted");
         }
 
         [Route("Complete/{assignmentId}/{emailId?}")]
-        public IActionResult Complete(AppointmentLetterModel model, string emailId)
+        public IActionResult Complete(AppointmentLetterModel model, string emailId, string returnUrl)
         {
             var applicationManager = DomainHub.GetDomain<IApplicationManager>();
             var application = applicationManager[model.AssignmentId];
@@ -141,7 +141,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
                 {
                     applicationManager.Complete(model.AssignmentId, model.AppointmentNo, time, model.Name, model.Category, model.SubCategory);
                 }
-                return Redirect("/Admin/Assignment/Appointed");
+                return Redirect(returnUrl ?? "/Admin/Assignment/Appointed");
             }
             else if (!string.IsNullOrEmpty(model.Content))
             {
@@ -163,26 +163,28 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
                 model.SubCategory = application.SubCategory;
             }
 
+            ViewBag.ReturnUrl = returnUrl;
+
             return View(model);
         }
 
         [Route("Close/{id}")]
-        public IActionResult Close(string id)
+        public IActionResult Close(string id, string returnUrl)
         {
             var applicationManager = DomainHub.GetDomain<IApplicationManager>();
             applicationManager.Close(id);
-            return Redirect("/Admin/Assignment/Complete");
+            return Redirect(returnUrl ?? "/Admin/Assignment/Complete");
         }
 
         [Authorize(Roles="Admin,Manager")]
         [Route("Pay/{assignmentId}")]
-        public IActionResult Pay(AssignmentPayModel model)
+        public IActionResult Pay(AssignmentPayModel model, string returnUrl)
         {
             if (ModelState.IsValid)
             {
                 var paymentManager = DomainHub.GetDomain<IPaymentManager>();
                 paymentManager.AdminPay(model.AssignmentId, model.ChargeId, model.Type, model.Currency, model.Amount, model.Payer);
-                return Redirect("/Admin/Assignment/Complete");
+                return Redirect(returnUrl ?? "/Admin/Assignment/Complete");
             }
 
             return View(model);

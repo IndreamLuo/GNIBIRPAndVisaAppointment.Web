@@ -219,9 +219,13 @@
     <tr>
         <th></th>
         <td>
-            @await Html.PartialAsync("../AdminAssignment/AdminToolPartial.cshtml", ViewBag.Application as GNIBIRPAndVisaAppointment.Web.DataAccess.Model.Storage.Application)
+            @await Html.PartialAsync("../AdminAssignment/AdminToolPartial.cshtml", new ViewDataDictionary(new Microsoft.AspNetCore.Mvc.ModelBinding.EmptyModelMetadataProvider(), new Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary())
+            {
+                { "Id", assignment.Id },
+                { "Status", assignment.Status },
+                { "IsPaid", isPaid },
+                { "ReturnUrl", "/Application/Status/" + assignment.Id }
+            })
         </td>
     </tr>
 </table>
-
-@await Component.InvokeAsync("ApplicationAdminTool")

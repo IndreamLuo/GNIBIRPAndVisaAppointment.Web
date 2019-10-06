@@ -1,10 +1,14 @@
-@model GNIBIRPAndVisaAppointment.Web.DataAccess.Model.Storage.Application
+@{
+    var id = ViewData["Id"];
+}
 @inject Microsoft.AspNetCore.Identity.SignInManager<GNIBIRPAndVisaAppointment.Web.Identity.ApplicationUser> SignInManager
 @inject Microsoft.AspNetCore.Identity.UserManager<GNIBIRPAndVisaAppointment.Web.Identity.ApplicationUser> UserManager
 
 @if (SignInManager.IsSignedIn(this.User) && (await UserManager.GetRolesAsync(await UserManager.GetUserAsync(this.User))).Contains("Admin"))
 {
-    <a class="btn btn-primary" href="/Application/Contact/@Model.Id">Contact</a>
-    <a class="btn btn-primary" href="/Application/Order/@Model.Id">Order</a>
-    <a class="btn btn-primary" href="/Application/Appointment/@Model.Id">Appointment</a>
+    <a class="btn btn-primary" href="/Application/Contact/@id">Contact</a>
+    <a class="btn btn-primary" href="/Application/Order/@id">Order</a>
+    <a class="btn btn-primary" href="/Application/Appointment/@id">Appointment</a>
+    <hr>
+    @Html.Partial("/Views/AdminAssignment/OperationButtonsPartial.cshtml", new ViewDataDictionary(ViewData))
 }

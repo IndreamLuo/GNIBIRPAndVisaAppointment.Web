@@ -4,6 +4,7 @@
 }
 
 <form method="POST">
+    <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
     <div class="form-group">
         <label for="AppointmentNo">Appointment No.</label>
         <input class="form-control" id="AppointmentNo" name="AppointmentNo" type="text" value="@Model.AppointmentNo" placeholder="EXTW-XXXXXXXXX" />
