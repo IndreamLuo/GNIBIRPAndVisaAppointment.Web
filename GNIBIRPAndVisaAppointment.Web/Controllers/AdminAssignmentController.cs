@@ -61,7 +61,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
         {
             var applicationManager = DomainHub.GetDomain<IApplicationManager>();
             applicationManager.Accept(id);
-            return Redirect(returnUrl ?? "/Admin/Assignment/Index");
+            return Redirect(returnUrl ?? "/Admin/Assignment/Pending");
         }
 
         [Route("Reaccept/{id}")]
@@ -93,7 +93,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
         {
             var applicationManager = DomainHub.GetDomain<IApplicationManager>();
             applicationManager.Reject(id);
-            return Redirect(returnUrl ?? "/Admin/Assignment/Index");
+            return Redirect(returnUrl ?? "/Admin/Assignment/Pending");
         }
 
         [Route("Appoint/{id}")]
