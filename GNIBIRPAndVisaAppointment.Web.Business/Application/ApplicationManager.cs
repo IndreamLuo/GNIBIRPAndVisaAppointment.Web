@@ -199,7 +199,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Application
         }
 
         static Dictionary<string, DateTime> UpdateAssignmentBuffer = new Dictionary<string, DateTime>();
-        const int UpdateTaskDelaySeconds = 4;
+        const int UpdateTaskDelaySeconds = 2;
 
         protected async Task UpdataAssignmentStatus(string orderId, string fromStatus, string toStatus)
         {
@@ -221,26 +221,29 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Application
 
             var assignment = AssignmentTable[fromStatus, orderId];
 
-            AssignmentTable.Delete(assignment);
-
-            assignment.ETag = "*";
-            assignment.Status = toStatus;
-            assignment.PartitionKey = assignment.Status;
-
-            AssignmentTable.Insert(assignment);
-
-            var trackedAssignment = GetAssignment(orderId);
-            trackedAssignment.Status = toStatus;
-            
-            AssignmentTable.Replace(trackedAssignment);
-
-            if (fromStatus == AssignmentStatus.Accepted || toStatus == AssignmentStatus.Accepted)
+            if (assignment != null)
             {
-                NotifyWorkerUpdateAsync();
-            }
+                AssignmentTable.Delete(assignment);
 
-            var emailApplication = DomainHub.GetDomain<IEmailApplication>();
-            emailApplication.NotifyApplicationChangedAsync(orderId, assignment.Status);
+                assignment.ETag = "*";
+                assignment.Status = toStatus;
+                assignment.PartitionKey = assignment.Status;
+
+                AssignmentTable.Insert(assignment);
+
+                var trackedAssignment = GetAssignment(orderId);
+                trackedAssignment.Status = toStatus;
+                
+                AssignmentTable.Replace(trackedAssignment);
+
+                if (fromStatus == AssignmentStatus.Accepted || toStatus == AssignmentStatus.Accepted)
+                {
+                    NotifyWorkerUpdateAsync();
+                }
+
+                var emailApplication = DomainHub.GetDomain<IEmailApplication>();
+                emailApplication.NotifyApplicationChangedAsync(orderId, assignment.Status);
+            }
         }
 
         public Assignment GetAssignment(string orderId)

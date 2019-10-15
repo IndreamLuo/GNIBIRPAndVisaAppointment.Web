@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using GNIBIRPAndVisaAppointment.Web.Business;
 using GNIBIRPAndVisaAppointment.Web.Business.Api;
 using GNIBIRPAndVisaAppointment.Web.Business.Application;
@@ -69,12 +70,17 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
         [Route("Assignment/Duplicate")]
         public IActionResult AssignmentDuplicate(string token, string id)
         {
-            var apiManager = DomainHub.GetDomain<IApiManager>();
-            if (apiManager.VerifyToken(token))
+            Task.Run(async () =>
             {
-                var applicationManager = DomainHub.GetDomain<IApplicationManager>();
-                applicationManager.Duplicate(id);
-            }
+                await Task.Delay(60 * 1000);
+
+                var apiManager = DomainHub.GetDomain<IApiManager>();
+                if (apiManager.VerifyToken(token))
+                {
+                    var applicationManager = DomainHub.GetDomain<IApplicationManager>();
+                    applicationManager.Duplicate(id);
+                }
+            });
 
             return Accepted();
         }
