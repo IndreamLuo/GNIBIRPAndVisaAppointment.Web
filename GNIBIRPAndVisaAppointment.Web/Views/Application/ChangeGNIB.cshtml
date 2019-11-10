@@ -1,0 +1,32 @@
+@model GNIBIRPAndVisaAppointment.Web.Models.Application.ChangeGNIBModel
+
+<form method="POST">
+    <input type="hidden" name="IsInitialazed" value="@Model.IsInitialazed.ToString()">
+    <div class="form-group">
+        <label class="control-label">Has GNIB(IRP) No:</label>
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text">
+                    <input name="HasGNIB" id="HasGNIB" value="true" type="checkbox" @(Model.HasGNIB ? "checked" : string.Empty)>
+                </span>
+            </div>
+            <input name="GNIBNo" id="GNIBNo" value="@Model.GNIBNo" class="form-control" placeholder="GNIB number">
+            <input name="GNIBExDT" value="@Model.GNIBExDT" id="GNIBExDT" class="form-control" placeholder="Expire: 30/03/2018">
+        </div>
+        <span asp-validation-for="GNIBNo" class="form-text text-danger"></span>
+        <span asp-validation-for="GNIBExDT" class="form-text text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-success">Submit</button>
+</form>
+
+@section scripts {
+    <script type="text/javascript">
+        $(function () {
+            var setGNIB = function () {
+                $([GNIBNo, GNIBExDT]).prop('disabled', !HasGNIB.checked);
+            }
+            $(HasGNIB).change(setGNIB);
+            setGNIB();
+        })
+    </script>
+}

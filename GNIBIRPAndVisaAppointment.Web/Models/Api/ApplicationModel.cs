@@ -1,11 +1,10 @@
 using System;
-using GNIBIRPAndVisaAppointment.Web.DataAccess.Model.Storage;
 
 namespace GNIBIRPAndVisaAppointment.Web.Models.Api
 {
     public class ApplicationModel
     {
-        public ApplicationModel(Application entity)
+        public ApplicationModel(GNIBIRPAndVisaAppointment.Web.DataAccess.Model.Storage.Application entity)
         {
             Time = entity.Time;
             Category = entity.Category;

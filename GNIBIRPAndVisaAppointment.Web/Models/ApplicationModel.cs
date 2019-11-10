@@ -1,6 +1,4 @@
-using System;
 using System.ComponentModel.DataAnnotations;
-using GNIBIRPAndVisaAppointment.Web.DataAccess.Model.Storage;
 
 namespace GNIBIRPAndVisaAppointment.Web.Models
 {
@@ -8,7 +6,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Models
     {
         public ApplicationModel() { }
 
-        public ApplicationModel(Application application)
+        public ApplicationModel(GNIBIRPAndVisaAppointment.Web.DataAccess.Model.Storage.Application application)
         {
 
         }

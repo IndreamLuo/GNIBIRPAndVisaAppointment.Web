@@ -12,6 +12,7 @@ using GNIBIRPAndVisaAppointment.Web.Business.Payment;
 using GNIBIRPAndVisaAppointment.Web.DataAccess.Model.Storage;
 using GNIBIRPAndVisaAppointment.Web.Identity;
 using GNIBIRPAndVisaAppointment.Web.Models;
+using GNIBIRPAndVisaAppointment.Web.Models.Application;
 using GNIBIRPAndVisaAppointment.Web.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
@@ -470,6 +471,49 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
                 Content = emailContent,
                 IsHtml = true
             });
+
+            return View(model);
+        }
+
+        [Route("ChangeGNIB/{Id}")]
+        public IActionResult ChangeGNIB(ChangeGNIBModel model)
+        {
+            var applicationManager = DomainHub.GetDomain<IApplicationManager>();
+
+            if (!model.IsInitialazed)
+            {
+                var application = applicationManager[model.Id];
+                model.HasGNIB = application.ConfirmGNIB == "Renewal";
+                model.GNIBNo = application.GNIBNo;
+                model.GNIBExDT = application.GNIBExDT;
+            }
+            else
+            {
+                if (model.HasGNIB)
+                {
+                    if (string.IsNullOrEmpty(model.GNIBNo))
+                    {
+                        ModelState.AddModelError("GNIBNo", "GNIB No is required.");
+                    }
+
+                    if (!IsFormattedDate(model.GNIBExDT))
+                    {
+                        ModelState.AddModelError("GNIBExDT", "GNIB expired date format wrong, should be DD/MM/YYYY.");
+                    }
+                }
+                
+                if (ModelState.IsValid)
+                {
+                    applicationManager.ChangeGNIB(model.Id, model.HasGNIB, model.GNIBNo, model.GNIBExDT);
+
+                    return RedirectToAction(nameof(Status), new
+                    {
+                        orderId = model.Id
+                    });
+                }
+            }
+
+            model.IsInitialazed = true;
 
             return View(model);
         }

@@ -60,6 +60,28 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Application
                 return application.Id;
             }
         }
+
+        public void ChangeGNIB(string id, bool hasGNIB, string gnibNo, string gnibExDT)
+        {
+            var application = this[id];
+            
+            var changed = application.ConfirmGNIB != (hasGNIB ? "Renewal" : "New")
+                || application.GNIBNo != gnibNo
+                || application.GNIBExDT != gnibExDT;
+
+            application.ETag = "*";
+            application.ConfirmGNIB = hasGNIB ? "Renewal" : "New";
+            application.GNIBNo = gnibNo;
+            application.GNIBExDT = gnibExDT;
+
+            ApplicationTable.Replace(application);
+
+            var assignment = GetAssignment(id);
+            if (assignment.Status == AssignmentStatus.Accepted && changed)
+            {
+                NotifyWorkerUpdateAsync();
+            }
+        }
         
         public string CreateOrder(DataAccess.Model.Storage.Order order)
         {

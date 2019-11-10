@@ -21,12 +21,8 @@
   </ol>
 </nav>
 
-<table class="table table-sm">
-    <tr class="table-active">
-        <th colspan="2">
-            Application
-        </th>
-    </tr>
+<h4>Application</h4>
+<table class="table table-sm table-striped">
     <tr>
         <th>Person</th>
         <td>
@@ -47,7 +43,23 @@
     </tr>
     <tr>
         <th>GNIB / IRP Status</th>
-        <td>@(application.ConfirmGNIB == "Renewal" ? $"{application.GNIBNo} ~ {application.GNIBExDT}" : "New Registration")</td>
+        <td>
+            @if (application.ConfirmGNIB == "Renewal")
+            {
+                <div class="alert alert-success">
+                    @application.GNIBNo
+                    ~
+                    @application.GNIBExDT
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-warning">
+                    This application has no GNIB number.
+                </div>
+            }
+            <a href="/Application/ChangeGNIB/@application.Id" class="btn btn-info btn-sm">Change GNIB</a>
+        </td>
     </tr>
     <tr>
         <th>Contact</th>
@@ -61,11 +73,12 @@
             </div>
         </td>
     </tr>
-    <tr class="table-active">
-        <th colspan="2">
-            Order
-        </th>
-    </tr>
+</table>
+
+<hr class="my-4">
+
+<h4>Order</h4>
+<table class="table table-sm table-striped">
     <tr>
         <th>Basic</th>
         <td>
@@ -130,11 +143,12 @@
             </td>
         </tr>
     }
-    <tr class="table-active">
-        <th colspan="2">
-            Assignment
-        </th>
-    </tr>
+</table>
+
+<hr class="my-4">
+
+<h4>Assignment</h4>
+<table class="table table-sm table-striped">
     <tr>
         <th>Submitted Time</th>
         <td>
