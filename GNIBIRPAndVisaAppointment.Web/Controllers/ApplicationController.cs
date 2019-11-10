@@ -506,7 +506,8 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
                 {
                     applicationManager.ChangeGNIB(model.Id, model.HasGNIB, model.GNIBNo, model.GNIBExDT);
 
-                    return RedirectToAction(nameof(Status), new
+                    return RedirectToAction(nameof(Status),
+                    new
                     {
                         orderId = model.Id
                     });
