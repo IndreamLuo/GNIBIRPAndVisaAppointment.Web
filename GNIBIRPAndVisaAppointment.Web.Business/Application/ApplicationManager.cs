@@ -77,7 +77,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Application
             ApplicationTable.Replace(application);
 
             var assignment = GetAssignment(id);
-            if (assignment.Status == AssignmentStatus.Accepted && changed)
+            if (changed && assignment.Status == AssignmentStatus.Accepted)
             {
                 NotifyWorkerUpdateAsync();
             }
