@@ -7,124 +7,157 @@
     var isPaids = ViewBag.IsPaids;
 }
 
-<table class="table table-sm table-striped">
-    <thead>
-        <tr>
-            <nav>
-                <div class="nav nav-tabs assignment-nav">
-                    <a class="nav-item nav-link pending" href="/Admin/Assignment/Pending">Pending</a>
-                    <a class="nav-item nav-link accepted" href="/Admin/Assignment/Accepted">Accepted</a>
-                    <a class="nav-item nav-link appointed" href="/Admin/Assignment/Appointed">Appointed</a>
-                    <a class="nav-item nav-link duplicated" href="/Admin/Assignment/Duplicated">Duplicated</a>
-                    <a class="nav-item nav-link unverify" href="/Admin/Assignment/Unverify">Unverify</a>
-                    <a class="nav-item nav-link complete" href="/Admin/Assignment/Complete">Complete</a>
-                    <a class="nav-item nav-link cancelled" href="/Admin/Assignment/Cancelled">Cancelled</a>
-                    <a class="nav-item nav-link rejected" href="/Admin/Assignment/Rejected">Rejected</a>
-                    <a class="nav-item nav-link closed" href="/Admin/Assignment/Closed">Closed</a>
-                </li>
-            </nav>
-        </tr>
-        <tr class="table-secondary">
-            <th>Person (@assignments.Count)</th>
-            <th>Category</th>
-            <th>Target</th>
-            <th>Time</th>
-            <th>Status</th>
-            <th>Appointment</th>
-            <th>Payment</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var assignment in assignments)
-        {
-            <tr @(status != "Closed" && (assignment.AppointmentLetter?.Time.Date ?? DateTime.MaxValue) <= DateTime.Now ? "class=table-danger" : string.Empty)>
-                <td>
-                    <a target="_blank" href="/Application/Status/@assignment.Id">
-                        @assignment.Application.GivenName @assignment.Application.SurName
-                    </a>
-                </td>
-                <td>
-                    @if (assignment.Order.Emergency != 0)
+<form method="POST" action="Assignment/Accepts">
+    <table class="table table-sm table-striped">
+        <thead>
+            <tr>
+                <nav>
+                    <div class="nav nav-tabs assignment-nav">
+                        <a class="nav-item nav-link pending" href="/Admin/Assignment/Pending">Pending</a>
+                        <a class="nav-item nav-link accepted" href="/Admin/Assignment/Accepted">Accepted</a>
+                        <a class="nav-item nav-link appointed" href="/Admin/Assignment/Appointed">Appointed</a>
+                        <a class="nav-item nav-link duplicated" href="/Admin/Assignment/Duplicated">Duplicated</a>
+                        <!-- <a class="nav-item nav-link unverify" href="/Admin/Assignment/Unverify">Unverify</a> -->
+                        <a class="nav-item nav-link complete" href="/Admin/Assignment/Complete">Complete</a>
+                        <a class="nav-item nav-link cancelled" href="/Admin/Assignment/Cancelled">Cancelled</a>
+                        <a class="nav-item nav-link rejected" href="/Admin/Assignment/Rejected">Rejected</a>
+                        <a class="nav-item nav-link closed" href="/Admin/Assignment/Closed">Closed</a>
+                    </li>
+                </nav>
+            </tr>
+            <tr class="table-secondary">
+                @if (status == "Pending")
+                {
+                    <th>
+                        <input class="select-all" type="checkbox" />
+                    </th>
+                }
+                <th>Person (@assignments.Count)</th>
+                <th>Category</th>
+                <th>Target</th>
+                <th>Time</th>
+                <th>Status</th>
+                @if (status == "Complete")
+                {
+                    <th>Appointment</th>
+                }
+                <th>Payment</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var assignment in assignments)
+            {
+                <tr @(status != "Closed" && (assignment.AppointmentLetter?.Time.Date ?? DateTime.MaxValue) <= DateTime.Now ? "class=table-danger" : string.Empty)>
+                    @if (status == "Pending")
                     {
-                        <span class="badge badge-danger">EMERGENCY</span>
+                        <th>
+                            <input class='select-id' name="ids" type="checkbox" value="@assignment.Id" />
+                        </th>
                     }
-                    @if (assignment.Order.AnyCategory != 0)
-                    {
-                        <span class="badge badge-primary">ANY</span>
-                    }
-                    <strong>@assignment.Application.Category</strong>
-                    <br />
-                    @assignment.Application.SubCategory
-                    <br />
-                    <strong>@assignment.Application.ConfirmGNIB</strong>
-                </td>
-                <td>
-                    @assignment.Order.From ~ @assignment.Order.To
-                </td>
-                <td>@assignment.Time</td>
-                <td>
-                    @Html.Partial("~/Views/Application/StatusPartial.cshtml", assignment.Status as string)
-                </td>
-                <td>
-                    @if (assignment.AppointmentLetter != null)
-                    {
-                        <a target="_blank" href="/Application/Appointment/@assignment.Id">@assignment.AppointmentLetter.AppointmentNo</a>
-                        <br />
-                        @assignment.AppointmentLetter.Time.ToString("MM-dd HH:mm")
-                    }
-                </td>
-                <td>
-                    @{
-                        var paymentList = payments[assignment.Id];
-                        if (paymentList == null || paymentList.Count == 0)
+                    <td>
+                        <a target="_blank" href="/Application/Status/@assignment.Id">
+                            @assignment.Application.GivenName @assignment.Application.SurName
+                        </a>
+                    </td>
+                    <td>
+                        @if (assignment.Order.Emergency != 0)
                         {
-                            <span class="badge badge-danger">Unpaid</span>
+                            <span class="badge badge-danger badge-sm">EMERGENCY</span>
+                            <br />
+                        }
+                        @if (assignment.Application.ConfirmGNIB == "Renewal")
+                        {
+                            <span class="badge badge-primary badge-sm">@assignment.Application.ConfirmGNIB</span>
                         }
                         else
                         {
-                            foreach (var payment in paymentList)
-                            {
-                                <span class="badge badge-success">@payment.Type</span>
-                                @switch(payment.Currency)
-                                {
-                                    case "cny":
-                                        <span>¥</span>
-                                        break;
-                                    case "eur":
-                                        <span>€</span>
-                                        break;
-                                    case "usd":
-                                        <span>$</span>
-                                        break;
-                                }
-                                <span>@payment.Amount</span>
-                                <br />
-                            }
+                            <span class="badge badge-success badge-sm">@assignment.Application.ConfirmGNIB</span>
                         }
-                    }
-                </td>
-                <td>
-                    @Html.Partial("OperationButtonsPartial", new ViewDataDictionary(new Microsoft.AspNetCore.Mvc.ModelBinding.EmptyModelMetadataProvider(), new Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary())
+                    </td>
+                    <td>
+                        @assignment.Order.From ~ @assignment.Order.To
+                    </td>
+                    <td>@assignment.Time</td>
+                    <td>
+                        @Html.Partial("~/Views/Application/StatusPartial.cshtml", assignment.Status as string)
+                    </td>
+                    <td>
+                        @if (assignment.AppointmentLetter != null)
+                        {
+                            <a target="_blank" href="/Application/Appointment/@assignment.Id">@assignment.AppointmentLetter.AppointmentNo</a>
+                            <br />
+                            @assignment.AppointmentLetter.Time.ToString("MM-dd HH:mm")
+                        }
+                    </td>
+                    @if (status == "Complete")
                     {
-                        { "Id", assignment.Id },
-                        { "Status", assignment.Status },
-                        { "IsPaid", isPaids[assignment.Id] },
-                    })
-                </td>
-            </tr>
-            <tr>
-                <td colspan="8">
-                    @assignment.Application.Comment
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+                        <td>
+                            @{
+                                var paymentList = payments[assignment.Id];
+                                if (paymentList == null || paymentList.Count == 0)
+                                {
+                                    <span class="badge badge-danger">Unpaid</span>
+                                }
+                                else
+                                {
+                                    foreach (var payment in paymentList)
+                                    {
+                                        <span class="badge badge-success">@payment.Type</span>
+                                        @switch(payment.Currency)
+                                        {
+                                            case "cny":
+                                                <span>¥</span>
+                                                break;
+                                            case "eur":
+                                                <span>€</span>
+                                                break;
+                                            case "usd":
+                                                <span>$</span>
+                                                break;
+                                        }
+                                        <span>@payment.Amount</span>
+                                        <br />
+                                    }
+                                }
+                            }
+                        </td>
+                    }
+                    <td>
+                        @Html.Partial("OperationButtonsPartial", new ViewDataDictionary(new Microsoft.AspNetCore.Mvc.ModelBinding.EmptyModelMetadataProvider(), new Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary())
+                        {
+                            { "Id", assignment.Id },
+                            { "Status", assignment.Status },
+                            { "IsPaid", isPaids[assignment.Id] },
+                        })
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="8">
+                        @assignment.Application.Comment
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <hr>
+
+    @switch (status)
+    {
+        case "Pending":
+            <button type="submit" class="btn btn-info">Accept</button>
+            break;
+    }
+</form>
 
 @section scripts
 {
     <script type="text/javascript">
         $('.assignment-nav .@status.ToLower()').addClass('active');
+
+        $('.select-all').change(function () {
+            $('.select-id').prop('checked', $(this).prop('checked'));
+        });
     </script>
 }

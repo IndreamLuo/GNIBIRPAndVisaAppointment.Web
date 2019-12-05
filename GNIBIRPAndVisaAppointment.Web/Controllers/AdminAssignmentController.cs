@@ -56,6 +56,19 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
             return View();
         }
 
+        [Route("Accepts")]
+        public IActionResult Accepts(string[] ids)
+        {
+            var applicationManager = DomainHub.GetDomain<IApplicationManager>();
+
+            foreach (var id in ids)
+            {
+                applicationManager.Accept(id);
+            }
+
+            return RedirectToRoute("/Admin/Assignment/Pending");
+        }
+
         [Route("Accept/{id}")]
         public IActionResult Accept(string id, string returnUrl)
         {
