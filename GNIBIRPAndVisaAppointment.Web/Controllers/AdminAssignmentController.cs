@@ -53,6 +53,21 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
             ViewBag.Payments = payments;
             ViewBag.IsPaids = isPaids;
 
+            if (status == AssignmentStatus.Appointed)
+            {
+                var appointmentLetterManger = DomainHub.GetDomain<IAppointmentLetterManager>();
+                var letters = appointmentLetterManger.UnassignedLetters.GroupBy(letter => letter.Name).ToDictionary(group => group.Key);
+                var noLetter = new AppointmentLetter[0];
+                ViewBag.AppointmentLetters = assignments
+                    .ToDictionary(assignment => assignment.Id,
+                        assignment =>
+                        {
+                            var application = applicationManager[assignment.Id];
+                            var name = $"{application.GivenName}  {application.SurName}";
+                            return letters.ContainsKey(name) ? letters[name].ToArray() : noLetter;
+                        });
+            }
+
             return View();
         }
 
@@ -67,6 +82,20 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
             }
 
             return RedirectToRoute("/Admin/Assignment/Pending");
+        }
+
+        [Route("Completes")]
+        public IActionResult Completes(string[] letters)
+        {
+            var applicationManager = DomainHub.GetDomain<IApplicationManager>();
+            
+            foreach (var letter in letters)
+            {
+                var keys = letter.Split("|");
+                applicationManager.Complete(keys[0], keys[1]);
+            }
+
+            return Redirect("/Admin/Assignment/Appointed");
         }
 
         [Route("Accept/{id}")]

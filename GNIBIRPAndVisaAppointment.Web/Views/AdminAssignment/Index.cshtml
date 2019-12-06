@@ -1,13 +1,26 @@
 @using GNIBIRPAndVisaAppointment.Web.Business.Application
+@using GNIBIRPAndVisaAppointment.Web.DataAccess.Model.Storage
 @{
     Layout = "_AdminLayout";
     var status = ViewBag.Status;
     var assignments = ViewBag.Assignments;
     var payments = ViewBag.Payments;
     var isPaids = ViewBag.IsPaids;
+    var letters = (Dictionary<string, AppointmentLetter[]>)ViewBag.AppointmentLetters;
+
+    string formAction = null;
+    switch (status)
+    {
+        case "Pending":
+            formAction = "Accepts";
+            break;
+        case "Appointed":
+            formAction = "Completes";
+            break;
+    }
 }
 
-<form method="POST" action="Assignment/Accepts">
+<form method="POST" action="@formAction">
     <table class="table table-sm table-striped">
         <thead>
             <tr>
@@ -26,7 +39,7 @@
                 </nav>
             </tr>
             <tr class="table-secondary">
-                @if (status == "Pending")
+                @if (status == "Pending" || status == "Appointed")
                 {
                     <th>
                         <input class="select-all" type="checkbox" />
@@ -53,6 +66,19 @@
                     {
                         <th>
                             <input class='select-id' name="ids" type="checkbox" value="@assignment.Id" />
+                        </th>
+                    }
+                    else if (status == "Appointed")
+                    {
+                        <th>
+                            @{
+                                var assignmentLetters = letters[assignment.Id];
+                                @foreach (var letter in assignmentLetters)
+                                {
+                                    <input class='select-id' name="letters" type="checkbox" value="@assignment.Id|@(letter.RowKey)" />
+                                    @letter.Time.ToString("dd-MMM-yyyy")
+                                }
+                            }
                         </th>
                     }
                     <td>
@@ -148,6 +174,9 @@
         case "Pending":
             <button type="submit" class="btn btn-info">Accept</button>
             break;
+        case "Appointed":
+            <button type="submit" class="btn btn-success">Complete</button>
+            break;
     }
 </form>
 
@@ -157,7 +186,9 @@
         $('.assignment-nav .@status.ToLower()').addClass('active');
 
         $('.select-all').change(function () {
-            $('.select-id').prop('checked', $(this).prop('checked'));
+            $('form table tbody tr').each(function () {
+                $(this).find('.select-id').last().prop('checked', $('.select-all').prop('checked'));
+            })
         });
     </script>
 }
