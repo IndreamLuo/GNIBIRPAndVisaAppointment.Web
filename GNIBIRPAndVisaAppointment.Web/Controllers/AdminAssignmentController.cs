@@ -81,7 +81,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
                 applicationManager.Accept(id);
             }
 
-            return RedirectToRoute("/Admin/Assignment/Pending");
+            return Redirect("/Admin/Assignment/Pending");
         }
 
         [Route("Completes")]
