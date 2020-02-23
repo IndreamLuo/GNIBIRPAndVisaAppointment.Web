@@ -107,6 +107,12 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Application
                 OrderTable.Replace(order);
             }
 
+            Task.Run(async () =>
+            {
+                await Task.Delay(5 * 60 * 1000);
+                this.AutoAccept(order.Id);
+            });
+
             return order.Id;
         }
 
@@ -142,6 +148,41 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Application
 
             var emailApplication = DomainHub.GetDomain<IEmailApplication>();
             emailApplication.NotifyApplicationChangedAsync(orderId, assignment.Status).Wait();
+        }
+
+        public void AutoAccept(string orderId)
+        {
+            var assignment = this.GetAssignment(orderId);
+            if (assignment.Status != AssignmentStatus.Pending)
+            {
+                return;
+            }
+
+            var application = this[orderId];
+            
+            var configurationManager = DomainHub.GetDomain<IConfigurationManager>();
+            var acceptedDaysString = application.ConfirmGNIB == "Renewal"
+            ? configurationManager["Appointment", "AutoAcceptRenewalDays"]
+            : configurationManager["Appointment", "AutoAcceptNewDays"];
+
+            if (string.IsNullOrEmpty(acceptedDaysString))
+            {
+                return;
+            }
+
+            var order = this.GetOrder(orderId);
+            var acceptedDays = Convert.ToInt32(acceptedDaysString);
+
+            var to = string.IsNullOrEmpty(order.To)
+            ? DateTime.MaxValue
+            : DateTime.ParseExact(order.To, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+
+            var daysFromNow = (to - DateTime.Now.Date).TotalDays;
+
+            if (daysFromNow >= acceptedDays)
+            {
+                this.Accept(orderId);
+            }
         }
 
         public void Accept(string orderId)

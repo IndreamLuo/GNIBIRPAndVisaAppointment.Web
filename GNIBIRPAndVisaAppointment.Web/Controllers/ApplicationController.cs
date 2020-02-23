@@ -92,6 +92,12 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
                     ModelState.AddModelError("PPReason", "Passport Number or No Passport Reason required.");
                 }
 
+                var dob = DateTime.ParseExact(model.DOB, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+                if (dob >= DateTime.Now)
+                {
+                    ModelState.AddModelError(nameof(model.DOB), "Date of Birth should be at least before today.");
+                }
+
                 ViewBag.reCaptchaVerified = null;
                 
                 if (ModelState.IsValid
