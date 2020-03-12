@@ -65,9 +65,20 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
                     }
                 }
 
-                if (!string.IsNullOrEmpty(model.DOB) && !IsFormattedDate(model.DOB))
+                if (!string.IsNullOrEmpty(model.DOB))
                 {
-                    ModelState.AddModelError("DOB", "Date of Birth is formatting wrong, should be DD/MM/YYYY.");
+                    if (!IsFormattedDate(model.DOB))
+                    {
+                        ModelState.AddModelError("DOB", "Date of Birth is formatting wrong, should be DD/MM/YYYY.");
+                    }
+                    else
+                    {
+                        var dob = DateTime.ParseExact(model.DOB, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+                        if (dob >= DateTime.Now)
+                        {
+                            ModelState.AddModelError(nameof(model.DOB), "Date of Birth should be at least before today.");
+                        }
+                    }
                 }
 
                 if (!model.UsrDeclaration)
@@ -90,12 +101,6 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
                 else if (string.IsNullOrEmpty(model.PPReason))
                 {
                     ModelState.AddModelError("PPReason", "Passport Number or No Passport Reason required.");
-                }
-
-                var dob = DateTime.ParseExact(model.DOB, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
-                if (dob >= DateTime.Now)
-                {
-                    ModelState.AddModelError(nameof(model.DOB), "Date of Birth should be at least before today.");
                 }
 
                 ViewBag.reCaptchaVerified = null;
