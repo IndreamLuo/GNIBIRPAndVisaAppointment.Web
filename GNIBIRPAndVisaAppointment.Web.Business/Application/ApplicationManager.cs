@@ -239,10 +239,10 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Application
             AppointmentLetterTable.Insert(new AppointmentLetter
             {
                 PartitionKey = orderId,
-                RowKey = appointmentNo,
-                AppointmentNo = appointmentNo,
+                RowKey = appointmentNo.Replace("\r", ""),
+                AppointmentNo = appointmentNo.Replace("\r", ""),
                 Time = TimeZoneInfo.ConvertTimeFromUtc(time, Localization.DublinTimeZoneInfo),
-                Name = name,
+                Name = name.Replace("\r", ""),
                 Category = category,
                 SubCategory = subCategory
             });
