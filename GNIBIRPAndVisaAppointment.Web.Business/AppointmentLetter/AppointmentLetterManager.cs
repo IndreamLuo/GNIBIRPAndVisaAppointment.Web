@@ -78,7 +78,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.AppointmnetLetter
         public AppointmentLetter[] FindByName(string name)
         {
             EnsureCacheLoaded();
-            return Cache.Where(appointmentLetter => appointmentLetter.Name == name).ToArray();
+            return Cache.Where(appointmentLetter => appointmentLetter.Name == name || appointmentLetter.Name == $"{name}\r").ToArray();
         }
 
         public void Assign(string id, string applicationId)

@@ -56,7 +56,11 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
             if (status == AssignmentStatus.Appointed)
             {
                 var appointmentLetterManger = DomainHub.GetDomain<IAppointmentLetterManager>();
-                var letters = appointmentLetterManger.UnassignedLetters.GroupBy(letter => letter.Name).ToDictionary(group => group.Key);
+                var letters = appointmentLetterManger
+                    .UnassignedLetters
+                    .Where(letter => letter.Time > DateTime.Now.AddDays(-7))
+                    .GroupBy(letter => letter.Name.Replace("\r", ""))
+                    .ToDictionary(group => group.Key);
                 var noLetter = new AppointmentLetter[0];
                 ViewBag.AppointmentLetters = assignments
                     .ToDictionary(assignment => assignment.Id,
