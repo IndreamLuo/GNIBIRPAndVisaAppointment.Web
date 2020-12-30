@@ -117,12 +117,12 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Payment
                   {
                     PriceData = new SessionLineItemPriceDataOptions
                     {
-                      UnitAmount = amount,
-                      Currency = currency,
-                      ProductData = new SessionLineItemPriceDataProductDataOptions
-                      {
-                          Name = "GNIB/IRP Appointment Service",
-                      },
+                        UnitAmount = amount,
+                        Currency = currency,
+                        ProductData = new SessionLineItemPriceDataProductDataOptions
+                        {
+                            Name = "GNIB/IRP Appointment Service",
+                        },
                     },
                     Quantity = 1,
                   },
