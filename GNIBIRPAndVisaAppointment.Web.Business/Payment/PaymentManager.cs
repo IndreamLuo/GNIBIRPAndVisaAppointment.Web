@@ -109,7 +109,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Payment
             {
                 PaymentMethodTypes = new List<string>
                 {
-                  "card", "alipay"
+                  "card"
                 },
                 LineItems = new List<SessionLineItemOptions>
                 {
