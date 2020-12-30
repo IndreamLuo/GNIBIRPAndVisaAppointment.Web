@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -296,6 +295,35 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
             ViewBag.StripeKey = paymentManager.PublishableKey;
 
             return View();
+        }
+
+        [Route("CreatePayment/{orderId}")]
+        public IActionResult CreatePayment(string orderId)
+        {
+            var paymentManager = DomainHub.GetDomain<IPaymentManager>();
+            var domain = $"{Request.Scheme}://{Request.Host.Value}";
+
+            var session = paymentManager.CreateStripePaySession(orderId, $"{domain}/Application/Checkout/{orderId}", $"{domain}/Application/PaymentSuccess/{orderId}");            
+
+            return Json(session.Id);
+        }
+
+        [Route("PaymentSuccess/{orderId}")]
+        public IActionResult PaymentSuccess(string orderId)
+        {
+            var paymentManager = DomainHub.GetDomain<IPaymentManager>();
+            var isPaid = paymentManager.ConfirmPayment(orderId);
+
+            if (!isPaid)
+            {
+                return RedirectToAction("Checkout", new {
+                    orderId = orderId
+                });
+            }
+            
+            return RedirectToAction("Status", new {
+                orderId = orderId
+            });
         }
 
         [Route("StripePay/{orderId}")]

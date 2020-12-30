@@ -199,8 +199,35 @@
             }
         </td>
     </tr>
+</table>
+
+<hr class="my-4">
+
+<h4>Payment</h4>
+<table class="table table-sm table-striped">
     <tr>
         <th>Payment</th>
+        <td>
+            @foreach (var payment in payments)
+            {
+                <span>
+                    @if (payment.Status == null || payment.Status == "paid") {
+                        <span class="badge badge-success">success</span>
+                    } else {
+                        <span class="badge badge-secondary">failed</span>
+                    }
+                    @payment.Time.ToString("yyyy-MM-dd HH:mm:ss")
+                    |
+                    @payment.Type:
+                    @payment.Amount
+                    @payment.Currency.ToUpper()
+                </span>
+                <br />
+            }
+        </td>
+    </tr>
+    <tr>
+        <th></th>
         <td>
             @if (!isPaid)
             {
@@ -212,11 +239,6 @@
                 {
                     <a class="btn btn-primary" target="_self" href="/Application/Checkout/@order.Id">Prepay</a>
                 }
-                <br />
-            }
-            @foreach (var payment in payments)
-            {
-                <span>@payment.Type: @payment.Amount @payment.Currency.ToUpper()</span>
                 <br />
             }
         </td>
