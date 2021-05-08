@@ -191,7 +191,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
             var assignment = applicationManager.GetAssignment(model.ApplicationId);
             if (assignment != null && assignment.Status != AssignmentStatus.Pending && !isSignedIn)
             {
-                return RedirectToAction("Checkout", new
+                return RedirectToAction("Status", new
                 {
                     orderId = model.ApplicationId
                 });
