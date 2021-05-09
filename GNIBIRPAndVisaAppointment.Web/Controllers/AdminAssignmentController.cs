@@ -82,7 +82,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
 
             foreach (var id in ids)
             {
-
+                applicationManager.Pending(id);
             }
 
             return RedirectToAction("Index",
