@@ -75,6 +75,23 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
             return View();
         }
 
+        [Route("Pendings")]
+        public IActionResult Pendings(string[] ids)
+        {
+            var applicationManager = DomainHub.GetDomain<IApplicationManager>();
+
+            foreach (var id in ids)
+            {
+
+            }
+
+            return RedirectToAction("Index",
+            new
+            {
+                Status = AssignmentStatus.Accepted
+            });
+        }
+
         [Route("Accepts")]
         public IActionResult Accepts(string[] ids)
         {
@@ -100,6 +117,14 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
             }
 
             return Redirect("/Admin/Assignment/Appointed");
+        }
+
+        [Route("Pending/{id}")]
+        public IActionResult Pending(string id, string returnUrl)
+        {
+            var applicationManager = DomainHub.GetDomain<IApplicationManager>();
+            applicationManager.Pending(id);
+            return Redirect(returnUrl ?? "/Admin/Assignment/Pending");
         }
 
         [Route("Accept/{id}")]

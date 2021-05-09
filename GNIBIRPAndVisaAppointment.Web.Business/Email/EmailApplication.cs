@@ -19,13 +19,13 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Email
             DomainHub = domainHub;
         }
 
-        public async Task NotifyApplicationChangedAsync(string applicationId, string currentStatus)
+        public async Task NotifyApplicationChangedAsync(string applicationId, string previousStatus, string currentStatus)
         {
             var applicationManager = DomainHub.GetDomain<IApplicationManager>();
             var application = applicationManager[applicationId];
 
             var configurationManager = DomainHub.GetDomain<IConfigurationManager>();
-            var templateKey = $"Application{currentStatus}";
+            var templateKey = $"Application{previousStatus}{currentStatus}";
             var time = DateTime.Now;
             if (currentStatus == AssignmentStatus.Complete)
             {
@@ -45,6 +45,12 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Email
                 time = appointment.Time;
             }
             var templateId = configurationManager["MailjetTemplate", templateKey];
+
+            if (string.IsNullOrEmpty(templateId))
+            {
+                await this.NotifyApplicationChangedAsync(applicationId, null, currentStatus);
+                return;
+            }
 
             if (templateId != null)
             {

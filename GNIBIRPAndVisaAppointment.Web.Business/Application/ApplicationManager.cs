@@ -123,8 +123,13 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Application
 
         public void Pending(string orderId)
         {
-            if (GetAssignment(orderId) != null)
+            var currentAssignment = GetAssignment(orderId);
+            if (currentAssignment != null)
             {
+                if (currentAssignment.Status == AssignmentStatus.Accepted)
+                {
+                    this.UpdataAssignmentStatus(orderId, currentAssignment.Status, AssignmentStatus.Pending);
+                }
                 return;
             }
 
@@ -147,7 +152,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Application
             AssignmentTable.Insert(assignment);
 
             var emailApplication = DomainHub.GetDomain<IEmailApplication>();
-            emailApplication.NotifyApplicationChangedAsync(orderId, assignment.Status).Wait();
+            emailApplication.NotifyApplicationChangedAsync(orderId, null, assignment.Status).Wait();
         }
 
         public void AutoAccept(string orderId)
@@ -305,7 +310,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Application
                 }
 
                 var emailApplication = DomainHub.GetDomain<IEmailApplication>();
-                emailApplication.NotifyApplicationChangedAsync(orderId, assignment.Status);
+                emailApplication.NotifyApplicationChangedAsync(orderId, fromStatus, assignment.Status);
             }
         }
 

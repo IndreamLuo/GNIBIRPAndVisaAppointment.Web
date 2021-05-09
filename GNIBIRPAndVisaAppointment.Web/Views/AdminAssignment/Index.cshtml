@@ -11,10 +11,13 @@
     string formAction = null;
     switch (status)
     {
-        case "Pending":
+        case AssignmentStatus.Pending:
             formAction = "Accepts";
             break;
-        case "Appointed":
+        case AssignmentStatus.Accepted:
+            formAction = "Pendings";
+            break;
+        case AssignmentStatus.Appointed:
             formAction = "Completes";
             break;
     }
@@ -39,7 +42,7 @@
                 </nav>
             </tr>
             <tr class="table-secondary">
-                @if (status == "Pending" || status == "Appointed")
+                @if (status == AssignmentStatus.Pending || status == AssignmentStatus.Appointed || status == AssignmentStatus.Accepted)
                 {
                     <th>
                         <input class="select-all" type="checkbox" />
@@ -62,13 +65,19 @@
             @foreach (var assignment in assignments)
             {
                 <tr @(status != "Closed" && (assignment.AppointmentLetter?.Time.Date ?? DateTime.MaxValue) <= DateTime.Now ? "class=table-danger" : string.Empty)>
-                    @if (status == "Pending")
+                    @if (status == AssignmentStatus.Pending)
                     {
                         <th>
                             <input class='select-id' name="ids" type="checkbox" value="@assignment.Id" />
                         </th>
                     }
-                    else if (status == "Appointed")
+                    else if (status == AssignmentStatus.Accepted)
+                    {
+                        <th>
+                            <input class='select-id' name="ids" type="checkbox" value="@assignment.Id" />
+                        </th>
+                    }
+                    else if (status == AssignmentStatus.Appointed)
                     {
                         <th>
                             @{
@@ -172,7 +181,10 @@
     @switch (status)
     {
         case "Pending":
-            <button type="submit" class="btn btn-info">Accept</button>
+            <button type="submit" class="btn btn-primary">Accept</button>
+            break;
+        case "Accepted":
+            <button type="submit" class="btn btn-info">Pending</button>
             break;
         case "Appointed":
             <button type="submit" class="btn btn-success">Complete</button>
