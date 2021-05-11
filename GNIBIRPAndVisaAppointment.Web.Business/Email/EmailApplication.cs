@@ -31,8 +31,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Email
             {
                 var order = applicationManager.GetOrder(applicationId);
                 var paymentManager = DomainHub.GetDomain<IPaymentManager>();
-                var payments = paymentManager.GetPayments(applicationId);
-                if (payments.Sum(payment => payment.Amount) >= (order.Amount + order.Special))
+                if (paymentManager.IsPaid(applicationId))
                 {
                     templateKey += "Paid";
                 }

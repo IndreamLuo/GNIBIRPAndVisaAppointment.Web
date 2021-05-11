@@ -200,7 +200,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Business.Payment
 
             var amount = this.GetPaidAmount(payments);
 
-            return order.Amount - amount;
+            return order.Amount + order.Special - amount;
         }
 
         double GetPaidAmount(IEnumerable<DataAccess.Model.Storage.Payment> payments)
