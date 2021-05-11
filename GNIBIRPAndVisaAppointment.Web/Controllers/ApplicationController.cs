@@ -431,7 +431,10 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
 
             if (!SignInManager.IsSignedIn(User) && !paymentManager.IsPaid(orderId))
             {
-                throw new InvalidOperationException("Not paid.");
+                return RedirectToAction(nameof(this.Checkout), new
+                {
+                    orderId = orderId
+                });
             }
 
             ViewBag.ApplicationId = orderId;
