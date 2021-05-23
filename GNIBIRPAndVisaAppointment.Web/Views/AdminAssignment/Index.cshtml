@@ -139,7 +139,14 @@
                             {
                                 foreach (var payment in paymentList)
                                 {
-                                    <span class="badge badge-success">@payment.Type</span>
+                                    if (payment.Status == null || payment.Status == "paid")
+                                    {
+                                        <span class="badge badge-success">@payment.Type</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge badge-secondary">@payment.Type</span>
+                                    }
                                     @switch(payment.Currency)
                                     {
                                         case "cny":
