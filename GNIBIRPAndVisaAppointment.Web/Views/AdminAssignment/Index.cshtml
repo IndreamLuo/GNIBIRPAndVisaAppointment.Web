@@ -117,47 +117,47 @@
                     <td>
                         @Html.Partial("~/Views/Application/StatusPartial.cshtml", assignment.Status as string)
                     </td>
-                    <td>
-                        @if (assignment.AppointmentLetter != null)
-                        {
-                            <a target="_blank" href="/Application/Appointment/@assignment.Id">@assignment.AppointmentLetter.AppointmentNo</a>
-                            <br />
-                            @assignment.AppointmentLetter.Time.ToString("MM-dd HH:mm")
-                        }
-                    </td>
                     @if (status == "Complete")
                     {
                         <td>
-                            @{
-                                var paymentList = payments[assignment.Id];
-                                if (paymentList == null || paymentList.Count == 0)
-                                {
-                                    <span class="badge badge-danger">Unpaid</span>
-                                }
-                                else
-                                {
-                                    foreach (var payment in paymentList)
-                                    {
-                                        <span class="badge badge-success">@payment.Type</span>
-                                        @switch(payment.Currency)
-                                        {
-                                            case "cny":
-                                                <span>¥</span>
-                                                break;
-                                            case "eur":
-                                                <span>€</span>
-                                                break;
-                                            case "usd":
-                                                <span>$</span>
-                                                break;
-                                        }
-                                        <span>@payment.Amount</span>
-                                        <br />
-                                    }
-                                }
+                            @if (assignment.AppointmentLetter != null)
+                            {
+                                <a target="_blank" href="/Application/Appointment/@assignment.Id">@assignment.AppointmentLetter.AppointmentNo</a>
+                                <br />
+                                @assignment.AppointmentLetter.Time.ToString("MM-dd HH:mm")
                             }
                         </td>
                     }
+                    <td>
+                        @{
+                            var paymentList = payments[assignment.Id];
+                            if (paymentList == null || paymentList.Count == 0)
+                            {
+                                <span class="badge badge-danger">Unpaid</span>
+                            }
+                            else
+                            {
+                                foreach (var payment in paymentList)
+                                {
+                                    <span class="badge badge-success">@payment.Type</span>
+                                    @switch(payment.Currency)
+                                    {
+                                        case "cny":
+                                            <span>¥</span>
+                                            break;
+                                        case "eur":
+                                            <span>€</span>
+                                            break;
+                                        case "usd":
+                                            <span>$</span>
+                                            break;
+                                    }
+                                    <span>@payment.Amount</span>
+                                    <br />
+                                }
+                            }
+                        }
+                    </td>
                     <td>
                         @Html.Partial("OperationButtonsPartial", new ViewDataDictionary(new Microsoft.AspNetCore.Mvc.ModelBinding.EmptyModelMetadataProvider(), new Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary())
                         {
