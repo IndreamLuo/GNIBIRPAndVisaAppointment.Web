@@ -30,8 +30,14 @@ namespace GNIBIRPAndVisaAppointment.Web.Models
         public bool UsrDeclaration { get; set; }
         
         [Required]
+        public string Salutation { get; set; }
+        
+        [Required]
         [MaxLength(200)]
         public string GivenName { get; set; }
+        
+        [MaxLength(200)]
+        public string MidName { get; set; }
         
         [Required]
         [MaxLength(200)]
@@ -59,6 +65,15 @@ namespace GNIBIRPAndVisaAppointment.Web.Models
         
         [Required]
         public bool AuthorizeDataUsage { get; set; }
+
+        public static string[] Salutations = new []
+        {
+            "Mr",
+            "Mrs",
+            "Miss",
+            "Ms",
+            "Dr"
+        };
 
         public static string[] Nationalities = new []
         {

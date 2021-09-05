@@ -26,15 +26,25 @@
     <tr>
         <th>Person</th>
         <td>
-            @application.GivenName
-            .
-            @application.SurName
-            <br />
-            @application.DOB
-            <br />
-            @application.Nationality - @(application.PPNoYN == "Yes" ? application.PPNo : application.PPReason)
-            <br />
-            @(application.FamAppYN == "Yes" ? $"* {application.FamAppNo} person(s)" : "Individual")
+            <div class="input-group">
+                <span class="input-group-text">@application.Salutation</span>
+                <input type="text" class="form-control" value="@application.GivenName" readonly>
+                @if (!string.IsNullOrEmpty(application.MidName))
+                {
+                    <input type="text" class="form-control" value="@application.MidName" readonly>
+                }
+                <input type="text" class="form-control" value="@application.SurName" readonly>
+            </div>
+            <div class="input-group">
+                <input type="text" class="form-control" value="@application.DOB" readonly>
+            </div>
+            <div class="input-group">
+                <input type="text" class="form-control" value="@application.Nationality" readonly>
+                <input type="text" class="form-control" value="@(application.PPNoYN == "Yes" ? application.PPNo : application.PPReason)" readonly>
+            </div>
+            <div class="input-group">
+                <input type="text" class="form-control" value="@(application.FamAppYN == "Yes" ? $"* {application.FamAppNo} person(s)" : "Individual")" readonly>
+            </div>
         </td>
     </tr>
     <tr>
@@ -44,26 +54,27 @@
     <tr>
         <th>GNIB / IRP Status</th>
         <td>
-            @if (application.ConfirmGNIB == "Renewal")
-            {
-                <div class="alert alert-success">
-                    @application.GNIBNo
-                    ~
-                    @application.GNIBExDT
-                </div>
-            }
-            else
-            {
-                <div class="alert alert-warning">
-                    This application has no GNIB number.
-                </div>
-            }
-            <a href="/Application/ChangeGNIB/@application.Id" class="btn btn-info btn-sm">Change GNIB</a>
+            <div class="input-group">
+                @if (application.ConfirmGNIB == "Renewal")
+                {
+                    <input type="text" class="form-control" value="@application.GNIBNo" readonly>
+                    <input type="text" class="form-control" value="@application.GNIBExDT" readonly>
+                }
+                else
+                {
+                    <input type="text" class="form-control" value="This application has no GNIB number." readonly>
+                }
+                <a href="/Application/ChangeGNIB/@application.Id" class="btn btn-info">Change GNIB</a>
+            </div>
         </td>
     </tr>
     <tr>
         <th>Contact</th>
-        <td>@application.Email</td>
+        <td>
+            <div class="input-group">
+                <input type="text" class="form-control" value="@application.Email" readonly>
+            </div>
+        </td>
     </tr>
     <tr>
         <th>Comment</th>
@@ -95,10 +106,10 @@
                 <span>
                     € @order.PickDate
                     -
-                    For specific dates
-                    , from
-                    @order.From
-                    to
+                    Date Picked
+                    , FROM
+                    @(order.From ?? "now")
+                    TO
                     @order.To
                 </span>
             }

@@ -13,7 +13,9 @@ namespace GNIBIRPAndVisaAppointment.Web.DataAccess.Model.Storage
         public string GNIBNo { get; set; }
         public string GNIBExDT { get; set; }
         public char UsrDeclaration { get; set; }
+        public string Salutation { get; set; }
         public string GivenName { get; set; }
+        public string MidName { get; set; }
         public string SurName { get; set; }
         public string DOB { get; set; }
         public string Nationality { get; set; }

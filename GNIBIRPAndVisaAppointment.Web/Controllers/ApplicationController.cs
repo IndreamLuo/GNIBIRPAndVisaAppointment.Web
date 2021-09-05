@@ -121,7 +121,9 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
                             GNIBNo = model.GNIBNo,
                             GNIBExDT = model.GNIBExDT,
                             UsrDeclaration = model.UsrDeclaration ? 'Y' : 'N',
+                            Salutation = model.Salutation,
                             GivenName = model.GivenName,
+                            MidName = model.MidName,
                             SurName = model.SurName,
                             DOB = model.DOB,
                             Nationality = model.Nationality,
@@ -392,7 +394,9 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
                     || assignment.Status == AssignmentStatus.Rejected)
                 && !isSignedIn)
             {
+                application.Salutation = "Closed";
                 application.GivenName = "Closed";
+                application.MidName = "Closed";
                 application.SurName = "Closed";
                 application.DOB = "Closed";
                 application.GNIBNo = "Closed";

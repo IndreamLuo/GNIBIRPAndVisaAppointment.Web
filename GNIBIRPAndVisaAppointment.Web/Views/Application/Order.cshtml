@@ -31,7 +31,9 @@
             </tr>
             <tr>
                 <td>
+                    @application.Salutation
                     @application.GivenName
+                    @application.MidName
                     @application.SurName
                     (
                         @application.DOB
@@ -86,7 +88,7 @@
         <div class="alert alert-info">
             The wider range of dates you pick the more you are possible to get an appointment.
             <br />
-            A date range for wider than 2 weeks is highly suggested.
+            A date range for wider than 4 weeks is highly suggested.
             <br />
             If the appointment is booked in your set date range but you cannot go, the service will still be considered as done.
         </div>

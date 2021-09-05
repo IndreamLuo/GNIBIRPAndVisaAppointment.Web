@@ -95,14 +95,29 @@
         </div>
 
         <div class="alert alert-warning">
-            If you don't have an old GNIB/IRP number you may uncheck it.
-            But if you do have you'd better to put it in which makes getting your appointment much faster.
+            If you don't have an old GNIB/IRP number you may uncheck it.<br>
         </div>
 
+        <div class="form-group">
+            <label for="Salutation" class="control-label">Salutation:</label>
+            <select name="Salutation" value="@Model.Salutation" id="Salutation" class="form-control" placeholder="Select...">
+                <option value="">Select...</option>
+                @foreach (var salutation in ApplicationModel.Salutations)
+                {
+                    <option value="@salutation">@salutation</option>
+                }
+            </select>
+            <span asp-validation-for="Salutation" class="form-text text-danger"></span>
+        </div>
         <div class="form-group">
             <label for="GivenName" class="control-label">Given Name:</label>
             <input name="GivenName" value="@Model.GivenName" id="GivenName" class="form-control" placeholder="Enter your given name">
             <span asp-validation-for="GivenName" class="form-text text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label for="MidName" class="control-label">Middle Name(s) (if any):</label>
+            <input name="MidName" value="@Model.MidName" id="MidName" class="form-control" placeholder="Enter your middle name(s)">
+            <span asp-validation-for="MidName" class="form-text text-danger"></span>
         </div>
         <div class="form-group">
             <label for="SurName" class="control-label">Surname:</label>
