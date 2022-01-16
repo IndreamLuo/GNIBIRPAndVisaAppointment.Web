@@ -15,7 +15,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
 {
     [Authorize(Roles="Admin,Manager")]
     [Route("Admin/Assignment")]
-    public class AdminAssignmentController : Controller
+    public partial class AdminAssignmentController : Controller
     {
         readonly IDomainHub DomainHub;
         

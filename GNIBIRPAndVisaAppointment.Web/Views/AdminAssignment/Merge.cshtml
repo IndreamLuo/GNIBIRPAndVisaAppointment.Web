@@ -1,0 +1,196 @@
+@model GNIBIRPAndVisaAppointment.Web.Models.Admin.MergeModel
+
+<form method="POST">
+    @if (string.IsNullOrWhiteSpace(Model.WithId))
+    {
+        <div>
+            <label for="withId" class="form-label">With Assignment</label>
+            <input type="text" class="form-control" id="withId" name="withId" />
+        </div>
+    }
+    else
+    {
+        var merging = ViewBag.Merging;
+        
+        <h4>Application</h4>
+        <table class="table table-sm table-striped">
+            <tr>
+                <th>Person</th>
+                <td>
+                    <div class="input-group">
+                        <span class="input-group-text">@Model.Salutation</span>
+                        <input type="text" class="form-control" name="givenname" value="@Model.GivenName" readonly>
+                        <input type="text" class="form-control" name="midname" value="@Model.MidName" readonly>
+                        <input type="text" class="form-control" name="surname" value="@Model.SurName" readonly>
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">@Model.Salutation</span>
+                        <input type="text" class="form-control" value="@merging.GivenName" readonly>
+                        <input type="text" class="form-control" value="@merging.MidName" readonly>
+                        <input type="text" class="form-control" value="@merging.SurName" readonly>
+                    </div>
+
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="dob" value="@Model.DOB" readonly>
+                    </div>
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" value="@merging.DOB" readonly>
+                    </div>
+
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="nationality" value="@Model.Nationality" readonly>
+                        <input type="text" class="form-control" name="ppnoyn" value="@Model.PPNoYN" readonly>
+                        <input type="text" class="form-control" name="ppno" value="@Model.PPNo" readonly>
+                        <input type="text" class="form-control" name="ppreason" value="@Model.PPReason" readonly>
+                    </div>
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" value="@merging.Nationality" readonly>
+                        <input type="text" class="form-control" value="@merging.PPNoYN" readonly>
+                        <input type="text" class="form-control" value="@merging.PPNo" readonly>
+                        <input type="text" class="form-control" value="@merging.PPReason" readonly>
+                    </div>
+                    
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="FamAppYN" value="@Model.FamAppYN" readonly>
+                        <input type="text" class="form-control" name="FamAppNo" value="@Model.FamAppNo" readonly>
+                    </div>
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" value="@merging.FamAppYN" readonly>
+                        <input type="text" class="form-control" value="@merging.FamAppNo" readonly>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th>GNIB / IRP Status</th>
+                <td>
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="gnibno" value="@Model.GNIBNo" readonly>
+                        <input type="text" class="form-control" name="gnibexdt" value="@Model.GNIBExDT" readonly>
+                    </div>
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" value="@merging.GNIBNo" readonly>
+                        <input type="text" class="form-control" value="@merging.GNIBExDT" readonly>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th>Contact</th>
+                <td>
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="email" value="@Model.Email" readonly>
+                    </div>
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" value="@merging.Email" readonly>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th>Comment</th>
+                <td>
+                    <div class="input-group">
+                        <textarea name="comment" readonly>@Model.Comment</textarea>
+                    </div>
+                    <div class="input-group mb-3">
+                        <textarea readonly>@merging.Comment</textarea>
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+        <hr class="my-4">
+
+        <h4>Assignment</h4>
+        <table class="table table-sm table-striped">
+            <tr>
+                <th>Submitted Time</th>
+                <td>
+                    @Model.Time.ToString("dd MMM yyyy HH:mm:ss")
+                </td>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td>
+                    @Html.Partial("StatusPartial", Model.Status as string)
+                </td>
+            </tr>
+            <tr>
+                <th></th>
+                <td>
+                    @switch (Model.Status)
+                    {
+                        case AssignmentStatus.Pending:
+                            <div class="alert alert-info">
+                                Your application is submitted.
+                            </div>
+                            break;
+                        case AssignmentStatus.Accepted:
+                            <div class="alert alert-primary">
+                                I'm working on your application and looking for an appointment for you.
+                            </div>
+                            break;
+                        case AssignmentStatus.Appointed:
+                            <div class="alert alert-warning">
+                                Waiting for the application e-mail.
+                            </div>
+                            break;
+                        case AssignmentStatus.Duplicated:
+                            <div class="alert alert-danger">
+                                You already have an appointment. I failed to book you another.
+                                <br />
+                                If you want to make a new appointment, you need to cancel the old one.
+                            </div>
+                            break;
+                        case AssignmentStatus.Complete:
+                            if (!isPaid)
+                            {
+                                <div class="alert alert-warning">
+                                    Your appointment is booked and uploaded. Please pay to download.
+                                </div>
+                            }
+                            break;
+                    }
+                </td>
+            </tr>
+        </table>
+    }
+    <input class="btn btn-primary mt-3" type="submit" />
+</form>
+
+@section Scripts
+{
+    <script>
+        $(() => {
+            var addNewGetButton = ($current, $merging) => {
+                var $button = $('<input type="button" class="btn btn-info" value="Use" />');
+                
+                $button.click(() => {
+                    var $currentInputs = $current.find('input, textarea');
+                    var $mergingInputs = $merging.find('input, textarea');
+
+                    $currentInputs.each(index => {
+                        var $currentInput = $($currentInputs[index]);
+                        var $mergingInput = $($mergingInputs[index]);
+
+                        var value = $currentInput.val();
+                        $currentInput.val($mergingInput.val());
+                        $mergingInput.val(value);
+                    });
+                });
+
+                $merging.append($button);
+            }
+
+            var $inputGroups = $('.input-group');
+            
+            $inputGroups.each((index, inputGroup) => {
+                var $inputGroup = $(inputGroup);
+                var $inputs = $inputGroup.find('input, textarea');
+
+                if ($inputs[0].name == '') {
+                    addNewGetButton($($inputGroups[parseInt(index) - 1]), $inputGroup);
+                } else {
+                }
+            });
+        });
+    </script>
+}

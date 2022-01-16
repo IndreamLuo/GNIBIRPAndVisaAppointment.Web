@@ -12,6 +12,7 @@ namespace GNIBIRPAndVisaAppointment.Web.Models
         {
             
         }
+        
         public string Id { get; set; }
         
         [Required]
