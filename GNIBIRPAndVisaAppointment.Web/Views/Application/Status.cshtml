@@ -260,7 +260,9 @@
             @if (isPaid && (assignment.Status == AssignmentStatus.Complete || assignment.Status == AssignmentStatus.Closed))
             {
                 @* <a class="btn btn-success" target="_blank" href="/Application/Appointment/@order.Id">View Appointment Letter</a> *@
-                <div class="alert alert-success">The appointment letter has been sent to your application e-mail address.</div>
+                <div class="alert alert-success">
+                    The appointment letter has been sent to your application e-mail address.
+                </div>
             }
         </td>
     </tr>
