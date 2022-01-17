@@ -1,4 +1,6 @@
 @using GNIBIRPAndVisaAppointment.Web.Business.Application
+@inject Microsoft.AspNetCore.Identity.SignInManager<GNIBIRPAndVisaAppointment.Web.Identity.ApplicationUser> SignInManager
+@inject Microsoft.AspNetCore.Identity.UserManager<GNIBIRPAndVisaAppointment.Web.Identity.ApplicationUser> UserManager
 
 @{
     var assignment = ViewBag.Assignment;
@@ -231,7 +233,12 @@
                     |
                     @payment.Type:
                     @payment.Amount
-                    @payment.Currency.ToUpper()
+                    @payment.Currency.ToUpper()                    
+                    @if (SignInManager.IsSignedIn(this.User) && (await UserManager.GetRolesAsync(await UserManager.GetUserAsync(this.User))).Contains("Admin"))
+                    {
+                        <span>|</span>
+                        @payment.ChargeId
+                    }
                 </span>
                 <br />
             }
