@@ -186,10 +186,10 @@ namespace GNIBIRPAndVisaAppointment.Web.Controllers
             var availableAppointmentLetters = appointmentLetterManger.FindByName(fullName);
             ViewBag.AvailableAppointmentLetters = availableAppointmentLetters;
 
-            if (model.Name != fullName)
-            {
-                ModelState.AddModelError("Name", "Name doesn't match with applicant.");
-            }
+            // if (model.Name != fullName)
+            // {
+            //     ModelState.AddModelError("Name", "Name doesn't match with applicant.");
+            // }
             
             if (ModelState.IsValid)
             {
